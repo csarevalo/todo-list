@@ -17,7 +17,12 @@ class TodoApp extends StatelessWidget {
       create: (BuildContext context) => TaskProvider(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: HomeScreen(),
+        title: "Snazzy To-Do List",
+        initialRoute: '/',
+        routes: {
+          '/': (context) => HomeScreen(),
+        },
+        // home: HomeScreen(),
       ),
     );
   }
