@@ -59,10 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.deepPurple,
         foregroundColor: Colors.white70,
         // onPressed: () => _addTask(),
-        onPressed: () => showDialog(
-          context: context,
-          builder: (BuildContext context) => AddTaskDialog(context),
-        ),
+        onPressed: () => _displayAddTaskDialog(context),
         child: const Icon(
           Icons.add,
         ),
@@ -70,54 +67,57 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  AlertDialog AddTaskDialog(BuildContext context) {
-    return AlertDialog(
-      title: const Text("Add a Task"),
-      content: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 15,
-          vertical: 5,
-        ),
-        child: TextField(
-          controller: _textEditingController,
-          decoration: InputDecoration(
-            hintText: 'Add New To-Do',
-            filled: true,
-            fillColor: Colors.deepPurple.shade200,
-            enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.deepPurple,
-                ),
-                borderRadius: BorderRadius.circular(10)),
+  Future<dynamic> _displayAddTaskDialog(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text("Add a Task"),
+        content: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 15,
+            vertical: 5,
+          ),
+          child: TextField(
+            controller: _textEditingController,
+            decoration: InputDecoration(
+              hintText: 'Add New To-Do',
+              filled: true,
+              fillColor: Colors.deepPurple.shade200,
+              enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Colors.deepPurple,
+                  ),
+                  borderRadius: BorderRadius.circular(10)),
+            ),
           ),
         ),
+        actions: <Widget>[
+          OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text("Cancel"),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+              _addTask();
+            },
+            child: Text("Add"),
+          ),
+        ],
+        actionsAlignment: MainAxisAlignment.center,
       ),
-      actions: <Widget>[
-        OutlinedButton(
-          style: OutlinedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text("Cancel"),
-        ),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-          onPressed: () {
-            Navigator.of(context).pop();
-            _addTask();
-          },
-          child: Text("Add"),
-        ),
-      ],
-      actionsAlignment: MainAxisAlignment.center,
     );
   }
 }
