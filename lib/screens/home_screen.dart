@@ -4,14 +4,14 @@ import 'package:provider/provider.dart';
 import '../providers/task_provider.dart';
 import '../widgets/task_tile.dart';
 
-class TodoListScreen extends StatefulWidget {
-  TodoListScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  HomeScreen({super.key});
 
   @override
-  State<TodoListScreen> createState() => _TodoListScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _TodoListScreenState extends State<TodoListScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   final _taskTitleController = TextEditingController();
 
   void _addTask() {

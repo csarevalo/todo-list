@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'screens/todo_list_screen.dart';
+import 'screens/home_screen.dart';
 import 'providers/task_provider.dart';
 
 void main() {
@@ -17,7 +17,7 @@ class TodoApp extends StatelessWidget {
       create: (BuildContext context) => TaskProvider(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: TodoListScreen(),
+        home: HomeScreen(),
       ),
     );
   }
