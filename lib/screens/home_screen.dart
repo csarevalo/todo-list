@@ -12,10 +12,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final _taskTitleController = TextEditingController();
+  final _textEditingController = TextEditingController();
 
   void _addTask() {
-    final taskTitleText = _taskTitleController.text;
+    final taskTitleText = _textEditingController.text;
     final taskProvider = Provider.of<TaskProvider>(context, listen: false);
     final task = taskProvider.createTask(
       title: taskTitleText,
@@ -24,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (taskTitleText.isNotEmpty) {
       taskProvider.addTask(task);
     }
-    _taskTitleController.clear();
+    _textEditingController.clear();
   }
 
   @override
@@ -55,39 +55,69 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         },
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: TextField(
-                  controller: _taskTitleController,
-                  decoration: InputDecoration(
-                    hintText: 'Add New To-Do',
-                    filled: true,
-                    fillColor: Colors.deepPurple.shade200,
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Colors.deepPurple,
-                        ),
-                        borderRadius: BorderRadius.circular(10)),
-                  ),
-                ),
-              ),
-            ),
-            FloatingActionButton(
-              backgroundColor: Colors.deepPurple,
-              foregroundColor: Colors.white70,
-              onPressed: () => _addTask(),
-              child: const Icon(
-                Icons.add,
-              ),
-            ),
-          ],
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.deepPurple,
+        foregroundColor: Colors.white70,
+        // onPressed: () => _addTask(),
+        onPressed: () => showDialog(
+          context: context,
+          builder: (BuildContext context) => AddTaskDialog(context),
+        ),
+        child: const Icon(
+          Icons.add,
         ),
       ),
+    );
+  }
+
+  AlertDialog AddTaskDialog(BuildContext context) {
+    return AlertDialog(
+      title: const Text("Add a Task"),
+      content: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 15,
+          vertical: 5,
+        ),
+        child: TextField(
+          controller: _textEditingController,
+          decoration: InputDecoration(
+            hintText: 'Add New To-Do',
+            filled: true,
+            fillColor: Colors.deepPurple.shade200,
+            enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Colors.deepPurple,
+                ),
+                borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+      ),
+      actions: <Widget>[
+        OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text("Cancel"),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+            _addTask();
+          },
+          child: Text("Add"),
+        ),
+      ],
+      actionsAlignment: MainAxisAlignment.center,
     );
   }
 }
