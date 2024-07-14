@@ -24,28 +24,23 @@ class AddTaskDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("Add a Task"),
-      content: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 15,
-          vertical: 5,
+      backgroundColor: Colors.purple.shade50,
+      // title: const Text("Add a Task"),
+      content: TextField(
+        autofocus: true,
+        textInputAction:
+            TextInputAction.done, // submit on enter... no new lines
+        maxLines: 3, // limit lines displayed
+        controller: _taskTitleController,
+        decoration: const InputDecoration(
+          hintText: 'What are you going to do?',
+          border: InputBorder.none,
         ),
-        child: TextField(
-          autofocus: true,
-          controller: _taskTitleController,
-          decoration: InputDecoration(
-            hintText: 'Add New To-Do',
-            filled: true,
-            fillColor: Colors.deepPurple.shade200,
-            enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.deepPurple,
-              ),
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-        ),
+        onSubmitted: (value) {
+          _addTask(context);
+        },
       ),
+
       actions: <Widget>[
         OutlinedButton(
           style: OutlinedButton.styleFrom(
@@ -71,6 +66,9 @@ class AddTaskDialog extends StatelessWidget {
         ),
       ],
       actionsAlignment: MainAxisAlignment.center,
+      actionsPadding: const EdgeInsets.only(bottom: 15),
+      buttonPadding: const EdgeInsets.symmetric(horizontal: 15),
+      insetPadding: const EdgeInsets.all(80), // outside dialog
     );
   }
 }
