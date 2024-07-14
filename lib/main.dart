@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:todo_list/screens/add_task_dialog.dart';
+// import 'package:todo_list/screens/add_task_dialog.dart';
 
 import 'screens/home_screen.dart';
 import 'providers/task_provider.dart';
@@ -22,7 +22,7 @@ class TodoApp extends StatelessWidget {
         initialRoute: '/',
         routes: {
           '/': (ctx) => HomeScreen(),
-          '/add-task': (ctx) => AddTaskDialog(),
+          // '/add-task': (ctx) => AddTaskDialog(),
         },
         // home: HomeScreen(),
       ),

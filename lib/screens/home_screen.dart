@@ -12,21 +12,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final _textEditingController = TextEditingController();
-
-  void _addTask() {
-    final taskTitleText = _textEditingController.text;
-    final taskProvider = Provider.of<TaskProvider>(context, listen: false);
-    final task = taskProvider.createTask(
-      title: taskTitleText,
-      priority: 2,
-    );
-    if (taskTitleText.isNotEmpty) {
-      taskProvider.addTask(task);
-    }
-    _textEditingController.clear();
-  }
-
   @override
   Widget build(BuildContext context) {
     final tasks = Provider.of<TaskProvider>(context).todoList;
@@ -67,8 +52,23 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future<dynamic> _displayAddTaskDialog(BuildContext context) async {
-    return showDialog(
+  Future<void> _displayAddTaskDialog(BuildContext context) async {
+    final TextEditingController _taskTitleController = TextEditingController();
+
+    void _addTask() {
+      final taskTitleText = _taskTitleController.text;
+      final taskProvider = Provider.of<TaskProvider>(context, listen: false);
+      final task = taskProvider.createTask(
+        title: taskTitleText,
+        priority: 2,
+      );
+      if (taskTitleText.isNotEmpty) {
+        taskProvider.addTask(task);
+      }
+      _taskTitleController.clear();
+    }
+
+    return showDialog<void>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
         title: const Text("Add a Task"),
@@ -78,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
             vertical: 5,
           ),
           child: TextField(
-            controller: _textEditingController,
+            controller: _taskTitleController,
             decoration: InputDecoration(
               hintText: 'Add New To-Do',
               filled: true,
@@ -101,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text("Cancel"),
+            child: const Text("Cancel"),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -113,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.of(context).pop();
               _addTask();
             },
-            child: Text("Add"),
+            child: const Text("Add"),
           ),
         ],
         actionsAlignment: MainAxisAlignment.center,

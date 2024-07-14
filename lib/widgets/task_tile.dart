@@ -25,7 +25,8 @@ class TaskTile extends StatelessWidget {
       padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
       child: Slidable(
         endActionPane: ActionPane(
-          motion: StretchMotion(),
+          extentRatio: 0.25,
+          motion: const StretchMotion(),
           children: [
             SlidableAction(
               onPressed: onDeleted,
