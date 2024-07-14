@@ -34,13 +34,12 @@ class AddTaskDialog extends StatelessWidget {
         controller: _taskTitleController,
         decoration: const InputDecoration(
           hintText: 'What are you going to do?',
-          border: InputBorder.none,
+          border: InputBorder.none, //OutlineInputBorder(),
         ),
         onSubmitted: (value) {
           _addTask(context);
         },
       ),
-
       actions: <Widget>[
         OutlinedButton(
           style: OutlinedButton.styleFrom(
@@ -66,9 +65,10 @@ class AddTaskDialog extends StatelessWidget {
         ),
       ],
       actionsAlignment: MainAxisAlignment.center,
-      actionsPadding: const EdgeInsets.only(bottom: 15),
       buttonPadding: const EdgeInsets.symmetric(horizontal: 15),
-      insetPadding: const EdgeInsets.all(80), // outside dialog
+      // contentPadding: EdgeInsets.symmetric(),
+      // actionsPadding: const EdgeInsets.only(bottom: 15),
+      // insetPadding: const EdgeInsets.all(50), // outside dialog
     );
   }
 }
