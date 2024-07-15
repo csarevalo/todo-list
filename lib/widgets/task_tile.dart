@@ -7,7 +7,7 @@ class TaskTile extends StatelessWidget {
   final int priority;
   final Function(bool?)? onCompleted;
   final Function(BuildContext)? onDeleted;
-  final Function(int)? onPriorityChanged;
+  final void Function()? onPriorityChanged;
 
   const TaskTile({
     super.key,
@@ -16,7 +16,7 @@ class TaskTile extends StatelessWidget {
     required this.onCompleted,
     required this.onDeleted,
     required this.priority,
-    this.onPriorityChanged,
+    required this.onPriorityChanged,
   });
 
   @override
@@ -72,8 +72,8 @@ class TaskTile extends StatelessWidget {
                 ),
               ),
               IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.flag),
+                onPressed: onPriorityChanged,
+                icon: const Icon(Icons.flag),
                 alignment: Alignment.centerRight,
                 color: priority == 1 ? Colors.blue : Colors.amber.shade400,
               ),

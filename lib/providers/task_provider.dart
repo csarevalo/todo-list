@@ -50,8 +50,8 @@ class TaskProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // void priorityChanged(int index){
-  //     _todoList[index][2] =
-  // notifyListeners();
-  // }
+  void priorityChanged(int index, int priority) {
+    _todoList[index].priority = priority;
+    notifyListeners();
+  }
 }
