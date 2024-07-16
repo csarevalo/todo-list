@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ChangePriorityDialog extends StatelessWidget {
@@ -8,27 +9,38 @@ class ChangePriorityDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      alignment: Alignment.center,
       title: const Text("Priority"),
+      contentPadding: const EdgeInsets.only(top: 10),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          priorityButton(0),
-          priorityButton(1),
-          priorityButton(2),
           priorityButton(3, active: true),
+          priorityButton(2),
+          priorityButton(1),
+          priorityButton(0),
         ],
       ),
       actions: [
-        ElevatedButton(
+        TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text("Cancel"),
+          child: const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Cancel",
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
       ],
+      actionsPadding: const EdgeInsets.symmetric(vertical: 8),
       actionsAlignment: MainAxisAlignment.center,
     );
   }
 
-  ElevatedButton priorityButton(int priorityLvl, {bool active = false}) {
+  TextButton priorityButton(int priorityLvl, {bool active = false}) {
     List<String> priorityLevels = <String>[
       "No Priority",
       "Low Priority",
@@ -38,24 +50,27 @@ class ChangePriorityDialog extends StatelessWidget {
     List<Color> priorityColors = [
       Colors.grey,
       Colors.blue,
-      Colors.yellow,
-      Colors.red,
+      Colors.yellow.shade700,
+      Colors.red.shade600,
     ];
-    return ElevatedButton(
+    return TextButton.icon(
       onPressed: () {},
-      child: Row(
+      icon: Icon(
+        priorityLvl == 0 ? Icons.flag_outlined : Icons.flag,
+        color: priorityColors[priorityLvl],
+      ),
+      label: Row(
         children: [
-          Icon(
-            Icons.flag,
-            color: priorityColors[priorityLvl],
-          ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Text(priorityLevels[priorityLvl]),
+            child: Text(
+              priorityLevels[priorityLvl],
+              style: TextStyle(
+                fontSize: 16,
+                color: priorityColors[priorityLvl],
+              ),
             ),
           ),
-          active ? Icon(Icons.check) : SizedBox(),
+          active ? const Icon(Icons.check) : const SizedBox(),
         ],
       ),
     );
