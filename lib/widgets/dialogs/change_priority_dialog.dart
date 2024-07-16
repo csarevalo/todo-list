@@ -1,10 +1,20 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_list/providers/task_provider.dart';
 
 class ChangePriorityDialog extends StatelessWidget {
+  final String taskID;
   const ChangePriorityDialog({
     super.key,
+    required this.taskID,
   });
+
+  void _changePriority(BuildContext context) {
+    final taskProvider = Provider.of<TaskProvider>(context, listen: false);
+    // final test = taskProvider.
+    //get task priority
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +25,31 @@ class ChangePriorityDialog extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          priorityButton(3, active: true),
-          priorityButton(2),
-          priorityButton(1),
-          priorityButton(0),
+          priorityButton(
+            3,
+            active: true,
+            onPressed: () {
+              _changePriority(context);
+            },
+          ),
+          priorityButton(
+            2,
+            onPressed: () {
+              _changePriority(context);
+            },
+          ),
+          priorityButton(
+            1,
+            onPressed: () {
+              _changePriority(context);
+            },
+          ),
+          priorityButton(
+            0,
+            onPressed: () {
+              _changePriority(context);
+            },
+          ),
         ],
       ),
       actions: [
@@ -27,10 +58,7 @@ class ChangePriorityDialog extends StatelessWidget {
           child: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                "Cancel",
-                textAlign: TextAlign.center,
-              ),
+              Text("Cancel", textAlign: TextAlign.center),
             ],
           ),
         ),
@@ -40,7 +68,11 @@ class ChangePriorityDialog extends StatelessWidget {
     );
   }
 
-  TextButton priorityButton(int priorityLvl, {bool active = false}) {
+  TextButton priorityButton(
+    int priorityLvl, {
+    void Function()? onPressed,
+    bool active = false,
+  }) {
     List<String> priorityLevels = <String>[
       "No Priority",
       "Low Priority",
@@ -54,7 +86,7 @@ class ChangePriorityDialog extends StatelessWidget {
       Colors.red.shade600,
     ];
     return TextButton.icon(
-      onPressed: () {},
+      onPressed: onPressed,
       icon: Icon(
         priorityLvl == 0 ? Icons.flag_outlined : Icons.flag,
         color: priorityColors[priorityLvl],

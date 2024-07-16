@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class TaskTile extends StatelessWidget {
+  final String id;
   final String title;
   final bool isDone;
   final int priority;
@@ -11,6 +12,7 @@ class TaskTile extends StatelessWidget {
 
   const TaskTile({
     super.key,
+    required this.id,
     required this.title,
     required this.isDone,
     required this.onCompleted,
