@@ -14,8 +14,6 @@ class ChangePriorityDialog extends StatelessWidget {
   void _changePriority(BuildContext context, {required int newPriority}) {
     final taskProvider = Provider.of<TaskProvider>(context, listen: false);
     taskProvider.changePriority(taskId, newPriority);
-    // final test = taskProvider.
-    //get task priority
     Navigator.of(context).pop();
   }
 
