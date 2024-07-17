@@ -30,25 +30,28 @@ class ChangePriorityDialog extends StatelessWidget {
         children: [
           priorityButton(
             priority: 3,
-            active: true,
+            active: currentPriority == 3,
             onPressed: () {
               _changePriority(context, newPriority: 3);
             },
           ),
           priorityButton(
             priority: 2,
+            active: currentPriority == 2,
             onPressed: () {
               _changePriority(context, newPriority: 2);
             },
           ),
           priorityButton(
             priority: 1,
+            active: currentPriority == 1,
             onPressed: () {
               _changePriority(context, newPriority: 1);
             },
           ),
           priorityButton(
             priority: 0,
+            active: currentPriority == 0,
             onPressed: () {
               _changePriority(context, newPriority: 0);
             },
