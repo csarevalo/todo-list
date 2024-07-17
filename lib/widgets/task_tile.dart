@@ -3,20 +3,20 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 
 class TaskTile extends StatelessWidget {
   final String title;
-  final bool isDone;
+  final bool checkboxState;
   final int priority;
-  final Function(bool?)? onCompleted;
-  final Function(BuildContext)? onDeleted;
-  final void Function()? onPriorityChanged;
+  final Function(bool?)? onCheckboxChanged;
+  final Function(BuildContext)? onDelete;
+  final void Function()? onPriorityChange;
 
   const TaskTile({
     super.key,
     required this.title,
-    required this.isDone,
-    required this.onCompleted,
-    required this.onDeleted,
+    required this.checkboxState,
     required this.priority,
-    required this.onPriorityChanged,
+    required this.onCheckboxChanged,
+    required this.onDelete,
+    required this.onPriorityChange,
   });
 
   @override
@@ -29,7 +29,7 @@ class TaskTile extends StatelessWidget {
           motion: const StretchMotion(),
           children: [
             SlidableAction(
-              onPressed: onDeleted,
+              onPressed: onDelete,
               icon: Icons.delete,
               borderRadius: BorderRadius.circular(15),
               backgroundColor: Colors.red,
@@ -45,8 +45,8 @@ class TaskTile extends StatelessWidget {
           child: Row(
             children: [
               Checkbox(
-                value: isDone,
-                onChanged: onCompleted,
+                value: checkboxState,
+                onChanged: onCheckboxChanged,
                 checkColor: Colors.deepPurple,
                 activeColor: Colors.white70,
                 side: const BorderSide(color: Colors.white70),
@@ -61,7 +61,7 @@ class TaskTile extends StatelessWidget {
                     style: TextStyle(
                       color: Colors.white70,
                       fontSize: 18,
-                      decoration: isDone
+                      decoration: checkboxState
                           ? TextDecoration.lineThrough
                           : TextDecoration.none,
                       decorationColor: Colors.white70,
@@ -72,7 +72,7 @@ class TaskTile extends StatelessWidget {
                 ),
               ),
               IconButton(
-                onPressed: onPriorityChanged,
+                onPressed: onPriorityChange,
                 icon: const Icon(Icons.flag),
                 alignment: Alignment.centerRight,
                 color: priority == 0

@@ -25,7 +25,7 @@ class TaskProvider with ChangeNotifier {
 
   List get todoList => _todoList;
 
-  void checkboxChanged(String taskId) {
+  void toggleDone(String taskId) {
     final index = _todoList.indexWhere((task) => task.id == taskId);
     _todoList[index].isDone = !_todoList[index].isDone;
     notifyListeners();

@@ -17,6 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final tasks = Provider.of<TaskProvider>(context).todoList;
+    final taskProvider = Provider.of<TaskProvider>(context, listen: false);
 
     return Scaffold(
       backgroundColor: Colors.deepPurple.shade200,
@@ -30,15 +31,14 @@ class _HomeScreenState extends State<HomeScreen> {
         itemCount: tasks.length,
         itemBuilder: (BuildContext context, index) {
           final task = tasks[index];
-          final taskProvider =
-              Provider.of<TaskProvider>(context, listen: false);
+
           return TaskTile(
             title: task.title,
-            isDone: task.isDone,
+            checkboxState: task.isDone,
             priority: task.priority,
-            onCompleted: (value) => taskProvider.checkboxChanged(task.id),
-            onDeleted: (context) => taskProvider.deleteTask(task.id),
-            onPriorityChanged: () => displayChangePriorityDialog(
+            onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
+            onDelete: (context) => taskProvider.deleteTask(task.id),
+            onPriorityChange: () => displayChangePriorityDialog(
               context,
               task.id,
               task.priority,
