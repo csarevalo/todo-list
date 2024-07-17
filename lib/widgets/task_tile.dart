@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class TaskTile extends StatelessWidget {
-  final String id;
   final String title;
   final bool isDone;
   final int priority;
@@ -12,7 +11,6 @@ class TaskTile extends StatelessWidget {
 
   const TaskTile({
     super.key,
-    required this.id,
     required this.title,
     required this.isDone,
     required this.onCompleted,
@@ -77,7 +75,13 @@ class TaskTile extends StatelessWidget {
                 onPressed: onPriorityChanged,
                 icon: const Icon(Icons.flag),
                 alignment: Alignment.centerRight,
-                color: priority == 1 ? Colors.blue : Colors.amber.shade400,
+                color: priority == 0
+                    ? Colors.grey.shade400
+                    : priority == 1
+                        ? Colors.blue
+                        : priority == 2
+                            ? Colors.yellow.shade700
+                            : Colors.red.shade600,
               ),
             ],
           ),

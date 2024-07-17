@@ -25,7 +25,8 @@ class TaskProvider with ChangeNotifier {
 
   List get todoList => _todoList;
 
-  void checkboxChanged(int index) {
+  void checkboxChanged(String taskId) {
+    final index = _todoList.indexWhere((task) => task.id == taskId);
     _todoList[index].isDone = !_todoList[index].isDone;
     notifyListeners();
   }
@@ -45,13 +46,15 @@ class TaskProvider with ChangeNotifier {
     );
   }
 
-  void deleteTask(int index) {
+  void deleteTask(String taskId) {
+    final index = _todoList.indexWhere((task) => task.id == taskId);
     _todoList.removeAt(index);
     notifyListeners();
   }
 
-  void priorityChanged(int index, int priority) {
-    _todoList[index].priority = priority;
+  void changePriority(String taskId, int newPriority) {
+    final index = _todoList.indexWhere((task) => task.id == taskId);
+    _todoList[index].priority = newPriority;
     notifyListeners();
   }
 }

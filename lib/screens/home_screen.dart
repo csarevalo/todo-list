@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/task_provider.dart';
@@ -34,14 +33,16 @@ class _HomeScreenState extends State<HomeScreen> {
           final taskProvider =
               Provider.of<TaskProvider>(context, listen: false);
           return TaskTile(
-            id: task.id,
             title: task.title,
             isDone: task.isDone,
             priority: task.priority,
-            onCompleted: (value) => taskProvider.checkboxChanged(index),
-            onDeleted: (context) => taskProvider.deleteTask(index),
-            onPriorityChanged: () =>
-                displayChangePriorityDialog(context, task.id),
+            onCompleted: (value) => taskProvider.checkboxChanged(task.id),
+            onDeleted: (context) => taskProvider.deleteTask(task.id),
+            onPriorityChanged: () => displayChangePriorityDialog(
+              context,
+              task.id,
+              task.priority,
+            ),
           );
         },
       ),
@@ -58,12 +59,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
 Future<void> displayChangePriorityDialog(
   BuildContext context,
-  String taskID,
+  String taskId,
+  int currentPriority,
 ) async {
   return showDialog<void>(
     context: context,
     builder: (BuildContext context) => ChangePriorityDialog(
-      taskID: taskID,
+      taskId: taskId,
+      currentPriority: currentPriority,
     ),
   );
 }
