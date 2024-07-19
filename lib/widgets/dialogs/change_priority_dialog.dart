@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:todo_list/providers/task_provider.dart';
 
 class ChangePriorityDialog extends StatelessWidget {
-  final String taskId;
+  final int taskId;
   final int currentPriority;
   const ChangePriorityDialog({
     super.key,
@@ -106,7 +106,8 @@ class ChangePriorityDialog extends StatelessWidget {
               ),
             ),
           ),
-          active ? const Icon(Icons.check) : const SizedBox(),
+          active ? const Icon(Icons.check) : const SizedBox.shrink(),
+          // if (active) const Icon(Icons.check),
         ],
       ),
     );

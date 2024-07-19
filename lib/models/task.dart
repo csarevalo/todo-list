@@ -1,5 +1,5 @@
 class Task {
-  final String id;
+  final int id;
   String title;
   bool isDone;
   int priority;

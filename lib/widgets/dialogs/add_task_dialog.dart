@@ -24,8 +24,8 @@ class AddTaskDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Colors.purple.shade50,
-      // title: const Text("Add a Task"),
+      // backgroundColor: Colors.purple.shade50,
+      title: const Text("Add a Task"),
       content: TextField(
         autofocus: true,
         textInputAction:

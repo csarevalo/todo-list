@@ -33,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
           final task = tasks[index];
 
           return TaskTile(
-            title: task.title,
+            title: task.title, //task.title,
             checkboxState: task.isDone,
             priority: task.priority,
             onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
 Future<void> displayChangePriorityDialog(
   BuildContext context,
-  String taskId,
+  int taskId,
   int currentPriority,
 ) async {
   return showDialog<void>(

@@ -20,6 +20,9 @@ class TodoApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: "Snazzy To-Do List",
+        theme: ThemeData(useMaterial3: true),
+        darkTheme: ThemeData.dark(useMaterial3: true),
+        themeMode: ThemeMode.light,
         initialRoute: '/',
         routes: {
           '/': (ctx) => HomeScreen(),

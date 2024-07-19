@@ -2,21 +2,30 @@ import 'package:flutter/material.dart';
 import '../models/task.dart';
 
 class TaskProvider with ChangeNotifier {
+  //id can be an int counter call function
+  //change vars to int
+  int _internalIdCounter = 0;
+  int _getNewId() {
+    _internalIdCounter += 1;
+    return _internalIdCounter;
+  }
+
   final List<Task> _todoList = [
     Task(
-      id: DateTime.now().toString(),
+      // id: DateTime.now().toString(),
+      id: -1,
       title: "Task 1",
       isDone: false,
       priority: 1,
     ),
     Task(
-      id: DateTime.now().toString(),
+      id: -2,
       title: "Task 2",
       isDone: true,
       priority: 2,
     ),
     Task(
-      id: DateTime.now().toString(),
+      id: -3,
       title: "Task 3",
       isDone: false,
       priority: 3,
@@ -25,7 +34,7 @@ class TaskProvider with ChangeNotifier {
 
   List get todoList => _todoList;
 
-  void toggleDone(String taskId) {
+  void toggleDone(int taskId) {
     final index = _todoList.indexWhere((task) => task.id == taskId);
     _todoList[index].isDone = !_todoList[index].isDone;
     notifyListeners();
@@ -39,20 +48,20 @@ class TaskProvider with ChangeNotifier {
   Task createTask(
       {required String title, bool isDone = false, int priority = 1}) {
     return Task(
-      id: DateTime.now().toString(),
+      id: _getNewId(),
       title: title,
       isDone: isDone,
       priority: priority,
     );
   }
 
-  void deleteTask(String taskId) {
+  void deleteTask(int taskId) {
     final index = _todoList.indexWhere((task) => task.id == taskId);
     _todoList.removeAt(index);
     notifyListeners();
   }
 
-  void changePriority(String taskId, int newPriority) {
+  void changePriority(int taskId, int newPriority) {
     final index = _todoList.indexWhere((task) => task.id == taskId);
     _todoList[index].priority = newPriority;
     notifyListeners();
