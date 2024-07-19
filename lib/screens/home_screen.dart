@@ -26,6 +26,9 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text("To-Do List"),
         backgroundColor: Colors.deepPurple,
         foregroundColor: Colors.white70,
+        actions: [
+          IconButton.filledTonal(onPressed: (){}, icon: Icon(Icons.sunny)),
+        ],
       ),
       body: ListView.builder(
         itemCount: tasks.length,

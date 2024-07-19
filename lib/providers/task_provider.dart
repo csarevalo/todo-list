@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import '../models/task.dart';
 
 class TaskProvider with ChangeNotifier {
-  //id can be an int counter call function
-  //change vars to int
   int _internalIdCounter = 0;
   int _getNewId() {
     _internalIdCounter += 1;
@@ -11,8 +9,10 @@ class TaskProvider with ChangeNotifier {
   }
 
   final List<Task> _todoList = [
+    //should leave empty list here
+    //get todo list from somewhere else
+    //avoid using negative integers
     Task(
-      // id: DateTime.now().toString(),
       id: -1,
       title: "Task 1",
       isDone: false,
