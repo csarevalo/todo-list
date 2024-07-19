@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_list/src/screens/settings_view.dart';
 
 import '../providers/task_provider.dart';
 import '../widgets/dialogs/change_priority_dialog.dart';
@@ -8,6 +9,7 @@ import '../widgets/dialogs/add_task_dialog.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
+  static const routeName = '/';
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -27,16 +29,24 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.deepPurple,
         foregroundColor: Colors.white70,
         actions: [
-          IconButton.filledTonal(onPressed: (){}, icon: Icon(Icons.sunny)),
+          IconButton.filledTonal(
+              onPressed: () {
+                Navigator.restorablePushNamed(
+                  context,
+                  SettingsView.routeName,
+                );
+              },
+              icon: const Icon(Icons.settings)),
         ],
       ),
       body: ListView.builder(
+        restorationId: 'homeScreen', //'todoList'
         itemCount: tasks.length,
         itemBuilder: (BuildContext context, index) {
           final task = tasks[index];
 
           return TaskTile(
-            title: task.title, //task.title,
+            title: task.title,
             checkboxState: task.isDone,
             priority: task.priority,
             onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
