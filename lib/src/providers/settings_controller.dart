@@ -13,21 +13,21 @@ class SettingsController with ChangeNotifier {
   // Make SettingsService a private variable so it is not used directly.
   final SettingsService _settingsService;
 
-  // Make ThemeMode a private variable so it is not updated directly without
+  // Make private variables so they are not updated directly without
   // also persisting the changes with the SettingsService.
   late ThemeMode _themeMode;
+  //Todo: late AppTheme _appTheme;
 
-  // Make AppTheme a private variable also
-  //Todo: late AppTheme _activeTheme;
-
-  // Allow Widgets to read the user's preferred ThemeMode.
+  // Allow Widgets to read the user's preferred settings:
   ThemeMode get themeMode => _themeMode;
+  //Todo: AppTheme get appTheme => _appTheme??????
 
   /// Load the user's settings from the SettingsService. It may load from a
   /// local database or the internet. The controller only knows it can load the
   /// settings from the service.
   Future<void> loadSettings() async {
     _themeMode = await _settingsService.themeMode();
+    //Todo: _appTheme = await _settingsService.appTheme();
 
     // Important! Inform listeners a change has occurred.
     notifyListeners();
