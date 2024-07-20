@@ -48,18 +48,19 @@ class SettingsView extends StatelessWidget {
               ],
             ),
           ),
-          DropdownButton<ThemeMode>(
+          DropdownButton<String>(
+            value: controller.appTheme.themeTitle,
+            onChanged: (_) {}, //controller.updateAppTheme,
             items: const [
               DropdownMenuItem(
-                value: ThemeMode.light,
+                value: 'Mustard Theme',
                 child: Text('Mustard Theme'),
               ),
               DropdownMenuItem(
-                value: ThemeMode.dark,
+                value: 'Green Tea Theme',
                 child: Text('Green Tea Theme'),
               )
             ],
-            onChanged: (ThemeMode? value) {},
           ),
         ],
       ),

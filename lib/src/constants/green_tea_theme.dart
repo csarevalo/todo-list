@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 
 class GreenTeaTheme {
   final TextTheme textTheme;
+  final String themeTitle = "Green Tea";
 
   const GreenTeaTheme(this.textTheme);
 
@@ -57,7 +58,7 @@ class GreenTeaTheme {
   }
 
   ThemeData light() {
-    return theme(lightScheme());
+    return theme(lightScheme()); //light()
   }
 
   static ColorScheme lightMediumContrastScheme() {
@@ -112,7 +113,7 @@ class GreenTeaTheme {
   }
 
   ThemeData lightMediumContrast() {
-    return theme(lightMediumContrastScheme());
+    return theme(lightMediumContrastScheme()); //lightMediumContrast()
   }
 
   static ColorScheme lightHighContrastScheme() {
@@ -167,7 +168,7 @@ class GreenTeaTheme {
   }
 
   ThemeData lightHighContrast() {
-    return theme(lightHighContrastScheme());
+    return theme(lightHighContrastScheme()); //lightHighContrast()
   }
 
   static ColorScheme darkScheme() {
@@ -222,7 +223,7 @@ class GreenTeaTheme {
   }
 
   ThemeData dark() {
-    return theme(darkScheme());
+    return theme(darkScheme()); //dark()
   }
 
   static ColorScheme darkMediumContrastScheme() {
@@ -277,7 +278,7 @@ class GreenTeaTheme {
   }
 
   ThemeData darkMediumContrast() {
-    return theme(darkMediumContrastScheme());
+    return theme(darkMediumContrastScheme()); //darkMediumContrast()
   }
 
   static ColorScheme darkHighContrastScheme() {
@@ -332,7 +333,7 @@ class GreenTeaTheme {
   }
 
   ThemeData darkHighContrast() {
-    return theme(darkHighContrastScheme());
+    return theme(darkHighContrastScheme()); //darkHighContrast()
   }
 
   ThemeData theme(ColorScheme colorScheme) => ThemeData(
