@@ -29,6 +29,17 @@ class AppTheme {
     }
   }
 
+  ThemeData lightContrast(int contrastLvl) {
+    switch (contrastLvl) {
+      case 2:
+        return lightHighContrast();
+      case 1:
+        return lightMediumContrast();
+      default:
+        return light();
+    }
+  }
+
   ThemeData lightHighContrast() {
     switch (title) {
       case "Green Tea":
@@ -59,6 +70,17 @@ class AppTheme {
         return MustardTheme(textTheme).dark();
       default:
         return ThemeData.dark();
+    }
+  }
+
+  ThemeData darkContrast(int contrastLvl) {
+    switch (contrastLvl) {
+      case 2:
+        return darkHighContrast();
+      case 1:
+        return darkMediumContrast();
+      default:
+        return dark();
     }
   }
 
