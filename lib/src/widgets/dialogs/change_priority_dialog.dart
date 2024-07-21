@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_list/src/providers/task_provider.dart';
@@ -19,7 +20,10 @@ class ChangePriorityDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeColors = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
     return AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       alignment: Alignment.center,
       title: const Text("Priority"),
       contentPadding: const EdgeInsets.only(top: 10),
@@ -59,15 +63,23 @@ class ChangePriorityDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("Cancel", textAlign: TextAlign.center),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Cancel",
+                  textAlign: TextAlign.center,
+                  style: textTheme.titleMedium!
+                      .copyWith(color: themeColors.primary),
+                ),
+              ],
+            ),
           ),
         ),
       ],
-      actionsPadding: const EdgeInsets.symmetric(vertical: 8),
+      actionsPadding: const EdgeInsets.symmetric(vertical: 0),
       actionsAlignment: MainAxisAlignment.center,
     );
   }
@@ -95,20 +107,22 @@ class ChangePriorityDialog extends StatelessWidget {
         priority == 0 ? Icons.flag_outlined : Icons.flag,
         color: priorityColors[priority],
       ),
-      label: Row(
-        children: [
-          Expanded(
-            child: Text(
-              priorityLevels[priority],
-              style: TextStyle(
-                fontSize: 16,
-                color: priorityColors[priority],
+      label: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                priorityLevels[priority],
+                style: TextStyle(
+                  fontSize: 16,
+                  color: priorityColors[priority],
+                ),
               ),
             ),
-          ),
-          active ? const Icon(Icons.check) : const SizedBox.shrink(),
-          // if (active) const Icon(Icons.check),
-        ],
+            active ? const Icon(Icons.check) : const SizedBox.shrink(),
+          ],
+        ),
       ),
     );
   }
