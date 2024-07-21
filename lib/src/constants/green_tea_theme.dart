@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 
 class GreenTeaTheme {
   final TextTheme textTheme;
-  final String themeTitle = "Green Tea";
+  final String title = "Green Tea";
 
   const GreenTeaTheme(this.textTheme);
 

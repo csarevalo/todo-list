@@ -49,12 +49,12 @@ class SettingsController with ChangeNotifier {
   }
 
   /// Update and persist the ThemeMode based on the user's selection.
-  Future<void> updateAppTheme(dynamic newAppTheme) async {
+  Future<void> updateAppTheme(String newAppTheme) async {
     if (newAppTheme == null) return;
     // Do not perform any work if new and old AppTheme are identical
-    if (newAppTheme == _appTheme) return;
+    if (newAppTheme == _appTheme.themeTitle) return;
     // Otherwise, store the new AppTheme in memory
-    _themeMode = newAppTheme;
+    _appTheme = newAppTheme;
     // Important! Inform listeners a change has occurred.
     notifyListeners();
 

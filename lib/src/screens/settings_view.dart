@@ -49,7 +49,7 @@ class SettingsView extends StatelessWidget {
             ),
           ),
           DropdownButton<String>(
-            value: controller.appTheme.themeTitle,
+            value: controller.appTheme.title,
             onChanged: (_) {}, //controller.updateAppTheme,
             items: const [
               DropdownMenuItem(

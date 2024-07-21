@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:todo_list/src/constants/green_tea_theme.dart';
+import 'package:todo_list/src/constants/mustard_theme.dart';
 
 class AppTheme {
   /// Theme Options
@@ -10,8 +12,8 @@ class AppTheme {
   // theme(lightScheme()); //light()
 
   final appThemes = [
-    "green_tea",
-    "mustard",
+    const GreenTeaTheme(TextTheme()).title,
+    const MustardTheme(TextTheme()).title,
   ];
   final themeModes = [
     "dark",
@@ -22,7 +24,7 @@ class AppTheme {
     "lightHighContrast",
   ];
 
-  ThemeData? chooseAppTheme(String themeSelected, String themeModeSelected) {
+  ThemeData? getAppTheme(String themeSelected, String themeModeSelected) {
     if (!appThemes.contains(themeSelected)) {
       return null;
     }
