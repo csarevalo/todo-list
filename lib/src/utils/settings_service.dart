@@ -19,6 +19,9 @@ class SettingsService {
         textTheme: txtTheme,
       );
 
+  /// Loads the User's preferred Contrast from local or remote storage.
+  Future<String> contrast() async => "None";
+
   /// Loads the User's preferred ThemeMode from local or remote storage.
   Future<ThemeMode> themeMode() async => ThemeMode.system;
 
@@ -36,6 +39,12 @@ class SettingsService {
 
   /// Persists the user's preferred AppTheme to local or remote storage.
   Future<void> updateAppTheme(String themeName) async {
+    // Todo: may be more optimal to only save a string AppTheme name
+    // since the TextThemes will be saved in constants
+  }
+
+  /// Persists the user's preferred AppTheme to local or remote storage.
+  Future<void> updateContrast(String contrast) async {
     // Todo: may be more optimal to only save a string AppTheme name
     // since the TextThemes will be saved in constants
   }

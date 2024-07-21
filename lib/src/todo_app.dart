@@ -26,9 +26,11 @@ class TodoApp extends StatelessWidget {
             // theme: ThemeData(useMaterial3: true),
             // darkTheme: ThemeData.dark(useMaterial3: true),
             theme: settingsController.appTheme.light(),
-            // highContrastTheme: settingsController.appTheme.lightHighContrast(),
+            highContrastTheme: settingsController.appTheme
+                .lightContrast(settingsController.contrast),
             darkTheme: settingsController.appTheme.dark(),
-            // highContrastDarkTheme: settingsController.appTheme.darkHighContrast(),
+            highContrastDarkTheme: settingsController.appTheme
+                .darkContrast(settingsController.contrast),
             themeMode: settingsController.themeMode,
             restorationScopeId: 'todoApp',
             initialRoute: '/',

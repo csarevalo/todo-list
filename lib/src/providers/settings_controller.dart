@@ -18,12 +18,14 @@ class SettingsController with ChangeNotifier {
   // also persisting the changes with the SettingsService.
   late ThemeMode _themeMode;
   late TextTheme _textTheme;
+  late String _contrast;
   late AppTheme _appTheme;
 
   // Allow Widgets to read the user's preferred settings:
   ThemeMode get themeMode => _themeMode;
   TextTheme get textTheme => _textTheme;
   AppTheme get appTheme => _appTheme;
+  String get contrast => _contrast;
 
   /// Load the user's settings from the SettingsService. It may load from a
   /// local database or the internet. The controller only knows it can load the
@@ -32,6 +34,7 @@ class SettingsController with ChangeNotifier {
     _themeMode = await _settingsService.themeMode();
     _textTheme = await _settingsService.textTheme();
     _appTheme = await _settingsService.appTheme(_textTheme);
+    _contrast = await _settingsService.contrast();
 
     // Important! Inform listeners a change has occurred.
     notifyListeners();
@@ -68,5 +71,20 @@ class SettingsController with ChangeNotifier {
     // Persist the changes to a local database or the internet using the
     // SettingService.
     await _settingsService.updateAppTheme(newAppTheme);
+  }
+
+  /// Update and persist the Contrast based on the user's selection.
+  Future<void> updateContrast(String? newContrast) async {
+    if (newContrast == null || newContrast == "") return;
+    // Do not perform any work if new and old Contrast are identical
+    if (newContrast == _contrast) return;
+    // Otherwise, store the new Contrast in memory
+    _contrast = newContrast;
+    // Important! Inform listeners a change has occurred.
+    notifyListeners();
+
+    // Persist the changes to a local database or the internet using the
+    // SettingService.
+    await _settingsService.updateContrast(newContrast);
   }
 }
