@@ -20,23 +20,32 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final tasks = Provider.of<TaskProvider>(context).todoList;
     final taskProvider = Provider.of<TaskProvider>(context, listen: false);
+    final themeColors = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      backgroundColor: Colors.deepPurple.shade200,
+      backgroundColor: themeColors.surfaceDim,
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("To-Do List"),
-        backgroundColor: Colors.deepPurple,
-        foregroundColor: Colors.white70,
+        title: Text(
+          "To-Do List",
+          style: textTheme.headlineMedium,
+        ),
+        backgroundColor: themeColors.surfaceDim,
+        foregroundColor: themeColors.onSurface,
         actions: [
-          IconButton.filledTonal(
-              onPressed: () {
-                Navigator.restorablePushNamed(
-                  context,
-                  SettingsView.routeName,
-                );
-              },
-              icon: const Icon(Icons.settings)),
+          IconButton(
+            onPressed: () {
+              Navigator.restorablePushNamed(
+                context,
+                SettingsView.routeName,
+              );
+            },
+            icon: Icon(
+              Icons.settings,
+              color: themeColors.onSurface,
+            ),
+          ),
         ],
       ),
       body: ListView.builder(
@@ -56,12 +65,14 @@ class _HomeScreenState extends State<HomeScreen> {
               task.id,
               task.priority,
             ),
+            tileColor: themeColors.primaryContainer,
+            onTileColor: themeColors.onPrimaryContainer,
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.deepPurple,
-        foregroundColor: Colors.white70,
+        backgroundColor: themeColors.primaryContainer,
+        foregroundColor: themeColors.onPrimaryContainer,
         onPressed: () => displayAddTaskDialog(context),
         // onPressed: () => Navigator.of(context).pushNamed('/add-task'),
         child: const Icon(Icons.add),

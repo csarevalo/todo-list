@@ -8,6 +8,8 @@ class TaskTile extends StatelessWidget {
   final Function(bool?)? onCheckboxChanged;
   final Function(BuildContext)? onDelete;
   final void Function()? onPriorityChange;
+  final Color tileColor;
+  final Color onTileColor;
 
   const TaskTile({
     super.key,
@@ -17,6 +19,8 @@ class TaskTile extends StatelessWidget {
     required this.onCheckboxChanged,
     required this.onDelete,
     required this.onPriorityChange,
+    required this.tileColor,
+    required this.onTileColor,
   });
 
   @override
@@ -33,12 +37,13 @@ class TaskTile extends StatelessWidget {
               icon: Icons.delete,
               borderRadius: BorderRadius.circular(15),
               backgroundColor: Colors.red,
+              foregroundColor: onTileColor,
             )
           ],
         ),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.deepPurple,
+            color: checkboxState ? tileColor.withOpacity(0.7) : tileColor,
             borderRadius: BorderRadius.circular(15),
           ),
           padding: const EdgeInsets.all(20),
@@ -47,9 +52,9 @@ class TaskTile extends StatelessWidget {
               Checkbox(
                 value: checkboxState,
                 onChanged: onCheckboxChanged,
-                checkColor: Colors.deepPurple,
-                activeColor: Colors.white70,
-                side: const BorderSide(color: Colors.white70),
+                checkColor: tileColor.withOpacity(0.4),
+                activeColor: onTileColor.withOpacity(0.4),
+                side: BorderSide(color: onTileColor),
               ),
               const SizedBox(
                 width: 8,
@@ -59,13 +64,17 @@ class TaskTile extends StatelessWidget {
                   child: Text(
                     title,
                     style: TextStyle(
-                      color: Colors.white70,
+                      color: checkboxState
+                          ? onTileColor.withOpacity(0.4)
+                          : onTileColor,
                       fontSize: 18,
                       decoration: checkboxState
                           ? TextDecoration.lineThrough
                           : TextDecoration.none,
-                      decorationColor: Colors.white70,
-                      decorationThickness: 2,
+                      decorationColor: checkboxState
+                          ? onTileColor.withOpacity(0.4)
+                          : onTileColor,
+                      decorationThickness: 1.5,
                     ),
                     softWrap: false,
                   ),
@@ -73,10 +82,12 @@ class TaskTile extends StatelessWidget {
               ),
               IconButton(
                 onPressed: onPriorityChange,
-                icon: const Icon(Icons.flag),
+                icon: priority == 0
+                    ? const Icon(Icons.flag_outlined)
+                    : const Icon(Icons.flag),
                 alignment: Alignment.centerRight,
                 color: priority == 0
-                    ? Colors.grey.shade400
+                    ? Colors.grey.shade500
                     : priority == 1
                         ? Colors.blue
                         : priority == 2

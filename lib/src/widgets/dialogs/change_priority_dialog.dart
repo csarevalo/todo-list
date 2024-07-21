@@ -84,7 +84,7 @@ class ChangePriorityDialog extends StatelessWidget {
       "High Priority",
     ];
     List<Color> priorityColors = [
-      Colors.grey.shade400,
+      Colors.grey.shade500,
       Colors.blue,
       Colors.yellow.shade700,
       Colors.red.shade600,
