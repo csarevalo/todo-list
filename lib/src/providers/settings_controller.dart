@@ -52,7 +52,7 @@ class SettingsController with ChangeNotifier {
     await _settingsService.updateThemeMode(newThemeMode);
   }
 
-  /// Update and persist the ThemeMode based on the user's selection.
+  /// Update and persist the AppTheme based on the user's selection.
   Future<void> updateAppTheme(String? newAppTheme) async {
     if (newAppTheme == null || newAppTheme == "") return;
     // Do not perform any work if new and old AppTheme are identical
