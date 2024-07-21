@@ -3,53 +3,45 @@ import 'package:todo_list/src/constants/green_tea_theme.dart';
 import 'package:todo_list/src/constants/mustard_theme.dart';
 
 class AppTheme {
-  /// Theme Options
-  // theme(darkHighContrastScheme()); //darkHighContrast()
-  // theme(darkMediumContrastScheme()); //darkMediumContrast()
-  // theme(darkScheme()); //dark()
-  // theme(lightHighContrastScheme()); //lightHighContrast()
-  // theme(lightMediumContrastScheme()); //lightMediumContrast()
-  // theme(lightScheme()); //light()
+  String title;
+  TextTheme textTheme;
+  AppTheme({
+    required this.title,
+    required this.textTheme,
+  });
 
-  final appThemes = [
-    const GreenTeaTheme(TextTheme()).title,
-    const MustardTheme(TextTheme()).title,
-  ];
-  final themeModes = [
-    "dark",
-    "darkMediumContrast",
-    "darkHighContrast",
-    "light",
-    "lightMediumContrast",
-    "lightHighContrast",
-  ];
+  // final appThemes = [
+  //   const GreenTeaTheme(TextTheme()).title,
+  //   const MustardTheme(TextTheme()).title,
+  // ];
+  // final themeModes = [
+  //   "dark",
+  //   "darkMediumContrast",
+  //   "darkHighContrast",
+  //   "light",
+  //   "lightMediumContrast",
+  //   "lightHighContrast",
+  // ];
 
-  ThemeData? getAppTheme(String themeSelected, String themeModeSelected) {
-    if (!appThemes.contains(themeSelected)) {
-      return null;
+  ThemeData light() {
+    switch (title) {
+      case "Green Tea":
+        return GreenTeaTheme(textTheme).light();
+      case "Mustard":
+        return MustardTheme(textTheme).light();
+      default:
+        return ThemeData.light();
     }
-    if (!themeModes.contains(themeModeSelected)) {
-      return null;
-    }
+  }
 
-    for (int appThemeChoice = 0;
-        appThemeChoice < appThemes.length;
-        appThemeChoice++) {
-      switch (themeSelected) {
-        case "dark":
-          break;
-        case "darkMediumContrast":
-          break;
-        case "darkHighContrast":
-          break;
-        case "light":
-          break;
-        case "lightMediumContrast":
-          break;
-        case "lightHighContrast":
-          break;
-        default:
-      }
+  ThemeData dark() {
+    switch (title) {
+      case "Green Tea":
+        return GreenTeaTheme(textTheme).dark();
+      case "Mustard":
+        return MustardTheme(textTheme).dark();
+      default:
+        return ThemeData.dark();
     }
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list/src/constants/green_tea_theme.dart';
+import 'package:todo_list/src/utils/app_theme.dart';
 
 /// A service that stores and retrieves user settings.
 ///
@@ -7,9 +7,18 @@ import 'package:todo_list/src/constants/green_tea_theme.dart';
 /// persist the user settings locally, use the shared_preferences package. If
 /// you'd like to store settings on a web server, use the http package.
 class SettingsService {
-  final TextTheme textTheme = const TextTheme(); //Todo: Default Text Theme
+  /// Loads the User's preferred TextTheme from local or remote storage.
+  Future<TextTheme> textTheme() async => const TextTheme();
+
   /// Loads the User's preferred AppTheme from local or remote storage.
-  Future appTheme() async => GreenTeaTheme(textTheme); //Todo: Default theme
+  Future<AppTheme> appTheme(
+    TextTheme txtTheme,
+  ) async =>
+      AppTheme(
+        title: "Green Tea", // Todo: retrieve this from somewhere
+        textTheme: txtTheme,
+      );
+
   /// Loads the User's preferred ThemeMode from local or remote storage.
   Future<ThemeMode> themeMode() async => ThemeMode.system;
 
@@ -19,6 +28,15 @@ class SettingsService {
     // http package to persist settings over the network.
   }
 
+  /// Persists the user's preferred TextTheme to local or remote storage.
+  Future<void> updateTextTheme(TextTheme txtTheme) async {
+    // Todo: may be more optimal to only save a string TextTheme name
+    // since the TextThemes will be saved in constants
+  }
+
   /// Persists the user's preferred AppTheme to local or remote storage.
-  Future<void> updateAppTheme(dynamic appTheme) async {}
+  Future<void> updateAppTheme(String themeName) async {
+    // Todo: may be more optimal to only save a string AppTheme name
+    // since the TextThemes will be saved in constants
+  }
 }

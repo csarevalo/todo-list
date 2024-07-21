@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_list/src/utils/app_theme.dart';
 
 import '../utils/settings_service.dart';
 
@@ -16,10 +17,12 @@ class SettingsController with ChangeNotifier {
   // Make private variables so they are not updated directly without
   // also persisting the changes with the SettingsService.
   late ThemeMode _themeMode;
-  late dynamic _appTheme;
+  late TextTheme _textTheme;
+  late AppTheme _appTheme;
 
   // Allow Widgets to read the user's preferred settings:
   ThemeMode get themeMode => _themeMode;
+  TextTheme get textTheme => _textTheme;
   get appTheme => _appTheme;
 
   /// Load the user's settings from the SettingsService. It may load from a
@@ -27,7 +30,8 @@ class SettingsController with ChangeNotifier {
   /// settings from the service.
   Future<void> loadSettings() async {
     _themeMode = await _settingsService.themeMode();
-    _appTheme = await _settingsService.appTheme(); //Todo:
+    _textTheme = await _settingsService.textTheme();
+    _appTheme = await _settingsService.appTheme(_textTheme); //Todo:
 
     // Important! Inform listeners a change has occurred.
     notifyListeners();
@@ -49,12 +53,15 @@ class SettingsController with ChangeNotifier {
   }
 
   /// Update and persist the ThemeMode based on the user's selection.
-  Future<void> updateAppTheme(String newAppTheme) async {
-    if (newAppTheme == null) return;
+  Future<void> updateAppTheme(String? newAppTheme) async {
+    if (newAppTheme == null || newAppTheme == "") return;
     // Do not perform any work if new and old AppTheme are identical
-    if (newAppTheme == _appTheme.themeTitle) return;
+    if (newAppTheme == _appTheme.title) return;
     // Otherwise, store the new AppTheme in memory
-    _appTheme = newAppTheme;
+    _appTheme = AppTheme(
+      title: newAppTheme,
+      textTheme: _textTheme,
+    );
     // Important! Inform listeners a change has occurred.
     notifyListeners();
 
