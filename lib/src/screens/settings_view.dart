@@ -48,19 +48,26 @@ class SettingsView extends StatelessWidget {
               ],
             ),
           ),
-          DropdownButton<String>(
-            value: controller.appTheme.title,
-            onChanged: (themeTitle) => controller.updateAppTheme(themeTitle),
-            items: const [
-              DropdownMenuItem(
-                value: 'Mustard',
-                child: Text('Mustard Theme'),
-              ),
-              DropdownMenuItem(
-                value: 'Green Tea',
-                child: Text('Green Tea Theme'),
-              )
-            ],
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            // Glue the SettingsController to the theme selection DropdownButton.
+            //
+            // When a user selects a app theme from the dropdown list, the
+            // SettingsController is updated, which rebuilds the MaterialApp.
+            child: DropdownButton<String>(
+              value: controller.appTheme.title,
+              onChanged: (themeTitle) => controller.updateAppTheme(themeTitle),
+              items: const [
+                DropdownMenuItem(
+                  value: 'Mustard',
+                  child: Text('Mustard Theme'),
+                ),
+                DropdownMenuItem(
+                  value: 'Green Tea',
+                  child: Text('Green Tea Theme'),
+                )
+              ],
+            ),
           ),
         ],
       ),

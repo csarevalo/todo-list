@@ -23,7 +23,7 @@ class SettingsController with ChangeNotifier {
   // Allow Widgets to read the user's preferred settings:
   ThemeMode get themeMode => _themeMode;
   TextTheme get textTheme => _textTheme;
-  get appTheme => _appTheme;
+  AppTheme get appTheme => _appTheme;
 
   /// Load the user's settings from the SettingsService. It may load from a
   /// local database or the internet. The controller only knows it can load the
@@ -31,7 +31,7 @@ class SettingsController with ChangeNotifier {
   Future<void> loadSettings() async {
     _themeMode = await _settingsService.themeMode();
     _textTheme = await _settingsService.textTheme();
-    _appTheme = await _settingsService.appTheme(_textTheme); //Todo:
+    _appTheme = await _settingsService.appTheme(_textTheme);
 
     // Important! Inform listeners a change has occurred.
     notifyListeners();
