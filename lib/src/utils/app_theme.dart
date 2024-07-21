@@ -10,18 +10,13 @@ class AppTheme {
     required this.textTheme,
   });
 
-  // final appThemes = [
-  //   const GreenTeaTheme(TextTheme()).title,
-  //   const MustardTheme(TextTheme()).title,
-  // ];
-  // final themeModes = [
-  //   "dark",
-  //   "darkMediumContrast",
-  //   "darkHighContrast",
-  //   "light",
-  //   "lightMediumContrast",
-  //   "lightHighContrast",
-  // ];
+  /// Theme Options
+  /// darkHighContrast()
+  /// darkMediumContrast()
+  /// dark()
+  /// lightHighContrast()
+  /// lightMediumContrast()
+  /// light()
 
   ThemeData light() {
     switch (title) {
@@ -34,12 +29,56 @@ class AppTheme {
     }
   }
 
+  ThemeData lightHighContrast() {
+    switch (title) {
+      case "Green Tea":
+        return GreenTeaTheme(textTheme).lightHighContrast();
+      case "Mustard":
+        return MustardTheme(textTheme).lightHighContrast();
+      default:
+        return ThemeData.light();
+    }
+  }
+
+  ThemeData lightMediumContrast() {
+    switch (title) {
+      case "Green Tea":
+        return GreenTeaTheme(textTheme).lightMediumContrast();
+      case "Mustard":
+        return MustardTheme(textTheme).lightMediumContrast();
+      default:
+        return ThemeData.light();
+    }
+  }
+
   ThemeData dark() {
     switch (title) {
       case "Green Tea":
         return GreenTeaTheme(textTheme).dark();
       case "Mustard":
         return MustardTheme(textTheme).dark();
+      default:
+        return ThemeData.dark();
+    }
+  }
+
+  ThemeData darkHighContrast() {
+    switch (title) {
+      case "Green Tea":
+        return GreenTeaTheme(textTheme).darkHighContrast();
+      case "Mustard":
+        return MustardTheme(textTheme).darkHighContrast();
+      default:
+        return ThemeData.dark();
+    }
+  }
+
+  ThemeData darkMediumContrast() {
+    switch (title) {
+      case "Green Tea":
+        return GreenTeaTheme(textTheme).darkMediumContrast();
+      case "Mustard":
+        return MustardTheme(textTheme).darkMediumContrast();
       default:
         return ThemeData.dark();
     }
