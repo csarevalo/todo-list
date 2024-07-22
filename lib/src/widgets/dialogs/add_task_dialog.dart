@@ -25,7 +25,7 @@ class AddTaskDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeColors = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
+    // final textTheme = Theme.of(context).textTheme;
     return AlertDialog(
       backgroundColor: themeColors.primaryContainer,
       title: const Text("Add a Task"),
