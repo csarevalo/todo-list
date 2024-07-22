@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_list/src/providers/task_provider.dart';
@@ -23,8 +24,10 @@ class AddTaskDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeColors = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
     return AlertDialog(
-      // backgroundColor: Colors.purple.shade50,
+      backgroundColor: themeColors.primaryContainer,
       title: const Text("Add a Task"),
       content: TextField(
         autofocus: true,
@@ -41,23 +44,13 @@ class AddTaskDialog extends StatelessWidget {
         },
       ),
       actions: <Widget>[
-        OutlinedButton(
-          style: OutlinedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
           child: const Text("Cancel"),
         ),
         ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
           onPressed: () {
             _addTask(context);
           },

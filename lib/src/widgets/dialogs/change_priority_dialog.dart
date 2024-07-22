@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_list/src/providers/task_provider.dart';
@@ -24,6 +23,7 @@ class ChangePriorityDialog extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      backgroundColor: themeColors.primaryContainer,
       alignment: Alignment.center,
       title: const Text("Priority"),
       contentPadding: const EdgeInsets.only(top: 10),

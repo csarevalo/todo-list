@@ -24,17 +24,18 @@ class _HomeScreenState extends State<HomeScreen> {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      backgroundColor: themeColors.surfaceTint,
+      backgroundColor: themeColors.primaryContainer,
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         centerTitle: true,
         title: Text(
           "To-Do List",
           style: textTheme.headlineSmall!.copyWith(
-            color: themeColors.primaryContainer,
+            color: themeColors.primary,
           ),
         ),
-        backgroundColor: themeColors.surfaceTint,
-        foregroundColor: themeColors.inversePrimary,
+        backgroundColor: themeColors.primaryContainer,
+        foregroundColor: themeColors.primary,
         actions: [
           IconButton(
             onPressed: () {
@@ -64,14 +65,14 @@ class _HomeScreenState extends State<HomeScreen> {
               task.id,
               task.priority,
             ),
-            tileColor: themeColors.primaryContainer,
-            onTileColor: themeColors.onPrimaryContainer,
+            tileColor: themeColors.primary.withOpacity(0.8),
+            onTileColor: themeColors.primaryContainer,
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: themeColors.primaryContainer,
-        foregroundColor: themeColors.onPrimaryContainer,
+        backgroundColor: themeColors.surfaceTint,
+        foregroundColor: themeColors.surface,
         onPressed: () => displayAddTaskDialog(context),
         // onPressed: () => Navigator.of(context).pushNamed('/add-task'),
         child: const Icon(Icons.add),
