@@ -51,6 +51,9 @@ class AddTaskDialog extends StatelessWidget {
           child: const Text("Cancel"),
         ),
         ElevatedButton(
+          style: OutlinedButton.styleFrom(
+              backgroundColor: themeColors.primary,
+              foregroundColor: themeColors.primaryContainer),
           onPressed: () {
             _addTask(context);
           },
