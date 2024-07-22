@@ -46,6 +46,20 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             icon: const Icon(Icons.settings),
           ),
+          PopupMenuButton(
+            offset: const Offset(0, 45),
+            itemBuilder: (context) => [
+              const PopupMenuItem<String>(
+                value: "Sort",
+                child: Text("Sort By"),
+              ),
+              const PopupMenuItem<String>(
+                value: "Filter",
+                child: Text("Filter By"),
+              ),
+            ],
+          ),
+          const SizedBox(width: 16)
         ],
       ),
       body: ListView.builder(
