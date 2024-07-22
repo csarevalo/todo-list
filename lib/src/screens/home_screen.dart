@@ -24,15 +24,17 @@ class _HomeScreenState extends State<HomeScreen> {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      backgroundColor: themeColors.surfaceDim,
+      backgroundColor: themeColors.surfaceTint,
       appBar: AppBar(
         centerTitle: true,
         title: Text(
           "To-Do List",
-          style: textTheme.headlineMedium,
+          style: textTheme.headlineSmall!.copyWith(
+            color: themeColors.primaryContainer,
+          ),
         ),
-        backgroundColor: themeColors.surfaceDim,
-        foregroundColor: themeColors.onSurface,
+        backgroundColor: themeColors.surfaceTint,
+        foregroundColor: themeColors.inversePrimary,
         actions: [
           IconButton(
             onPressed: () {
@@ -41,10 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 SettingsView.routeName,
               );
             },
-            icon: Icon(
-              Icons.settings,
-              color: themeColors.onSurface,
-            ),
+            icon: const Icon(Icons.settings),
           ),
         ],
       ),
