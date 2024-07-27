@@ -130,17 +130,17 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             ExpansionTileByCategory(
               leading: const Icon(Icons.flag, color: Colors.yellow),
-              titleText: "High Priority",
+              titleText: "Medium Priority",
               children: getTaskTileWithPriority(strPriority: "Medium"),
             ),
             ExpansionTileByCategory(
               leading: const Icon(Icons.flag, color: Colors.blue),
-              titleText: "Medium Priority",
+              titleText: "Low Priority",
               children: getTaskTileWithPriority(strPriority: "Low"),
             ),
             ExpansionTileByCategory(
               leading: const Icon(Icons.flag, color: Colors.grey),
-              titleText: "Low Priority",
+              titleText: "None Priority",
               children: getTaskTileWithPriority(strPriority: "None"),
             ),
             ExpansionTileByCategory(
