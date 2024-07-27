@@ -23,9 +23,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final themeColors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
-    List<TaskTile> getTaskTiles() {
+    List<TaskTile> getCompletedTaskTiles() {
       List<TaskTile> taskTiles = [];
-      for (var task in tasks) {
+      for (var task in tasks.where((task) => task.isDone == true)) {
         taskTiles.add(
           TaskTile(
             title: task.title,
@@ -43,7 +43,41 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         );
       }
+      return taskTiles;
+    }
 
+    List<TaskTile> getTaskTileWithPriority({required String strPriority}) {
+      List<TaskTile> taskTiles = [];
+      int priority;
+      switch (strPriority) {
+        case "High":
+          priority = 3;
+        case "Medium":
+          priority = 2;
+        case "Low":
+          priority = 1;
+        default:
+          priority = 0;
+      }
+      for (var task in tasks
+          .where((task) => task.priority == priority && task.isDone == false)) {
+        taskTiles.add(
+          TaskTile(
+            title: task.title,
+            checkboxState: task.isDone,
+            priority: task.priority,
+            onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
+            onDelete: (context) => taskProvider.deleteTask(task.id),
+            onPriorityChange: () => displayChangePriorityDialog(
+              context,
+              task.id,
+              task.priority,
+            ),
+            tileColor: themeColors.primary.withOpacity(0.8),
+            onTileColor: themeColors.primaryContainer,
+          ),
+        );
+      }
       return taskTiles;
     }
 
@@ -86,18 +120,35 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(width: 16)
         ],
       ),
-      body: ExpansionTile(
-        initiallyExpanded: true,
-        tilePadding: const EdgeInsets.only(top: 1),
-        backgroundColor: themeColors.primary,
-        title: Text(
-          "Hello world",
-          style: textTheme.headlineSmall!.copyWith(
-            color: themeColors.primaryContainer,
-            backgroundColor: themeColors.primary,
-          ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            ExpansionTileByCategory(
+              leading: const Icon(Icons.flag, color: Colors.red),
+              titleText: "High Priority",
+              children: getTaskTileWithPriority(strPriority: "High"),
+            ),
+            ExpansionTileByCategory(
+              leading: const Icon(Icons.flag, color: Colors.yellow),
+              titleText: "High Priority",
+              children: getTaskTileWithPriority(strPriority: "Medium"),
+            ),
+            ExpansionTileByCategory(
+              leading: const Icon(Icons.flag, color: Colors.blue),
+              titleText: "Medium Priority",
+              children: getTaskTileWithPriority(strPriority: "Low"),
+            ),
+            ExpansionTileByCategory(
+              leading: const Icon(Icons.flag, color: Colors.grey),
+              titleText: "Low Priority",
+              children: getTaskTileWithPriority(strPriority: "None"),
+            ),
+            ExpansionTileByCategory(
+              titleText: "Completed",
+              children: getCompletedTaskTiles(),
+            ),
+          ],
         ),
-        children: getTaskTiles(),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: themeColors.surfaceTint,
@@ -106,6 +157,41 @@ class _HomeScreenState extends State<HomeScreen> {
         // onPressed: () => Navigator.of(context).pushNamed('/add-task'),
         child: const Icon(Icons.add),
       ),
+    );
+  }
+}
+
+class ExpansionTileByCategory extends StatelessWidget {
+  const ExpansionTileByCategory({
+    super.key,
+    required this.titleText,
+    required this.children,
+    this.leading,
+  });
+
+  final String titleText;
+  final List<Widget> children;
+  final Widget? leading;
+
+  @override
+  Widget build(BuildContext context) {
+    final themeColors = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+    return ExpansionTile(
+      leading: leading,
+      initiallyExpanded: true,
+      // tilePadding: const EdgeInsets.only(top: 1),
+      backgroundColor: themeColors.primary,
+      collapsedBackgroundColor: themeColors.primary,
+      iconColor: themeColors.primaryContainer,
+      collapsedIconColor: themeColors.primaryContainer,
+      title: Text(
+        titleText,
+        style: textTheme.headlineSmall!.copyWith(
+          color: themeColors.primaryContainer,
+        ),
+      ),
+      children: children,
     );
   }
 }
