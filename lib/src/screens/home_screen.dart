@@ -62,27 +62,30 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(width: 16)
         ],
       ),
-      body: ListView.builder(
-        restorationId: 'homeScreen', //'todoList'
-        itemCount: tasks.length,
-        itemBuilder: (BuildContext context, index) {
-          final task = tasks[index];
+      body: Container(
+        color: themeColors.inversePrimary,
+        child: ListView.builder(
+          restorationId: 'homeScreen', //'todoList'
+          itemCount: tasks.length,
+          itemBuilder: (BuildContext context, index) {
+            final task = tasks[index];
 
-          return TaskTile(
-            title: task.title,
-            checkboxState: task.isDone,
-            priority: task.priority,
-            onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
-            onDelete: (context) => taskProvider.deleteTask(task.id),
-            onPriorityChange: () => displayChangePriorityDialog(
-              context,
-              task.id,
-              task.priority,
-            ),
-            tileColor: themeColors.primary.withOpacity(0.8),
-            onTileColor: themeColors.primaryContainer,
-          );
-        },
+            return TaskTile(
+              title: task.title,
+              checkboxState: task.isDone,
+              priority: task.priority,
+              onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
+              onDelete: (context) => taskProvider.deleteTask(task.id),
+              onPriorityChange: () => displayChangePriorityDialog(
+                context,
+                task.id,
+                task.priority,
+              ),
+              tileColor: themeColors.primary.withOpacity(0.8),
+              onTileColor: themeColors.primaryContainer,
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: themeColors.surfaceTint,
