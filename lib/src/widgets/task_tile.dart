@@ -10,6 +10,7 @@ class TaskTile extends StatelessWidget {
   final void Function()? onPriorityChange;
   final Color tileColor;
   final Color onTileColor;
+  final DateTime? dueDate;
 
   const TaskTile({
     super.key,
@@ -21,10 +22,13 @@ class TaskTile extends StatelessWidget {
     required this.onPriorityChange,
     required this.tileColor,
     required this.onTileColor,
+    this.dueDate,
   });
 
   @override
   Widget build(BuildContext context) {
+    final themeColors = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
     return Slidable(
       endActionPane: ActionPane(
         extentRatio: 0.25,
@@ -58,24 +62,33 @@ class TaskTile extends StatelessWidget {
               width: 8,
             ),
             Expanded(
-              child: SizedBox(
-                child: Text(
-                  title,
-                  style: TextStyle(
-                    color: checkboxState
-                        ? onTileColor.withOpacity(0.4)
-                        : onTileColor,
-                    fontSize: 18,
-                    decoration: checkboxState
-                        ? TextDecoration.lineThrough
-                        : TextDecoration.none,
-                    decorationColor: checkboxState
-                        ? onTileColor.withOpacity(0.4)
-                        : onTileColor,
-                    decorationThickness: 1.5,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      color: checkboxState
+                          ? onTileColor.withOpacity(0.4)
+                          : onTileColor,
+                      fontSize: 18,
+                      decoration: checkboxState
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none,
+                      decorationColor: checkboxState
+                          ? onTileColor.withOpacity(0.4)
+                          : onTileColor,
+                      decorationThickness: 1.5,
+                    ),
+                    softWrap: false,
                   ),
-                  softWrap: false,
-                ),
+                  Text(
+                    dueDate.toString(),
+                    style: textTheme.bodySmall!
+                        .copyWith(color: themeColors.onPrimary),
+                  ),
+                ],
               ),
             ),
             IconButton(
@@ -83,7 +96,7 @@ class TaskTile extends StatelessWidget {
               icon: priority == 0
                   ? const Icon(Icons.flag_outlined)
                   : const Icon(Icons.flag),
-              alignment: Alignment.centerRight,
+              alignment: Alignment.topRight,
               color: priority == 0
                   ? Colors.grey.shade500
                   : priority == 1

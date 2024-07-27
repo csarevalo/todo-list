@@ -23,9 +23,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final themeColors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
-    List<TaskTile> getCompletedTaskTiles() {
+    List<TaskTile> getTaskTilesWithCompletion({required completed}) {
       List<TaskTile> taskTiles = [];
-      for (var task in tasks.where((task) => task.isDone == true)) {
+      for (var task in tasks.where((task) => task.isDone == completed)) {
         taskTiles.add(
           TaskTile(
             title: task.title,
@@ -66,6 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
             title: task.title,
             checkboxState: task.isDone,
             priority: task.priority,
+            dueDate: task.dueDate,
             onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
             onDelete: (context) => taskProvider.deleteTask(task.id),
             onPriorityChange: () => displayChangePriorityDialog(
@@ -145,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             ExpansionTileByCategory(
               titleText: "Completed",
-              children: getCompletedTaskTiles(),
+              children: getTaskTilesWithCompletion(completed: true),
             ),
           ],
         ),
