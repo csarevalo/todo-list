@@ -32,7 +32,7 @@ class TaskProvider with ChangeNotifier {
     ),
   ];
 
-  List get todoList => _todoList;
+  List<Task> get todoList => _todoList;
 
   void toggleDone(int taskId) {
     final index = _todoList.indexWhere((task) => task.id == taskId);
