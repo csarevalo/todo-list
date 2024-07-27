@@ -23,6 +23,30 @@ class _HomeScreenState extends State<HomeScreen> {
     final themeColors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
+    List<TaskTile> getTaskTiles() {
+      List<TaskTile> taskTiles = [];
+      tasks.forEach((task) {
+        taskTiles.add(
+          TaskTile(
+            title: task.title,
+            checkboxState: task.isDone,
+            priority: task.priority,
+            onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
+            onDelete: (context) => taskProvider.deleteTask(task.id),
+            onPriorityChange: () => displayChangePriorityDialog(
+              context,
+              task.id,
+              task.priority,
+            ),
+            tileColor: themeColors.primary.withOpacity(0.8),
+            onTileColor: themeColors.primaryContainer,
+          ),
+        );
+      });
+
+      return taskTiles;
+    }
+
     return Scaffold(
       backgroundColor: themeColors.primaryContainer,
       appBar: AppBar(
@@ -62,30 +86,9 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(width: 16)
         ],
       ),
-      body: Container(
-        color: themeColors.inversePrimary,
-        child: ListView.builder(
-          restorationId: 'homeScreen', //'todoList'
-          itemCount: tasks.length,
-          itemBuilder: (BuildContext context, index) {
-            final task = tasks[index];
-
-            return TaskTile(
-              title: task.title,
-              checkboxState: task.isDone,
-              priority: task.priority,
-              onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
-              onDelete: (context) => taskProvider.deleteTask(task.id),
-              onPriorityChange: () => displayChangePriorityDialog(
-                context,
-                task.id,
-                task.priority,
-              ),
-              tileColor: themeColors.primary.withOpacity(0.8),
-              onTileColor: themeColors.primaryContainer,
-            );
-          },
-        ),
+      body: ExpansionTile(
+        title: const Text("Hello world"),
+        children: getTaskTiles(),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: themeColors.surfaceTint,
