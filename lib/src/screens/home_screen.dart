@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     List<TaskTile> getTaskTiles() {
       List<TaskTile> taskTiles = [];
-      tasks.forEach((task) {
+      for (var task in tasks) {
         taskTiles.add(
           TaskTile(
             title: task.title,
@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onTileColor: themeColors.primaryContainer,
           ),
         );
-      });
+      }
 
       return taskTiles;
     }
@@ -87,7 +87,16 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: ExpansionTile(
-        title: const Text("Hello world"),
+        initiallyExpanded: true,
+        tilePadding: const EdgeInsets.only(top: 1),
+        backgroundColor: themeColors.primary,
+        title: Text(
+          "Hello world",
+          style: textTheme.headlineSmall!.copyWith(
+            color: themeColors.primaryContainer,
+            backgroundColor: themeColors.primary,
+          ),
+        ),
         children: getTaskTiles(),
       ),
       floatingActionButton: FloatingActionButton(
