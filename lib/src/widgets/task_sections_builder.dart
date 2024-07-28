@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_list/src/models/section_heading.dart';
 
 import '../providers/task_provider.dart';
 import 'dialogs/change_priority_dialog.dart';
@@ -15,7 +16,7 @@ class TaskSectionsBuilder extends StatelessWidget {
     final taskProvider = Provider.of<TaskProvider>(context, listen: false);
 
     final themeColors = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
+    // final textTheme = Theme.of(context).textTheme;
 
     List<TaskTile> getTaskTilesWithCompletion({required completed}) {
       List<TaskTile> taskTiles = [];
@@ -76,29 +77,66 @@ class TaskSectionsBuilder extends StatelessWidget {
       return taskTiles;
     }
 
+    List<SectionExpansionTile> getSectionedTaskTiles(String groupBy) {
+      groupBy = groupBy.toLowerCase().trim();
+      final List<SectionHeading> prioritySections = [
+        SectionHeading(
+          heading: "High Priority",
+          leadingIcon: const Icon(Icons.flag, color: Colors.red),
+        ),
+        SectionHeading(
+          heading: "Medium Priority",
+          leadingIcon: const Icon(Icons.flag, color: Colors.yellow),
+        ),
+        SectionHeading(
+          heading: "Low Priority",
+          leadingIcon: const Icon(Icons.flag, color: Colors.blue),
+        ),
+        SectionHeading(
+          heading: "No Priority",
+          leadingIcon: const Icon(Icons.flag, color: Colors.grey),
+        ),
+      ];
+
+      final List<SectionHeading> dateSections = [
+        SectionHeading(heading: "Overdue Pospone"),
+        SectionHeading(heading: "Today"),
+        SectionHeading(heading: "Tomorrow"),
+        SectionHeading(heading: "Next 7 Days"),
+        SectionHeading(heading: "Later"),
+      ];
+
+      List<SectionHeading> sectionsUsed;
+      List<SectionExpansionTile> sectionTiles = [];
+      List<TaskTile> Function(String)? getChildren;
+
+      switch (groupBy) {
+        case "priority":
+          sectionsUsed = prioritySections;
+          getChildren = (String s) => getTaskTileWithPriority(strPriority: s);
+          break;
+        case "date":
+          sectionsUsed = dateSections;
+          break;
+        default:
+          sectionsUsed = [];
+      }
+      for (var section in sectionsUsed) {
+        debugPrint(section.heading.split(" ")[0]);
+        sectionTiles.add(
+          SectionExpansionTile(
+            titleText: section.heading,
+            children: getChildren!(section.heading.split(' ')[0]),
+          ),
+        );
+      }
+      return sectionTiles;
+    }
+
     return SingleChildScrollView(
       child: Column(
         children: [
-          SectionExpansionTile(
-            leading: const Icon(Icons.flag, color: Colors.red),
-            titleText: "High Priority",
-            children: getTaskTileWithPriority(strPriority: "High"),
-          ),
-          SectionExpansionTile(
-            leading: const Icon(Icons.flag, color: Colors.yellow),
-            titleText: "Medium Priority",
-            children: getTaskTileWithPriority(strPriority: "Medium"),
-          ),
-          SectionExpansionTile(
-            leading: const Icon(Icons.flag, color: Colors.blue),
-            titleText: "Low Priority",
-            children: getTaskTileWithPriority(strPriority: "Low"),
-          ),
-          SectionExpansionTile(
-            leading: const Icon(Icons.flag, color: Colors.grey),
-            titleText: "None Priority",
-            children: getTaskTileWithPriority(strPriority: "None"),
-          ),
+          ...getSectionedTaskTiles("priority"),
           SectionExpansionTile(
             titleText: "Completed",
             children: getTaskTilesWithCompletion(completed: true),
