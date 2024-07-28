@@ -13,7 +13,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
   final TextEditingController _taskTitleController = TextEditingController();
   String? _dropdownPriorityValue = "None";
   int _priority = 0;
-  DateTime _dateTime = DateTime.now();
+  DateTime? _dateTime;
 
   void _addTask(BuildContext context) {
     final taskTitleText = _taskTitleController.text;
@@ -50,7 +50,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
     final today = DateTime.now();
     showDatePicker(
       context: context,
-      initialDate: today,
+      initialDate: _dateTime ?? today,
       firstDate: today.subtract(const Duration(days: 365 * 25)),
       lastDate: today.add(const Duration(days: 365 * 50)),
     ).then(
