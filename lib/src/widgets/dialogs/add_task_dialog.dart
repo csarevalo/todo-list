@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_list/src/providers/task_provider.dart';
 
@@ -93,10 +94,23 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            IconButton(
-              onPressed: _showDatePicker,
-              icon: const Icon(Icons.date_range_rounded),
-            ),
+            (_newDueDate == null)
+                ? IconButton(
+                    onPressed: _showDatePicker,
+                    icon: Icon(
+                      Icons.event_busy,
+                      color: themeColors.onPrimaryContainer,
+                    ),
+                  )
+                : TextButton.icon(
+                    onPressed: _showDatePicker,
+                    label: Text(
+                        DateFormat.yMMMd().format(_newDueDate!).toString()),
+                    icon: Icon(
+                      Icons.date_range_rounded,
+                      color: themeColors.onPrimaryContainer,
+                    ),
+                  ),
             DropdownButton(
               value: _dropdownPriorityValue,
               iconSize: 0,
