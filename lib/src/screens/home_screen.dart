@@ -188,7 +188,7 @@ class ExpansionTileByCategory extends StatelessWidget {
       collapsedIconColor: themeColors.primaryContainer,
       title: Text(
         titleText,
-        style: textTheme.headlineSmall!.copyWith(
+        style: textTheme.titleMedium!.copyWith(
           color: themeColors.primaryContainer,
         ),
       ),
