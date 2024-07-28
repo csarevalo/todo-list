@@ -4,11 +4,12 @@ import 'package:todo_list/src/screens/settings_view.dart';
 
 import '../providers/task_provider.dart';
 import '../widgets/dialogs/change_priority_dialog.dart';
+import '../widgets/section_expansion_tile.dart';
 import '../widgets/task_tile.dart';
 import '../widgets/dialogs/add_task_dialog.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
   static const routeName = '/';
 
   @override
@@ -124,27 +125,27 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            ExpansionTileByCategory(
+            SectionExpansionTile(
               leading: const Icon(Icons.flag, color: Colors.red),
               titleText: "High Priority",
               children: getTaskTileWithPriority(strPriority: "High"),
             ),
-            ExpansionTileByCategory(
+            SectionExpansionTile(
               leading: const Icon(Icons.flag, color: Colors.yellow),
               titleText: "Medium Priority",
               children: getTaskTileWithPriority(strPriority: "Medium"),
             ),
-            ExpansionTileByCategory(
+            SectionExpansionTile(
               leading: const Icon(Icons.flag, color: Colors.blue),
               titleText: "Low Priority",
               children: getTaskTileWithPriority(strPriority: "Low"),
             ),
-            ExpansionTileByCategory(
+            SectionExpansionTile(
               leading: const Icon(Icons.flag, color: Colors.grey),
               titleText: "None Priority",
               children: getTaskTileWithPriority(strPriority: "None"),
             ),
-            ExpansionTileByCategory(
+            SectionExpansionTile(
               titleText: "Completed",
               children: getTaskTilesWithCompletion(completed: true),
             ),
@@ -158,41 +159,6 @@ class _HomeScreenState extends State<HomeScreen> {
         // onPressed: () => Navigator.of(context).pushNamed('/add-task'),
         child: const Icon(Icons.add),
       ),
-    );
-  }
-}
-
-class ExpansionTileByCategory extends StatelessWidget {
-  const ExpansionTileByCategory({
-    super.key,
-    required this.titleText,
-    required this.children,
-    this.leading,
-  });
-
-  final String titleText;
-  final List<Widget> children;
-  final Widget? leading;
-
-  @override
-  Widget build(BuildContext context) {
-    final themeColors = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
-    return ExpansionTile(
-      leading: leading,
-      initiallyExpanded: true,
-      childrenPadding: const EdgeInsets.only(bottom: 10),
-      backgroundColor: themeColors.primary,
-      collapsedBackgroundColor: themeColors.primary,
-      iconColor: themeColors.primaryContainer,
-      collapsedIconColor: themeColors.primaryContainer,
-      title: Text(
-        titleText,
-        style: textTheme.titleMedium!.copyWith(
-          color: themeColors.primaryContainer,
-        ),
-      ),
-      children: children,
     );
   }
 }

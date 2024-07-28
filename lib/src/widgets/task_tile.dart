@@ -84,14 +84,14 @@ class TaskTile extends StatelessWidget {
                     ),
                     softWrap: false,
                   ),
-                  (dueDate == null)
-                      ? const SizedBox.shrink()
-                      : Text(
-                          DateFormat.yMMMd().format(dueDate!).toString(),
-                          style: textTheme.bodySmall!.copyWith(
-                            color: themeColors.onPrimary,
-                          ),
-                        ),
+                  if (dueDate != null) ...[
+                    Text(
+                      DateFormat.yMMMd().format(dueDate!).toString(),
+                      style: textTheme.bodySmall!.copyWith(
+                        color: themeColors.onPrimary,
+                      ),
+                    ),
+                  ]
                 ],
               ),
             ),

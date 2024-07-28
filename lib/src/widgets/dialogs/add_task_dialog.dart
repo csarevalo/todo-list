@@ -94,23 +94,24 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            (_newDueDate == null)
-                ? IconButton(
-                    onPressed: _showDatePicker,
-                    icon: Icon(
-                      Icons.event_busy,
-                      color: themeColors.onPrimaryContainer,
-                    ),
-                  )
-                : TextButton.icon(
-                    onPressed: _showDatePicker,
-                    label: Text(
-                        DateFormat.yMMMd().format(_newDueDate!).toString()),
-                    icon: Icon(
-                      Icons.date_range_rounded,
-                      color: themeColors.onPrimaryContainer,
-                    ),
-                  ),
+            if (_newDueDate == null) ...[
+              IconButton(
+                onPressed: _showDatePicker,
+                icon: Icon(
+                  Icons.event_busy,
+                  color: themeColors.onPrimaryContainer,
+                ),
+              ),
+            ] else ...[
+              TextButton.icon(
+                onPressed: _showDatePicker,
+                label: Text(DateFormat.yMMMd().format(_newDueDate!).toString()),
+                icon: Icon(
+                  Icons.date_range_rounded,
+                  color: themeColors.onPrimaryContainer,
+                ),
+              ),
+            ],
             DropdownButton(
               value: _dropdownPriorityValue,
               iconSize: 0,
