@@ -181,7 +181,7 @@ class ExpansionTileByCategory extends StatelessWidget {
     return ExpansionTile(
       leading: leading,
       initiallyExpanded: true,
-      childrenPadding: const EdgeInsets.only(bottom: 12),
+      childrenPadding: const EdgeInsets.only(bottom: 10),
       backgroundColor: themeColors.primary,
       collapsedBackgroundColor: themeColors.primary,
       iconColor: themeColors.primaryContainer,
