@@ -87,7 +87,7 @@ class TaskTile extends StatelessWidget {
                   (dueDate == null)
                       ? const SizedBox.shrink()
                       : Text(
-                          DateFormat.yMMMd().format(DateTime.now()).toString(),
+                          DateFormat.yMMMd().format(dueDate!).toString(),
                           style: textTheme.bodySmall!
                               .copyWith(color: themeColors.onPrimary),
                         ),

@@ -13,7 +13,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
   final TextEditingController _taskTitleController = TextEditingController();
   String? _dropdownPriorityValue = "None";
   int _priority = 0;
-  DateTime? _dateTime;
+  DateTime? _newDueDate;
 
   void _addTask(BuildContext context) {
     final taskTitleText = _taskTitleController.text;
@@ -21,7 +21,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
     final task = taskProvider.createTask(
       title: taskTitleText,
       priority: _priority,
-      dueDate: _dateTime,
+      dueDate: _newDueDate,
     );
     if (taskTitleText.isNotEmpty) {
       taskProvider.addTask(task);
@@ -50,16 +50,14 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
     final today = DateTime.now();
     showDatePicker(
       context: context,
-      initialDate: _dateTime ?? today,
+      initialDate: _newDueDate ?? today,
       firstDate: today.subtract(const Duration(days: 365 * 25)),
       lastDate: today.add(const Duration(days: 365 * 50)),
     ).then(
       (value) {
-        if (value != null) {
-          setState(() {
-            _dateTime = value;
-          });
-        }
+        setState(() {
+          _newDueDate = value;
+        });
       },
     );
   }
