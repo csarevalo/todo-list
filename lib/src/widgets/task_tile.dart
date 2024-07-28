@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
 
 class TaskTile extends StatelessWidget {
   final String title;
@@ -83,11 +84,13 @@ class TaskTile extends StatelessWidget {
                     ),
                     softWrap: false,
                   ),
-                  Text(
-                    dueDate.toString(),
-                    style: textTheme.bodySmall!
-                        .copyWith(color: themeColors.onPrimary),
-                  ),
+                  (dueDate == null)
+                      ? const SizedBox.shrink()
+                      : Text(
+                          DateFormat.yMMMd().format(DateTime.now()).toString(),
+                          style: textTheme.bodySmall!
+                              .copyWith(color: themeColors.onPrimary),
+                        ),
                 ],
               ),
             ),
