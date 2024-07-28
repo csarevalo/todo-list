@@ -69,7 +69,7 @@ class TaskTile extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(
+                    style: textTheme.bodyLarge!.copyWith(
                       color: checkboxState
                           ? onTileColor.withOpacity(0.4)
                           : onTileColor,
@@ -88,8 +88,9 @@ class TaskTile extends StatelessWidget {
                       ? const SizedBox.shrink()
                       : Text(
                           DateFormat.yMMMd().format(dueDate!).toString(),
-                          style: textTheme.bodySmall!
-                              .copyWith(color: themeColors.onPrimary),
+                          style: textTheme.bodySmall!.copyWith(
+                            color: themeColors.onPrimary,
+                          ),
                         ),
                 ],
               ),
