@@ -55,9 +55,11 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
       lastDate: today.add(const Duration(days: 365 * 50)),
     ).then(
       (value) {
-        setState(() {
-          _dateTime = value!;
-        });
+        if (value != null) {
+          setState(() {
+            _dateTime = value;
+          });
+        }
       },
     );
   }
