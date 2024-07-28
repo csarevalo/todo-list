@@ -119,7 +119,10 @@ class TaskSectionsBuilder extends StatelessWidget {
           sectionsUsed = dateSections;
           break;
         default:
-          sectionsUsed = [];
+          //TODO: Do not add a section and just include the tasks
+          sectionsUsed = [SectionHeading(heading: "Not Completed")];
+          getChildren =
+              (String s) => getTaskTilesWithCompletion(completed: false);
       }
       for (var section in sectionsUsed) {
         debugPrint(section.heading.split(" ")[0]);
@@ -136,7 +139,7 @@ class TaskSectionsBuilder extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          ...getSectionedTaskTiles("priority"),
+          ...getSectionedTaskTiles(""),
           SectionExpansionTile(
             titleText: "Completed",
             children: getTaskTilesWithCompletion(completed: true),
