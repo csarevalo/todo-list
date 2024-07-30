@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/src/utils/app_theme.dart';
 
+import '../models/task_settings.dart';
+
 /// A service that stores and retrieves user settings.
 ///
 /// By default, this class does not persist user settings. If you'd like to
@@ -25,6 +27,12 @@ class SettingsService {
   /// Loads the User's preferred ThemeMode from local or remote storage.
   Future<ThemeMode> themeMode() async => ThemeMode.system;
 
+  /// Loads the User's preferred TaskSettings from local or remote storage.
+  Future<TaskSettings> taskSettings() async => TaskSettings(
+        sortBy: "Completed",
+        filterBy: "None",
+      );
+
   /// Persists the user's preferred ThemeMode to local or remote storage.
   Future<void> updateThemeMode(ThemeMode theme) async {
     // Use the shared_preferences package to persist settings locally or the
@@ -47,5 +55,9 @@ class SettingsService {
   Future<void> updateContrast(String contrast) async {
     // Todo: may be more optimal to only save a string AppTheme name
     // since the TextThemes will be saved in constants
+  }
+
+  updateTaskSettings(TaskSettings taskSettings) {
+    // Todo: in the future
   }
 }

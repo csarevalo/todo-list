@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:todo_list/src/models/section_heading.dart';
+
+import '../models/section_heading.dart';
 
 import '../providers/task_provider.dart';
 import 'dialogs/change_priority_dialog.dart';
@@ -125,7 +126,6 @@ class TaskSectionsBuilder extends StatelessWidget {
               (String s) => getTaskTilesWithCompletion(completed: false);
       }
       for (var section in sectionsUsed) {
-        debugPrint(section.heading.split(" ")[0]);
         sectionTiles.add(
           SectionExpansionTile(
             titleText: section.heading,

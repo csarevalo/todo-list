@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/src/utils/app_theme.dart';
 
+import '../models/task_settings.dart';
 import '../utils/settings_service.dart';
 
 /// A class that many Widgets can interact with to read user settings, update
@@ -20,12 +21,14 @@ class SettingsController with ChangeNotifier {
   late TextTheme _textTheme;
   late String _contrast;
   late AppTheme _appTheme;
+  late TaskSettings _taskSettings;
 
   // Allow Widgets to read the user's preferred settings:
   ThemeMode get themeMode => _themeMode;
   TextTheme get textTheme => _textTheme;
   AppTheme get appTheme => _appTheme;
   String get contrast => _contrast;
+  TaskSettings get taskSettings => _taskSettings;
 
   /// Load the user's settings from the SettingsService. It may load from a
   /// local database or the internet. The controller only knows it can load the
@@ -35,6 +38,7 @@ class SettingsController with ChangeNotifier {
     _textTheme = await _settingsService.textTheme();
     _appTheme = await _settingsService.appTheme(_textTheme);
     _contrast = await _settingsService.contrast();
+    _taskSettings = await _settingsService.taskSettings();
 
     // Important! Inform listeners a change has occurred.
     notifyListeners();
@@ -86,5 +90,44 @@ class SettingsController with ChangeNotifier {
     // Persist the changes to a local database or the internet using the
     // SettingService.
     await _settingsService.updateContrast(newContrast);
+  }
+
+  /// Update and persist the ThemeMode based on the user's selection.
+  Future<void> updateTaskSettings(
+      String? newSortBy, String? newFilterBy) async {
+    if (newSortBy == null && newFilterBy == null) return;
+    // Do not perform any work if new and old Task Settings are identical
+    if (newSortBy == _taskSettings.sortBy &&
+        newFilterBy == _taskSettings.filterBy) {
+      return;
+    }
+
+    // Otherwise, store the new Task Settings in memory
+    if (newSortBy != _taskSettings.sortBy &&
+        newFilterBy != _taskSettings.filterBy) {
+      _taskSettings = TaskSettings(
+        sortBy: newSortBy!,
+        filterBy: newFilterBy!,
+      );
+    } else if (newSortBy != _taskSettings.sortBy) {
+      _taskSettings = TaskSettings(
+        sortBy: newSortBy!,
+        filterBy: _taskSettings.filterBy,
+      );
+    } else if (newFilterBy != _taskSettings.filterBy) {
+      _taskSettings = TaskSettings(
+        sortBy: _taskSettings.sortBy,
+        filterBy: newFilterBy!,
+      );
+    } else {
+      // Do not perform any work
+      return;
+    }
+    // Important! Inform listeners a change has occurred.
+    notifyListeners();
+
+    // Persist the changes to a local database or the internet using the
+    // SettingService.
+    await _settingsService.updateTaskSettings(taskSettings);
   }
 }
