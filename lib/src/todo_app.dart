@@ -35,7 +35,7 @@ class TodoApp extends StatelessWidget {
             restorationScopeId: 'todoApp',
             initialRoute: '/',
             routes: {
-              '/': (ctx) => HomeScreen(),
+              '/': (ctx) => HomeScreen(settingsController: settingsController),
               '/settings': (ctx) =>
                   SettingsView(controller: settingsController),
             },

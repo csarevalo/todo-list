@@ -1,8 +1,8 @@
 class TaskSettings {
+  String groupBy;
   String sortBy;
-  String filterBy;
   TaskSettings({
+    required this.groupBy,
     required this.sortBy,
-    required this.filterBy,
   });
 }

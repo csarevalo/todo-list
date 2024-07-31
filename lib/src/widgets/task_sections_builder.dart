@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_list/src/providers/settings_controller.dart';
+import 'package:todo_list/src/utils/settings_service.dart';
 
 import '../models/section_heading.dart';
 
@@ -9,7 +11,8 @@ import 'section_expansion_tile.dart';
 import 'task_tile.dart';
 
 class TaskSectionsBuilder extends StatelessWidget {
-  const TaskSectionsBuilder({super.key});
+  final SettingsController settingsController;
+  const TaskSectionsBuilder({super.key, required this.settingsController});
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +142,7 @@ class TaskSectionsBuilder extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          ...getSectionedTaskTiles(""),
+          ...getSectionedTaskTiles(settingsController.taskSettings.groupBy),
           SectionExpansionTile(
             titleText: "Completed",
             children: getTaskTilesWithCompletion(completed: true),

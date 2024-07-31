@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:todo_list/src/providers/settings_controller.dart';
+import 'package:todo_list/src/utils/settings_service.dart';
 
 import '../screens/settings_view.dart';
 import '../widgets/task_sections_builder.dart';
 import '../widgets/dialogs/add_task_dialog.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends StatelessWidget {
+  final SettingsController settingsController;
+  const HomeScreen({super.key, required this.settingsController});
   static const routeName = '/';
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final themeColors = Theme.of(context).colorScheme;
@@ -44,9 +42,13 @@ class _HomeScreenState extends State<HomeScreen> {
           PopupMenuButton(
             offset: const Offset(0, 45),
             itemBuilder: (context) => [
-              const PopupMenuItem<String>(
+              PopupMenuItem<String>(
                 value: "Sort",
-                child: Text("Sort By"),
+                child: const Text("Sort By"),
+                onTap: () => displaySortByDialog(
+                  context,
+                  settingsController: settingsController,
+                ),
               ),
               const PopupMenuItem<String>(
                 value: "Filter",
@@ -57,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(width: 16)
         ],
       ),
-      body: const TaskSectionsBuilder(),
+      body: TaskSectionsBuilder(settingsController: settingsController),
       floatingActionButton: FloatingActionButton(
         backgroundColor: themeColors.surfaceTint,
         foregroundColor: themeColors.surface,
@@ -74,4 +76,59 @@ Future<void> displayAddTaskDialog(BuildContext context) async {
     context: context,
     builder: (BuildContext context) => AddTaskDialog(),
   );
+}
+
+Future<void> displaySortByDialog(BuildContext context,
+    {required settingsController}) async {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) =>
+        SortByDialog(settingsController: settingsController),
+  );
+}
+
+class SortByDialog extends StatelessWidget {
+  final SettingsController settingsController;
+  const SortByDialog({
+    super.key,
+    required this.settingsController,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final themeColors = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+    return AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      backgroundColor: themeColors.primaryContainer,
+      alignment: Alignment.bottomCenter,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              Text(
+                "Group By",
+                style: textTheme.titleSmall,
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              TextButton(
+                onPressed: () => settingsController.updateTaskSettings(
+                    newGroupBy: "Priority"),
+                child: const Text("Priority"),
+              ),
+              TextButton(
+                onPressed: () =>
+                    settingsController.updateTaskSettings(newGroupBy: "None"),
+                child: const Text("None"),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
 }
