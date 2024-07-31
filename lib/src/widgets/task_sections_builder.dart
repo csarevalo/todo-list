@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_list/src/providers/settings_controller.dart';
-import 'package:todo_list/src/utils/settings_service.dart';
 
 import '../models/section_heading.dart';
 

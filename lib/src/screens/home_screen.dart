@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/src/providers/settings_controller.dart';
-import 'package:todo_list/src/utils/settings_service.dart';
 
 import '../screens/settings_view.dart';
 import '../widgets/task_sections_builder.dart';
