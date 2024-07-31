@@ -30,6 +30,7 @@ class TaskSectionsBuilder extends StatelessWidget {
             title: task.title,
             checkboxState: task.isDone,
             priority: task.priority,
+            dueDate: task.dueDate,
             onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
             onDelete: (context) => taskProvider.deleteTask(task.id),
             onPriorityChange: () => displayChangePriorityDialog(
