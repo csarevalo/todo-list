@@ -58,7 +58,7 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(width: 16)
         ],
       ),
-      body: TaskSectionsBuilder(settingsController: settingsController),
+      body: TaskSectionsBuilder(settings: settingsController),
       floatingActionButton: FloatingActionButton(
         backgroundColor: themeColors.surfaceTint,
         foregroundColor: themeColors.surface,

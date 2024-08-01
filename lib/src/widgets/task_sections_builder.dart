@@ -10,8 +10,8 @@ import 'section_expansion_tile.dart';
 import 'task_tile.dart';
 
 class TaskSectionsBuilder extends StatelessWidget {
-  final SettingsController settingsController;
-  const TaskSectionsBuilder({super.key, required this.settingsController});
+  final SettingsController settings;
+  const TaskSectionsBuilder({super.key, required this.settings});
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +142,7 @@ class TaskSectionsBuilder extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          ...getSectionedTaskTiles(settingsController.taskSettings.groupBy),
+          ...getSectionedTaskTiles(settings.taskViewOptions.groupBy),
           SectionExpansionTile(
             titleText: "Completed",
             children: getTaskTilesWithCompletion(completed: true),

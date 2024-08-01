@@ -1,7 +1,7 @@
-class TaskSettings {
+class TaskViewOptions {
   String groupBy;
   String sortBy;
-  TaskSettings({
+  TaskViewOptions({
     required this.groupBy,
     required this.sortBy,
   });

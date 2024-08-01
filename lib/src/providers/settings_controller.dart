@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/src/utils/app_theme.dart';
 
-import '../models/task_settings.dart';
+import '../models/task_view_options.dart';
 import '../utils/settings_service.dart';
 
 /// A class that many Widgets can interact with to read user settings, update
@@ -21,14 +21,14 @@ class SettingsController with ChangeNotifier {
   late TextTheme _textTheme;
   late String _contrast;
   late AppTheme _appTheme;
-  late TaskSettings _taskSettings;
+  late TaskViewOptions _taskViewOptions;
 
   // Allow Widgets to read the user's preferred settings:
   ThemeMode get themeMode => _themeMode;
   TextTheme get textTheme => _textTheme;
   AppTheme get appTheme => _appTheme;
   String get contrast => _contrast;
-  TaskSettings get taskSettings => _taskSettings;
+  TaskViewOptions get taskViewOptions => _taskViewOptions;
 
   /// Load the user's settings from the SettingsService. It may load from a
   /// local database or the internet. The controller only knows it can load the
@@ -38,7 +38,7 @@ class SettingsController with ChangeNotifier {
     _textTheme = await _settingsService.textTheme();
     _appTheme = await _settingsService.appTheme(_textTheme);
     _contrast = await _settingsService.contrast();
-    _taskSettings = await _settingsService.taskSettings();
+    _taskViewOptions = await _settingsService.taskViewOptions();
 
     // Important! Inform listeners a change has occurred.
     notifyListeners();
@@ -93,46 +93,32 @@ class SettingsController with ChangeNotifier {
   }
 
   /// Update and persist the ThemeMode based on the user's selection.
-  Future<void> updateTaskSettings(
-      {String? newSortBy, String? newGroupBy}) async {
+  Future<void> updateTaskSettings({
+    String? newSortBy,
+    String? newGroupBy,
+  }) async {
     if (newSortBy == null && newGroupBy == null) {
       return;
     } else {
-      newGroupBy ??= _taskSettings.groupBy;
-      newSortBy ??= _taskSettings.sortBy;
+      newGroupBy ??= _taskViewOptions.groupBy;
+      newSortBy ??= _taskViewOptions.sortBy;
     }
     // Do not perform any work if new and old Task Settings are identical
-    if (newSortBy == _taskSettings.sortBy &&
-        newGroupBy == _taskSettings.groupBy) {
+    if (newSortBy == _taskViewOptions.sortBy &&
+        newGroupBy == _taskViewOptions.groupBy) {
       return;
     }
 
     // Otherwise, store the new Task Settings in memory
-    if (newSortBy != _taskSettings.sortBy &&
-        newGroupBy != _taskSettings.groupBy) {
-      _taskSettings = TaskSettings(
-        sortBy: newSortBy,
-        groupBy: newGroupBy,
-      );
-    } else if (newSortBy != _taskSettings.sortBy) {
-      _taskSettings = TaskSettings(
-        sortBy: newSortBy,
-        groupBy: _taskSettings.groupBy,
-      );
-    } else if (newGroupBy != _taskSettings.groupBy) {
-      _taskSettings = TaskSettings(
-        sortBy: _taskSettings.sortBy,
-        groupBy: newGroupBy,
-      );
-    } else {
-      // Do not perform any work
-      return;
-    }
+    _taskViewOptions = TaskViewOptions(
+      sortBy: newSortBy,
+      groupBy: newGroupBy,
+    );
     // Important! Inform listeners a change has occurred.
     notifyListeners();
 
     // Persist the changes to a local database or the internet using the
     // SettingService.
-    await _settingsService.updateTaskSettings(taskSettings);
+    await _settingsService.updateTaskViewOptions(taskViewOptions);
   }
 }
