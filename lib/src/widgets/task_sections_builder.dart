@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_list/src/constants/task_group_headings.dart';
 import 'package:todo_list/src/providers/settings_controller.dart';
 
 import '../models/section_heading.dart';
@@ -20,6 +21,7 @@ class TaskSectionsBuilder extends StatelessWidget {
 
     final themeColors = Theme.of(context).colorScheme;
     // final textTheme = Theme.of(context).textTheme;
+    const TaskGroupHeadings headingOptions = TaskGroupHeadings();
 
     List<TaskTile> getTaskTilesWithCompletion({required completed}) {
       List<TaskTile> taskTiles = [];
@@ -83,52 +85,30 @@ class TaskSectionsBuilder extends StatelessWidget {
 
     List<SectionExpansionTile> getSectionedTaskTiles(String groupBy) {
       groupBy = groupBy.toLowerCase().trim();
-      final List<SectionHeading> prioritySections = [
-        SectionHeading(
-          heading: "High Priority",
-          leadingIcon: const Icon(Icons.flag, color: Colors.red),
-        ),
-        SectionHeading(
-          heading: "Medium Priority",
-          leadingIcon: const Icon(Icons.flag, color: Colors.yellow),
-        ),
-        SectionHeading(
-          heading: "Low Priority",
-          leadingIcon: const Icon(Icons.flag, color: Colors.blue),
-        ),
-        SectionHeading(
-          heading: "No Priority",
-          leadingIcon: const Icon(Icons.flag, color: Colors.grey),
-        ),
-      ];
+      final List<SectionHeading> priorityHeadings =
+          headingOptions.priorityHeadings();
 
-      final List<SectionHeading> dateSections = [
-        SectionHeading(heading: "Overdue Pospone"),
-        SectionHeading(heading: "Today"),
-        SectionHeading(heading: "Tomorrow"),
-        SectionHeading(heading: "Next 7 Days"),
-        SectionHeading(heading: "Later"),
-      ];
+      final List<SectionHeading> dateSections = headingOptions.dateHeadings();
 
-      List<SectionHeading> sectionsUsed;
+      List<SectionHeading> groupHeaders;
       List<SectionExpansionTile> sectionTiles = [];
       List<TaskTile> Function(String)? getChildren;
 
       switch (groupBy) {
         case "priority":
-          sectionsUsed = prioritySections;
+          groupHeaders = priorityHeadings;
           getChildren = (String s) => getTaskTileWithPriority(strPriority: s);
           break;
         case "date":
-          sectionsUsed = dateSections;
+          groupHeaders = dateSections;
           break;
         default:
           //TODO: Do not add a section and just include the tasks
-          sectionsUsed = [SectionHeading(heading: "Not Completed")];
+          groupHeaders = [SectionHeading(heading: "Not Completed")];
           getChildren =
               (String s) => getTaskTilesWithCompletion(completed: false);
       }
-      for (var section in sectionsUsed) {
+      for (var section in groupHeaders) {
         sectionTiles.add(
           SectionExpansionTile(
             titleText: section.heading,
