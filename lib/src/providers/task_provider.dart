@@ -17,21 +17,21 @@ class TaskProvider with ChangeNotifier {
       title: "Task 1",
       isDone: false,
       priority: 1,
-      createdDate: DateTime.now(),
+      dateCreated: DateTime.now(),
     ),
     Task(
       id: -2,
       title: "Task 2",
       isDone: true,
       priority: 2,
-      createdDate: DateTime.now(),
+      dateCreated: DateTime.now(),
     ),
     Task(
       id: -3,
       title: "Task 3",
       isDone: false,
       priority: 3,
-      createdDate: DateTime.now(),
+      dateCreated: DateTime.now(),
     ),
   ];
 
@@ -41,7 +41,7 @@ class TaskProvider with ChangeNotifier {
     final index = _todoList.indexWhere((task) => task.id == taskId);
     _todoList[index].isDone = !_todoList[index].isDone;
     if (_todoList[index].isDone) {
-      _todoList[index].doneDate = DateTime.now();
+      _todoList[index].dateDone = DateTime.now();
     }
     notifyListeners();
   }
@@ -55,15 +55,19 @@ class TaskProvider with ChangeNotifier {
     required String title,
     bool isDone = false,
     int priority = 1,
-    DateTime? dueDate,
+    DateTime? dateModified,
+    DateTime? dateDue,
+    DateTime? dateDone,
   }) {
     return Task(
       id: _getNewId(),
       title: title,
       isDone: isDone,
       priority: priority,
-      createdDate: DateTime.now(),
-      dueDate: dueDate,
+      dateCreated: DateTime.now(),
+      dateModified: dateModified,
+      dateDue: dateDue,
+      dateDone: dateDone,
     );
   }
 

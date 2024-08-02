@@ -157,6 +157,7 @@ class TaskSectionsBuilder extends StatelessWidget {
           break;
         case "date":
           groupHeaders = dateSections;
+          getChildren = (String s) => getTaskTileBasedOnDate(datePeriod: s);
           break;
         default:
           //TODO: Do not add a section and just include the tasks
@@ -168,7 +169,7 @@ class TaskSectionsBuilder extends StatelessWidget {
         sectionTiles.add(
           ExpandableTaskSection(
             titleText: section.heading,
-            children: getChildren!(section.heading.split(' ')[0]),
+            children: getChildren(section.heading.split(' ')[0]),
           ),
         );
       }

@@ -14,7 +14,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
   final TextEditingController _taskTitleController = TextEditingController();
   String? _dropdownPriorityValue = "None";
   int _priority = 0;
-  DateTime? _newDueDate;
+  DateTime? _newDateDue;
 
   void _addTask(BuildContext context) {
     final taskTitleText = _taskTitleController.text;
@@ -22,7 +22,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
     final task = taskProvider.createTask(
       title: taskTitleText,
       priority: _priority,
-      dueDate: _newDueDate,
+      dateDue: _newDateDue,
     );
     if (taskTitleText.isNotEmpty) {
       taskProvider.addTask(task);
@@ -51,13 +51,13 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
     final today = DateTime.now();
     showDatePicker(
       context: context,
-      initialDate: _newDueDate ?? today,
+      initialDate: _newDateDue ?? today,
       firstDate: today.subtract(const Duration(days: 365 * 25)),
       lastDate: today.add(const Duration(days: 365 * 50)),
     ).then(
       (value) {
         setState(() {
-          _newDueDate = value;
+          _newDateDue = value;
         });
       },
     );
@@ -94,7 +94,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            if (_newDueDate == null) ...[
+            if (_newDateDue == null) ...[
               IconButton(
                 onPressed: _showDatePicker,
                 icon: Icon(
@@ -105,7 +105,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
             ] else ...[
               TextButton.icon(
                 onPressed: _showDatePicker,
-                label: Text(DateFormat.yMMMd().format(_newDueDate!).toString()),
+                label: Text(DateFormat.yMMMd().format(_newDateDue!).toString()),
                 icon: Icon(
                   Icons.date_range_rounded,
                   color: themeColors.onPrimaryContainer,
