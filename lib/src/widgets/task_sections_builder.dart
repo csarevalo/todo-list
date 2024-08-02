@@ -97,31 +97,32 @@ class TaskSectionsBuilder extends StatelessWidget {
       //...it will work with an if-elseif-else statement
       datePeriod = datePeriod.toLowerCase();
       List<TaskTile> taskTiles = [];
-      var filteredTasks = tasks;
+      var filteredTasks = List.from(tasks);
       switch (datePeriod) {
         case "overdue":
           filteredTasks.retainWhere((task) =>
               task.dateCreated.difference(DateTime.now()).inDays < 0 &&
-              task.isDone);
+              task.isDone == false);
         case "today":
           filteredTasks.retainWhere((task) =>
               task.dateCreated.difference(DateTime.now()).inDays == 0 &&
-              task.isDone);
+              task.isDone == false);
         case "tomorrow":
           filteredTasks.retainWhere((task) =>
               task.dateCreated.difference(DateTime.now()).inDays == 1 &&
-              task.isDone);
+              task.isDone == false);
         case "next": //next 7 days (2-7) days
           filteredTasks.retainWhere((task) =>
               (task.dateCreated.difference(DateTime.now()).inDays > 1) &&
               task.dateCreated.difference(DateTime.now()).inDays <= 7 &&
-              task.isDone);
+              task.isDone == false);
         case "late": //later
           filteredTasks.retainWhere((task) =>
               task.dateCreated.difference(DateTime.now()).inDays > 0 &&
-              task.isDone);
+              task.isDone == false);
         default: //no date
-          filteredTasks.retainWhere((task) => task.dateCreated == null);
+          filteredTasks.retainWhere(
+              (task) => task.dateCreated == null && task.isDone == false);
       }
       for (var task in filteredTasks) {
         taskTiles.add(
