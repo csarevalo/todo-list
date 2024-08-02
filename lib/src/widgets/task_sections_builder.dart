@@ -100,21 +100,28 @@ class TaskSectionsBuilder extends StatelessWidget {
       var filteredTasks = tasks;
       switch (datePeriod) {
         case "overdue":
-          filteredTasks.retainWhere(
-              (task) => task.dateCreated.difference(DateTime.now()).inDays < 0);
+          filteredTasks.retainWhere((task) =>
+              task.dateCreated.difference(DateTime.now()).inDays < 0 &&
+              task.isDone);
         case "today":
           filteredTasks.retainWhere((task) =>
-              task.dateCreated.difference(DateTime.now()).inDays == 0);
+              task.dateCreated.difference(DateTime.now()).inDays == 0 &&
+              task.isDone);
         case "tomorrow":
           filteredTasks.retainWhere((task) =>
-              task.dateCreated.difference(DateTime.now()).inDays == 1);
+              task.dateCreated.difference(DateTime.now()).inDays == 1 &&
+              task.isDone);
         case "next": //next 7 days (2-7) days
           filteredTasks.retainWhere((task) =>
               (task.dateCreated.difference(DateTime.now()).inDays > 1) &&
-              task.dateCreated.difference(DateTime.now()).inDays <= 7);
-        default: //later
-          filteredTasks.retainWhere(
-              (task) => task.dateCreated.difference(DateTime.now()).inDays > 0);
+              task.dateCreated.difference(DateTime.now()).inDays <= 7 &&
+              task.isDone);
+        case "late": //later
+          filteredTasks.retainWhere((task) =>
+              task.dateCreated.difference(DateTime.now()).inDays > 0 &&
+              task.isDone);
+        default: //no date
+          filteredTasks.retainWhere((task) => task.dateCreated == null);
       }
       for (var task in filteredTasks) {
         taskTiles.add(
@@ -154,11 +161,9 @@ class TaskSectionsBuilder extends StatelessWidget {
           groupHeaders = priorityHeadings;
           getChildren =
               (String s) => getTaskTileBasedOnPriority(strPriority: s);
-          break;
         case "date":
           groupHeaders = dateSections;
           getChildren = (String s) => getTaskTileBasedOnDate(datePeriod: s);
-          break;
         default:
           //TODO: Do not add a section and just include the tasks
           groupHeaders = [SectionHeading(heading: "Not Completed")];

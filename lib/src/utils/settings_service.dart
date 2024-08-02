@@ -57,7 +57,7 @@ class SettingsService {
     // since the TextThemes will be saved in constants
   }
 
-  updateTaskViewOptions(TaskViewOptions taskViewOptions) {
+  Future<void> updateTaskViewOptions(TaskViewOptions taskViewOptions) async {
     // Todo: in the future
   }
 }
