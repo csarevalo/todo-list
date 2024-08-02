@@ -3,17 +3,19 @@ class Task {
   String title;
   bool isDone;
   int priority;
-  DateTime createdDate;
-  DateTime? dueDate;
-  DateTime? doneDate;
+  DateTime dateCreated;
+  DateTime? dateModified;
+  DateTime? dateDue;
+  DateTime? dateDone;
 
   Task({
     required this.id,
     required this.title,
     required this.isDone,
     required this.priority,
-    required this.createdDate,
-    this.dueDate,
-    this.doneDate,
+    required this.dateCreated,
+    this.dateModified,
+    this.dateDue,
+    this.dateDone,
   });
 }

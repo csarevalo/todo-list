@@ -39,7 +39,7 @@ class TaskSectionsBuilder extends StatelessWidget {
             title: task.title,
             checkboxState: task.isDone,
             priority: task.priority,
-            dueDate: task.dueDate,
+            dateDue: task.dateDue,
             onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
             onDelete: (context) => taskProvider.deleteTask(task.id),
             onPriorityChange: () => displayChangePriorityDialog(
@@ -75,7 +75,7 @@ class TaskSectionsBuilder extends StatelessWidget {
             title: task.title,
             checkboxState: task.isDone,
             priority: task.priority,
-            dueDate: task.dueDate,
+            dateDue: task.dateDue,
             onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
             onDelete: (context) => taskProvider.deleteTask(task.id),
             onPriorityChange: () => displayChangePriorityDialog(
@@ -92,26 +92,29 @@ class TaskSectionsBuilder extends StatelessWidget {
     }
 
     List<TaskTile> getTaskTileBasedOnDate({required String datePeriod}) {
+      //TODO: add second input to select reference date
+      //(created, modified, completed)
+      //...it will work with an if-elseif-else statement
       datePeriod = datePeriod.toLowerCase();
       List<TaskTile> taskTiles = [];
       var filteredTasks = tasks;
       switch (datePeriod) {
         case "overdue":
           filteredTasks.retainWhere(
-              (task) => task.createdDate.difference(DateTime.now()).inDays < 0);
+              (task) => task.dateCreated.difference(DateTime.now()).inDays < 0);
         case "today":
           filteredTasks.retainWhere((task) =>
-              task.createdDate.difference(DateTime.now()).inDays == 0);
+              task.dateCreated.difference(DateTime.now()).inDays == 0);
         case "tomorrow":
           filteredTasks.retainWhere((task) =>
-              task.createdDate.difference(DateTime.now()).inDays == 1);
+              task.dateCreated.difference(DateTime.now()).inDays == 1);
         case "next": //next 7 days (2-7) days
           filteredTasks.retainWhere((task) =>
-              (task.createdDate.difference(DateTime.now()).inDays > 1) &&
-              task.createdDate.difference(DateTime.now()).inDays <= 7);
+              (task.dateCreated.difference(DateTime.now()).inDays > 1) &&
+              task.dateCreated.difference(DateTime.now()).inDays <= 7);
         default: //later
           filteredTasks.retainWhere(
-              (task) => task.createdDate.difference(DateTime.now()).inDays > 0);
+              (task) => task.dateCreated.difference(DateTime.now()).inDays > 0);
       }
       for (var task in filteredTasks) {
         taskTiles.add(
@@ -119,7 +122,7 @@ class TaskSectionsBuilder extends StatelessWidget {
             title: task.title,
             checkboxState: task.isDone,
             priority: task.priority,
-            dueDate: task.dueDate,
+            dateDue: task.dateDue,
             onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
             onDelete: (context) => taskProvider.deleteTask(task.id),
             onPriorityChange: () => displayChangePriorityDialog(

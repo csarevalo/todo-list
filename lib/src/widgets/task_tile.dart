@@ -11,7 +11,7 @@ class TaskTile extends StatelessWidget {
   final void Function()? onPriorityChange;
   final Color tileColor;
   final Color onTileColor;
-  final DateTime? dueDate;
+  final DateTime? dateDue;
 
   const TaskTile({
     super.key,
@@ -23,7 +23,7 @@ class TaskTile extends StatelessWidget {
     required this.onPriorityChange,
     required this.tileColor,
     required this.onTileColor,
-    this.dueDate,
+    this.dateDue,
   });
 
   @override
@@ -84,9 +84,9 @@ class TaskTile extends StatelessWidget {
                     ),
                     softWrap: false,
                   ),
-                  if (dueDate != null) ...[
+                  if (dateDue != null) ...[
                     Text(
-                      DateFormat.yMMMd().format(dueDate!).toString(),
+                      DateFormat.yMMMd().format(dateDue!).toString(),
                       style: textTheme.bodySmall!.copyWith(
                         color: themeColors.onPrimary,
                       ),
