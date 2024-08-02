@@ -14,6 +14,8 @@ class TaskSectionsBuilder extends StatelessWidget {
   final SettingsController settings;
   const TaskSectionsBuilder({super.key, required this.settings});
 
+  //TODO: Don't show empty sections...
+
   @override
   Widget build(BuildContext context) {
     final tasks = Provider.of<TaskProvider>(context).todoList;
@@ -21,9 +23,15 @@ class TaskSectionsBuilder extends StatelessWidget {
 
     final themeColors = Theme.of(context).colorScheme;
     // final textTheme = Theme.of(context).textTheme;
+
+    /// Set the tile colors
+    //TODO: Make this something that can be called
+    Color tileColor = themeColors.primary.withOpacity(0.8);
+    Color onTileColor = themeColors.primaryContainer;
+
     const TaskGroupHeadings headingOptions = TaskGroupHeadings();
 
-    List<TaskTile> getTaskTilesWithCompletion({required completed}) {
+    List<TaskTile> getTaskTilesBasedOnCompletion({required completed}) {
       List<TaskTile> taskTiles = [];
       for (var task in tasks.where((task) => task.isDone == completed)) {
         taskTiles.add(
@@ -39,15 +47,15 @@ class TaskSectionsBuilder extends StatelessWidget {
               task.id,
               task.priority,
             ),
-            tileColor: themeColors.primary.withOpacity(0.8),
-            onTileColor: themeColors.primaryContainer,
+            tileColor: tileColor,
+            onTileColor: onTileColor,
           ),
         );
       }
       return taskTiles;
     }
 
-    List<TaskTile> getTaskTileWithPriority({required String strPriority}) {
+    List<TaskTile> getTaskTileBasedOnPriority({required String strPriority}) {
       List<TaskTile> taskTiles = [];
       int priority;
       switch (strPriority) {
@@ -75,8 +83,52 @@ class TaskSectionsBuilder extends StatelessWidget {
               task.id,
               task.priority,
             ),
-            tileColor: themeColors.primary.withOpacity(0.8),
-            onTileColor: themeColors.primaryContainer,
+            tileColor: tileColor,
+            onTileColor: onTileColor,
+          ),
+        );
+      }
+      return taskTiles;
+    }
+
+    List<TaskTile> getTaskTileBasedOnDate({required String datePeriod}) {
+      datePeriod = datePeriod.toLowerCase();
+      List<TaskTile> taskTiles = [];
+      var filteredTasks = tasks;
+      switch (datePeriod) {
+        case "overdue":
+          filteredTasks.retainWhere(
+              (task) => task.createdDate.difference(DateTime.now()).inDays < 0);
+        case "today":
+          filteredTasks.retainWhere((task) =>
+              task.createdDate.difference(DateTime.now()).inDays == 0);
+        case "tomorrow":
+          filteredTasks.retainWhere((task) =>
+              task.createdDate.difference(DateTime.now()).inDays == 1);
+        case "next": //next 7 days (2-7) days
+          filteredTasks.retainWhere((task) =>
+              (task.createdDate.difference(DateTime.now()).inDays > 1) &&
+              task.createdDate.difference(DateTime.now()).inDays <= 7);
+        default: //later
+          filteredTasks.retainWhere(
+              (task) => task.createdDate.difference(DateTime.now()).inDays > 0);
+      }
+      for (var task in filteredTasks) {
+        taskTiles.add(
+          TaskTile(
+            title: task.title,
+            checkboxState: task.isDone,
+            priority: task.priority,
+            dueDate: task.dueDate,
+            onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
+            onDelete: (context) => taskProvider.deleteTask(task.id),
+            onPriorityChange: () => displayChangePriorityDialog(
+              context,
+              task.id,
+              task.priority,
+            ),
+            tileColor: tileColor,
+            onTileColor: onTileColor,
           ),
         );
       }
@@ -97,7 +149,8 @@ class TaskSectionsBuilder extends StatelessWidget {
       switch (groupBy) {
         case "priority":
           groupHeaders = priorityHeadings;
-          getChildren = (String s) => getTaskTileWithPriority(strPriority: s);
+          getChildren =
+              (String s) => getTaskTileBasedOnPriority(strPriority: s);
           break;
         case "date":
           groupHeaders = dateSections;
@@ -106,7 +159,7 @@ class TaskSectionsBuilder extends StatelessWidget {
           //TODO: Do not add a section and just include the tasks
           groupHeaders = [SectionHeading(heading: "Not Completed")];
           getChildren =
-              (String s) => getTaskTilesWithCompletion(completed: false);
+              (String s) => getTaskTilesBasedOnCompletion(completed: false);
       }
       for (var section in groupHeaders) {
         sectionTiles.add(
@@ -125,7 +178,7 @@ class TaskSectionsBuilder extends StatelessWidget {
           ...getSectionedTaskTiles(settings.taskViewOptions.groupBy),
           ExpandableTaskSection(
             titleText: "Completed",
-            children: getTaskTilesWithCompletion(completed: true),
+            children: getTaskTilesBasedOnCompletion(completed: true),
           ),
         ],
       ),
