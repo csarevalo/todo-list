@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class SectionExpansionTile extends StatelessWidget {
-  const SectionExpansionTile({
+class ExpandableTaskSection extends StatelessWidget {
+  const ExpandableTaskSection({
     super.key,
     required this.titleText,
     required this.children,

@@ -7,7 +7,7 @@ import '../models/section_heading.dart';
 
 import '../providers/task_provider.dart';
 import 'dialogs/change_priority_dialog.dart';
-import 'section_expansion_tile.dart';
+import 'expandable_task_sections.dart';
 import 'task_tile.dart';
 
 class TaskSectionsBuilder extends StatelessWidget {
@@ -83,7 +83,7 @@ class TaskSectionsBuilder extends StatelessWidget {
       return taskTiles;
     }
 
-    List<SectionExpansionTile> getSectionedTaskTiles(String groupBy) {
+    List<ExpandableTaskSection> getSectionedTaskTiles(String groupBy) {
       groupBy = groupBy.toLowerCase().trim();
       final List<SectionHeading> priorityHeadings =
           headingOptions.priorityHeadings();
@@ -91,7 +91,7 @@ class TaskSectionsBuilder extends StatelessWidget {
       final List<SectionHeading> dateSections = headingOptions.dateHeadings();
 
       List<SectionHeading> groupHeaders;
-      List<SectionExpansionTile> sectionTiles = [];
+      List<ExpandableTaskSection> sectionTiles = [];
       List<TaskTile> Function(String)? getChildren;
 
       switch (groupBy) {
@@ -110,7 +110,7 @@ class TaskSectionsBuilder extends StatelessWidget {
       }
       for (var section in groupHeaders) {
         sectionTiles.add(
-          SectionExpansionTile(
+          ExpandableTaskSection(
             titleText: section.heading,
             children: getChildren!(section.heading.split(' ')[0]),
           ),
@@ -123,7 +123,7 @@ class TaskSectionsBuilder extends StatelessWidget {
       child: Column(
         children: [
           ...getSectionedTaskTiles(settings.taskViewOptions.groupBy),
-          SectionExpansionTile(
+          ExpandableTaskSection(
             titleText: "Completed",
             children: getTaskTilesWithCompletion(completed: true),
           ),
