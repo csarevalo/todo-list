@@ -5,6 +5,7 @@ import 'package:todo_list/src/providers/settings_controller.dart';
 
 import '../models/section_heading.dart';
 
+import '../models/task.dart';
 import '../providers/task_provider.dart';
 import 'dialogs/change_priority_dialog.dart';
 import 'expandable_task_sections.dart';
@@ -30,6 +31,125 @@ class TaskSectionsBuilder extends StatelessWidget {
     Color onTileColor = themeColors.primaryContainer;
 
     const TaskGroupHeadings headingOptions = TaskGroupHeadings();
+
+    List<Task> getTasksBasedOnCompletion({required bool isCompleted}) {
+      List<Task> filteredTasks = List.from(tasks);
+      filteredTasks.retainWhere((task) => task.isDone == isCompleted);
+      return filteredTasks;
+    }
+
+    List<Task> getTasksBasedOnPriority({
+      required String strPriority,
+      bool isCompleted = false, //default: uncompleted
+    }) {
+      List<Task> filteredTasks = List.from(tasks);
+      int priority;
+      switch (strPriority) {
+        case "High":
+          priority = 3;
+        case "Medium":
+          priority = 2;
+        case "Low":
+          priority = 1;
+        default:
+          priority = 0;
+      }
+      filteredTasks.retainWhere(
+          (task) => task.priority == priority && task.isDone == isCompleted);
+      return filteredTasks;
+    }
+
+    DateTime? getDateFromTask({
+      required Task task,
+      required String dateType,
+    }) {
+      dateType = dateType.toLowerCase();
+      switch (dateType) {
+        case "done":
+          return task.dateDone;
+        case "modified":
+          return task.dateModified;
+        case "due":
+          return task.dateDue;
+        default: //created
+          return task.dateCreated;
+      }
+    }
+
+    List<Task> getTasksBasedOnCreatedDate({
+      required String datePeriod, // Options: overdue, today, tmr, next, later
+      required String dateType, // Options: done, modified, due, created
+      bool isCompleted = false, // Default: uncompleted
+    }) {
+      List<Task> filteredTasks = List.from(tasks);
+      switch (datePeriod) {
+        case "overdue":
+          filteredTasks.retainWhere((task) {
+            bool logic = task.isDone == isCompleted;
+            int? dayDiff = getDateFromTask(task: task, dateType: dateType)
+                ?.difference(DateTime.now())
+                .inDays;
+            if (dayDiff != null) {
+              return dayDiff < 0 && logic;
+            }
+            return logic;
+          });
+        case "today":
+          filteredTasks.retainWhere((task) {
+            bool logic = task.isDone == isCompleted;
+            int? dayDiff = getDateFromTask(task: task, dateType: dateType)
+                ?.difference(DateTime.now())
+                .inDays;
+            if (dayDiff != null) {
+              return dayDiff == 0 && logic;
+            }
+            return false;
+          });
+        case "tmr": //tomorrow
+          filteredTasks.retainWhere((task) {
+            bool logic = task.isDone == isCompleted;
+            int? dayDiff = getDateFromTask(task: task, dateType: dateType)
+                ?.difference(DateTime.now())
+                .inDays;
+            if (dayDiff != null) {
+              return dayDiff < 1 && logic;
+            }
+            return false;
+          });
+        case "next": //next 7 days (2-7) days
+          filteredTasks.retainWhere((task) {
+            bool logic = task.isDone == isCompleted;
+            int? dayDiff = getDateFromTask(task: task, dateType: dateType)
+                ?.difference(DateTime.now())
+                .inDays;
+            if (dayDiff != null) {
+              return dayDiff > 1 && dayDiff <= 7 && logic;
+            }
+            return false;
+          });
+        case "later": //later
+          filteredTasks.retainWhere((task) {
+            bool logic = task.isDone == isCompleted;
+            int? dayDiff = getDateFromTask(task: task, dateType: dateType)
+                ?.difference(DateTime.now())
+                .inDays;
+            if (dayDiff != null) {
+              return dayDiff > 7 && logic;
+            }
+            return false;
+          });
+        default: //no date
+          filteredTasks.retainWhere((task) {
+            bool logic = task.isDone == isCompleted;
+            DateTime? date = getDateFromTask(task: task, dateType: dateType);
+            if (date == null) {
+              return logic;
+            }
+            return false;
+          });
+      }
+      return filteredTasks;
+    }
 
     List<TaskTile> getTaskTilesBasedOnCompletion({required completed}) {
       List<TaskTile> taskTiles = [];

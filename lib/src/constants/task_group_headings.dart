@@ -33,6 +33,7 @@ class TaskGroupHeadings {
       SectionHeading(heading: "Tomorrow"),
       SectionHeading(heading: "Next 7 Days"),
       SectionHeading(heading: "Later"),
+      SectionHeading(heading: "No Date"),
     ];
   }
 }
