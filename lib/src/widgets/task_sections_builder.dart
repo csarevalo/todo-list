@@ -27,7 +27,6 @@ class TaskSectionsBuilder extends StatelessWidget {
     // final textTheme = Theme.of(context).textTheme;
 
     /// Set the tile colors
-    //TODO: Make this something that can be called
     Color tileColor = themeColors.primary.withOpacity(0.8);
     Color onTileColor = themeColors.primaryContainer;
 

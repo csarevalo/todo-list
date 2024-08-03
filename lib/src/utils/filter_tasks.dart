@@ -7,6 +7,12 @@ class FilterTasks {
   List<Task> basedOnCompletion({required bool isCompleted}) {
     List<Task> filteredTasks = List.from(tasks);
     filteredTasks.retainWhere((task) => task.isDone == isCompleted);
+    filteredTasks.sort((a, b) {
+      if (isCompleted && b.dateDone != null && a.dateDone != null) {
+        return b.dateDone!.compareTo(a.dateDone!);
+      }
+      return 0; //no completion date (so all are the same)
+    });
     return filteredTasks;
   }
 
@@ -28,6 +34,17 @@ class FilterTasks {
     }
     filteredTasks.retainWhere(
         (task) => task.priority == priority && task.isDone == isCompleted);
+    filteredTasks.sort((a, b) {
+      if (a.dateDue != null && b.dateDue != null) {
+        // Primary comparison by due date
+        return b.dateDue!.compareTo(a.dateDue!);
+      } else if (a.dateDue == null) {
+        return 1; // b is after a
+      } else if (b.dateDue == null) {
+        return -1; // a is after b
+      }
+      return -1; // b is before a (go to bottom)
+    });
     return filteredTasks;
   }
 
