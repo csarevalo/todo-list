@@ -59,6 +59,11 @@ class TaskSectionsBuilder extends StatelessWidget {
       return filteredTasks;
     }
 
+    DateTime? dateOnly(DateTime? date) {
+      if (date == null) return null;
+      return DateTime(date.year, date.month, date.day);
+    }
+
     DateTime? getDateFromTask({
       required Task task,
       required String dateType,
@@ -66,53 +71,59 @@ class TaskSectionsBuilder extends StatelessWidget {
       dateType = dateType.toLowerCase();
       switch (dateType) {
         case "done":
-          return task.dateDone;
+          return dateOnly(task.dateDone);
         case "modified":
-          return task.dateModified;
+          return dateOnly(task.dateModified);
         case "due":
-          return task.dateDue;
+          return dateOnly(task.dateDue);
         default: //created
-          return task.dateCreated;
+          return dateOnly(task.dateCreated);
       }
     }
 
     List<Task> getTasksBasedOnDate({
-      required String datePeriod, // Options: overdue, today, tmr, next, later
+      required String
+          datePeriod, // Options: overdue, today, tomorrow, next, later
       required String dateType, // Options: done, modified, due, created
       bool isCompleted = false, // Default: uncompleted
     }) {
+      dateType = dateType.toLowerCase();
+      datePeriod = datePeriod.toLowerCase();
+      DateTime? todaysDate = DateTime.now();
+      todaysDate = dateOnly(todaysDate);
+
       List<Task> filteredTasks = List.from(tasks);
       switch (datePeriod) {
         case "overdue":
           filteredTasks.retainWhere((task) {
             bool logic = task.isDone == isCompleted;
             int? dayDiff = getDateFromTask(task: task, dateType: dateType)
-                ?.difference(DateTime.now())
+                ?.difference(todaysDate!)
                 .inDays;
             if (dayDiff != null) {
               return dayDiff < 0 && logic;
             }
-            return logic;
+            return false;
           });
         case "today":
           filteredTasks.retainWhere((task) {
             bool logic = task.isDone == isCompleted;
             int? dayDiff = getDateFromTask(task: task, dateType: dateType)
-                ?.difference(DateTime.now())
+                ?.difference(todaysDate!)
                 .inDays;
             if (dayDiff != null) {
               return dayDiff == 0 && logic;
             }
             return false;
           });
-        case "tmr": //tomorrow
+        case "tomorrow":
           filteredTasks.retainWhere((task) {
             bool logic = task.isDone == isCompleted;
             int? dayDiff = getDateFromTask(task: task, dateType: dateType)
-                ?.difference(DateTime.now())
+                ?.difference(todaysDate!)
                 .inDays;
             if (dayDiff != null) {
-              return dayDiff < 1 && logic;
+              return dayDiff == 1 && logic;
             }
             return false;
           });
@@ -120,7 +131,7 @@ class TaskSectionsBuilder extends StatelessWidget {
           filteredTasks.retainWhere((task) {
             bool logic = task.isDone == isCompleted;
             int? dayDiff = getDateFromTask(task: task, dateType: dateType)
-                ?.difference(DateTime.now())
+                ?.difference(todaysDate!)
                 .inDays;
             if (dayDiff != null) {
               return dayDiff > 1 && dayDiff <= 7 && logic;
@@ -131,7 +142,7 @@ class TaskSectionsBuilder extends StatelessWidget {
           filteredTasks.retainWhere((task) {
             bool logic = task.isDone == isCompleted;
             int? dayDiff = getDateFromTask(task: task, dateType: dateType)
-                ?.difference(DateTime.now())
+                ?.difference(todaysDate!)
                 .inDays;
             if (dayDiff != null) {
               return dayDiff > 7 && logic;
@@ -175,118 +186,35 @@ class TaskSectionsBuilder extends StatelessWidget {
       return taskTiles;
     }
 
-    List<TaskTile> getTaskTilesBasedOnCompletion({required completed}) {
-      List<TaskTile> taskTiles = [];
-      for (var task in tasks.where((task) => task.isDone == completed)) {
-        taskTiles.add(
-          TaskTile(
-            title: task.title,
-            checkboxState: task.isDone,
-            priority: task.priority,
-            dateDue: task.dateDue,
-            onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
-            onDelete: (context) => taskProvider.deleteTask(task.id),
-            onPriorityChange: () => displayChangePriorityDialog(
-              context,
-              task.id,
-              task.priority,
-            ),
-            tileColor: tileColor,
-            onTileColor: onTileColor,
-          ),
-        );
-      }
+    List<TaskTile> getTaskTilesBasedOnCompletion({required isCompleted}) {
+      List<Task> filteredTasks = getTasksBasedOnCompletion(
+        isCompleted: isCompleted,
+      );
+      List<TaskTile> taskTiles = createTaskTileListFrom(filteredTasks);
       return taskTiles;
     }
 
-    List<TaskTile> getTaskTileBasedOnPriority({required String strPriority}) {
-      List<TaskTile> taskTiles = [];
-      int priority;
-      switch (strPriority) {
-        case "High":
-          priority = 3;
-        case "Medium":
-          priority = 2;
-        case "Low":
-          priority = 1;
-        default:
-          priority = 0;
-      }
-      for (var task in tasks
-          .where((task) => task.priority == priority && task.isDone == false)) {
-        taskTiles.add(
-          TaskTile(
-            title: task.title,
-            checkboxState: task.isDone,
-            priority: task.priority,
-            dateDue: task.dateDue,
-            onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
-            onDelete: (context) => taskProvider.deleteTask(task.id),
-            onPriorityChange: () => displayChangePriorityDialog(
-              context,
-              task.id,
-              task.priority,
-            ),
-            tileColor: tileColor,
-            onTileColor: onTileColor,
-          ),
-        );
-      }
+    List<TaskTile> getTaskTileBasedOnPriority({
+      required String strPriority,
+      bool isCompleted = false, // By default show uncompleted tasks only
+    }) {
+      List<Task> filteredTasks = getTasksBasedOnPriority(
+        strPriority: strPriority,
+        isCompleted: isCompleted,
+      );
+      List<TaskTile> taskTiles = createTaskTileListFrom(filteredTasks);
       return taskTiles;
     }
 
-    List<TaskTile> getTaskTileBasedOnDate({required String datePeriod}) {
-      //TODO: add second input to select reference date
-      //(created, modified, completed)
-      //...it will work with an if-elseif-else statement
-      datePeriod = datePeriod.toLowerCase();
-      List<TaskTile> taskTiles = [];
-      var filteredTasks = List.from(tasks);
-      switch (datePeriod) {
-        case "overdue":
-          filteredTasks.retainWhere((task) =>
-              task.dateCreated.difference(DateTime.now()).inDays < 0 &&
-              task.isDone == false);
-        case "today":
-          filteredTasks.retainWhere((task) =>
-              task.dateCreated.difference(DateTime.now()).inDays == 0 &&
-              task.isDone == false);
-        case "tomorrow":
-          filteredTasks.retainWhere((task) =>
-              task.dateCreated.difference(DateTime.now()).inDays == 1 &&
-              task.isDone == false);
-        case "next": //next 7 days (2-7) days
-          filteredTasks.retainWhere((task) =>
-              (task.dateCreated.difference(DateTime.now()).inDays > 1) &&
-              task.dateCreated.difference(DateTime.now()).inDays <= 7 &&
-              task.isDone == false);
-        case "late": //later
-          filteredTasks.retainWhere((task) =>
-              task.dateCreated.difference(DateTime.now()).inDays > 0 &&
-              task.isDone == false);
-        default: //no date
-          filteredTasks.retainWhere(
-              (task) => task.dateCreated == null && task.isDone == false);
-      }
-      for (var task in filteredTasks) {
-        taskTiles.add(
-          TaskTile(
-            title: task.title,
-            checkboxState: task.isDone,
-            priority: task.priority,
-            dateDue: task.dateDue,
-            onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
-            onDelete: (context) => taskProvider.deleteTask(task.id),
-            onPriorityChange: () => displayChangePriorityDialog(
-              context,
-              task.id,
-              task.priority,
-            ),
-            tileColor: tileColor,
-            onTileColor: onTileColor,
-          ),
-        );
-      }
+    List<TaskTile> getTaskTileBasedOnDate({
+      required String
+          datePeriod, // Options: overdue, today, tomorrow, next, later
+      required String dateType, // Options: done, modified, due, created
+      bool isCompleted = false, // Default: uncompleted
+    }) {
+      List<Task> filteredTasks = getTasksBasedOnDate(
+          datePeriod: datePeriod, dateType: dateType, isCompleted: isCompleted);
+      List<TaskTile> taskTiles = createTaskTileListFrom(filteredTasks);
       return taskTiles;
     }
 
@@ -296,7 +224,6 @@ class TaskSectionsBuilder extends StatelessWidget {
           headingOptions.priorityHeadings();
 
       final List<SectionHeading> dateSections = headingOptions.dateHeadings();
-
       List<SectionHeading> groupHeaders;
       List<ExpandableTaskSection> sectionTiles = [];
       List<TaskTile> Function(String)? getChildren;
@@ -306,14 +233,35 @@ class TaskSectionsBuilder extends StatelessWidget {
           groupHeaders = priorityHeadings;
           getChildren =
               (String s) => getTaskTileBasedOnPriority(strPriority: s);
-        case "date":
+        case "datecreated": //Date Created
           groupHeaders = dateSections;
-          getChildren = (String s) => getTaskTileBasedOnDate(datePeriod: s);
+          getChildren = (String s) => getTaskTileBasedOnDate(
+                datePeriod: s,
+                dateType: 'created',
+              );
+        case "datemodified": //Date Modified
+          groupHeaders = dateSections;
+          getChildren = (String s) => getTaskTileBasedOnDate(
+                datePeriod: s,
+                dateType: 'modified',
+              );
+        case "datedue": //Date Due
+          groupHeaders = dateSections;
+          getChildren = (String s) => getTaskTileBasedOnDate(
+                datePeriod: s,
+                dateType: 'due',
+              );
+        case "datedone": //Date Done
+          groupHeaders = dateSections;
+          getChildren = (String s) => getTaskTileBasedOnDate(
+                datePeriod: s,
+                dateType: 'done',
+              );
         default:
           //TODO: Do not add a section and just include the tasks
           groupHeaders = [SectionHeading(heading: "Not Completed")];
           getChildren =
-              (String s) => getTaskTilesBasedOnCompletion(completed: false);
+              (String s) => getTaskTilesBasedOnCompletion(isCompleted: false);
       }
       for (var section in groupHeaders) {
         sectionTiles.add(
@@ -332,7 +280,7 @@ class TaskSectionsBuilder extends StatelessWidget {
           ...getSectionedTaskTiles(settings.taskViewOptions.groupBy),
           ExpandableTaskSection(
             titleText: "Completed",
-            children: getTaskTilesBasedOnCompletion(completed: true),
+            children: getTaskTilesBasedOnCompletion(isCompleted: true),
           ),
         ],
       ),
