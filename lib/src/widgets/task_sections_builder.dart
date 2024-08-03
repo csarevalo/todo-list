@@ -76,7 +76,7 @@ class TaskSectionsBuilder extends StatelessWidget {
       }
     }
 
-    List<Task> getTasksBasedOnCreatedDate({
+    List<Task> getTasksBasedOnDate({
       required String datePeriod, // Options: overdue, today, tmr, next, later
       required String dateType, // Options: done, modified, due, created
       bool isCompleted = false, // Default: uncompleted
@@ -151,8 +151,27 @@ class TaskSectionsBuilder extends StatelessWidget {
       return filteredTasks;
     }
 
-    List<TaskTile> createTaskTile() {
+    List<TaskTile> createTaskTileListFrom(List<Task> taskList) {
       List<TaskTile> taskTiles = [];
+      for (var task in taskList) {
+        taskTiles.add(
+          TaskTile(
+            title: task.title,
+            checkboxState: task.isDone,
+            priority: task.priority,
+            dateDue: task.dateDue,
+            onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
+            onDelete: (context) => taskProvider.deleteTask(task.id),
+            onPriorityChange: () => displayChangePriorityDialog(
+              context,
+              task.id,
+              task.priority,
+            ),
+            tileColor: tileColor,
+            onTileColor: onTileColor,
+          ),
+        );
+      }
       return taskTiles;
     }
 
