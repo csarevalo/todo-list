@@ -151,6 +151,11 @@ class TaskSectionsBuilder extends StatelessWidget {
       return filteredTasks;
     }
 
+    List<TaskTile> createTaskTile() {
+      List<TaskTile> taskTiles = [];
+      return taskTiles;
+    }
+
     List<TaskTile> getTaskTilesBasedOnCompletion({required completed}) {
       List<TaskTile> taskTiles = [];
       for (var task in tasks.where((task) => task.isDone == completed)) {
