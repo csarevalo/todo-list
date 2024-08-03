@@ -38,12 +38,13 @@ class FilterTasks {
       if (a.dateDue != null && b.dateDue != null) {
         // Primary comparison by due date
         return b.dateDue!.compareTo(a.dateDue!);
-      } else if (a.dateDue == null) {
-        return 1; // b is after a
-      } else if (b.dateDue == null) {
-        return -1; // a is after b
+      } else if (a.dateDue == null && b.dateDue != null) {
+        return 1; // b is after a (task w/date goes 1st)
+      } else if (b.dateDue == null && a.dateDue != null) {
+        return -1; // a is after b (task w/date goes 1st)
       }
-      return -1; // b is before a (go to bottom)
+      // Secondary comparison by date created
+      return b.dateCreated.compareTo(a.dateCreated);
     });
     return filteredTasks;
   }
