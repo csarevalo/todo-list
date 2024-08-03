@@ -4,14 +4,26 @@ class FilterTasks {
   final List<Task> tasks;
   FilterTasks({required this.tasks});
 
+  //TODO: add sort option to be controlled from settings_controller
+
   List<Task> basedOnCompletion({required bool isCompleted}) {
     List<Task> filteredTasks = List.from(tasks);
     filteredTasks.retainWhere((task) => task.isDone == isCompleted);
     filteredTasks.sort((a, b) {
+      // Primary comparison by completion date
       if (isCompleted && b.dateDone != null && a.dateDone != null) {
         return b.dateDone!.compareTo(a.dateDone!);
       }
-      return 0; //no completion date (so all are the same)
+      // Secondary comparison by due date
+      if (a.dateDue != null && b.dateDue != null) {
+        return b.dateDue!.compareTo(a.dateDue!);
+      } else if (a.dateDue == null && b.dateDue != null) {
+        return 1; // b is after a (task w/date goes 1st)
+      } else if (b.dateDue == null && a.dateDue != null) {
+        return -1; // a is after b (task w/date goes 1st)
+      }
+      // Tertiary comparison by date created
+      return b.dateCreated.compareTo(a.dateCreated);
     });
     return filteredTasks;
   }
@@ -35,14 +47,17 @@ class FilterTasks {
     filteredTasks.retainWhere(
         (task) => task.priority == priority && task.isDone == isCompleted);
     filteredTasks.sort((a, b) {
-      if (a.dateDue != null && b.dateDue != null) {
-        // Primary comparison by due date
-        return b.dateDue!.compareTo(a.dateDue!);
+      int dueDateComp = 0;
+      if (b.dateDue != null && a.dateDue != null) {
+        dueDateComp = b.dateDue!.compareTo(a.dateDue!);
       } else if (a.dateDue == null && b.dateDue != null) {
-        return 1; // b is after a (task w/date goes 1st)
+        dueDateComp = 1; // b is after a (task w/date goes 1st)
       } else if (b.dateDue == null && a.dateDue != null) {
-        return -1; // a is after b (task w/date goes 1st)
+        dueDateComp = -1; // a is after b (task w/date goes 1st)
       }
+
+      // Primary comparison by due date
+      if (dueDateComp != 0) return dueDateComp;
       // Secondary comparison by date created
       return b.dateCreated.compareTo(a.dateCreated);
     });
@@ -127,6 +142,23 @@ class FilterTasks {
           return false;
         });
     }
+
+    filteredTasks.sort((a, b) {
+      int dueDateComp = 0;
+      if (b.dateDue != null && a.dateDue != null) {
+        dueDateComp = b.dateDue!.compareTo(a.dateDue!);
+      } else if (a.dateDue == null && b.dateDue != null) {
+        dueDateComp = 1; // b is after a (task w/date goes 1st)
+      } else if (b.dateDue == null && a.dateDue != null) {
+        dueDateComp = -1; // a is after b (task w/date goes 1st)
+      }
+
+      // Primary comparison by due date
+      if (dueDateComp != 0) return dueDateComp;
+      // Secondary comparison by date created
+      return b.dateCreated.compareTo(a.dateCreated);
+    });
+
     return filteredTasks;
   }
 
