@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_list/src/widgets/dialogs/edit_task_dialog.dart';
 
 import '../constants/task_group_headings.dart';
 import '../models/section_heading.dart';
@@ -51,6 +52,7 @@ class TaskSectionsBuilder extends StatelessWidget {
               task.id,
               task.priority,
             ),
+            onTapTaskTile: () => displayUpdateTaskDialog(context, task),
             tileColor: tileColor,
             onTileColor: onTileColor,
           ),
@@ -177,5 +179,15 @@ Future<void> displayChangePriorityDialog(
       taskId: taskId,
       currentPriority: currentPriority,
     ),
+  );
+}
+
+Future<void> displayUpdateTaskDialog(
+  BuildContext context,
+  Task task,
+) async {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) => EditTaskDialog(task: task),
   );
 }

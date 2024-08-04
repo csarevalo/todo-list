@@ -71,6 +71,21 @@ class TaskProvider with ChangeNotifier {
     );
   }
 
+  void updateTask(
+    int taskId, {
+    String? newTitle,
+    int? newPriority,
+    DateTime? newDateDue,
+  }) {
+    final index = _todoList.indexWhere((task) => task.id == taskId);
+    if (index == -1) return; // exit if index is Not Found
+    _todoList[index].title = newTitle ?? _todoList[index].title;
+    _todoList[index].priority = newPriority ?? _todoList[index].priority;
+    _todoList[index].dateDue = newDateDue ?? _todoList[index].dateDue;
+    _todoList[index].dateModified = DateTime.now();
+    notifyListeners();
+  }
+
   void deleteTask(int taskId) {
     final index = _todoList.indexWhere((task) => task.id == taskId);
     _todoList.removeAt(index);

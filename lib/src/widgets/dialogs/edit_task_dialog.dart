@@ -4,36 +4,47 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_list/src/providers/task_provider.dart';
 
-class AddTaskDialog extends StatefulWidget {
-  const AddTaskDialog({super.key});
+import '../../models/task.dart';
+
+class EditTaskDialog extends StatefulWidget {
+  final Task task;
+  const EditTaskDialog({super.key, required this.task});
 
   @override
-  State<AddTaskDialog> createState() => _AddTaskDialogState();
+  State<EditTaskDialog> createState() => _EditTaskDialogState();
 }
 
-class _AddTaskDialogState extends State<AddTaskDialog> {
+class _EditTaskDialogState extends State<EditTaskDialog> {
+  _EditTaskDialogState();
   final TextEditingController _taskTitleController = TextEditingController();
-  String? _dropdownPriorityValue = "None";
+  final List<String> _priorityCallbackOptions = [
+    "None",
+    "Low",
+    "Medium",
+    "High",
+  ];
+  String? _dropdownPriorityValue;
   int _priority = 0;
   DateTime? _newDateDue;
 
-  void _addTask(BuildContext context) {
+  void _editTask(BuildContext context) {
     String taskTitleText = _taskTitleController.text;
     while (taskTitleText.contains(RegExp(r'  '))) {
       // Remove all extra spaces in sentence.
       taskTitleText = taskTitleText.replaceAll(RegExp(r'  '), ' ');
     }
     final taskProvider = Provider.of<TaskProvider>(context, listen: false);
-    final task = taskProvider.createTask(
-      title: taskTitleText,
-      priority: _priority,
-      dateDue: _newDateDue,
-    );
+
     if (taskTitleText.isNotEmpty) {
-      taskProvider.addTask(task);
-      _taskTitleController.clear();
-      Navigator.of(context).pop();
+      taskProvider.updateTask(
+        widget.task.id,
+        newTitle: taskTitleText,
+        newPriority: _priority,
+        newDateDue: _newDateDue,
+      );
     }
+    _taskTitleController.clear();
+    Navigator.of(context).pop();
   }
 
   void dropdownPriorityCallback(String? priority) {
@@ -72,9 +83,14 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
   Widget build(BuildContext context) {
     final themeColors = Theme.of(context).colorScheme;
     // final textTheme = Theme.of(context).textTheme;
+
+    _taskTitleController.text = widget.task.title; //task title
+    _dropdownPriorityValue =
+        _priorityCallbackOptions[widget.task.priority]; //task priority
+    _newDateDue = widget.task.dateDue; //task due date
     return AlertDialog(
       backgroundColor: themeColors.primaryContainer,
-      title: const Text("Add a Task"),
+      title: const Text("My Task"),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -97,7 +113,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
               border: InputBorder.none, //OutlineInputBorder(),
             ),
             onSubmitted: (value) {
-              _addTask(context);
+              _editTask(context);
             },
           ),
         ],
@@ -164,9 +180,9 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
             disabledForegroundColor: themeColors.onError,
           ),
           onPressed: _taskTitleController.text.isEmpty
-              ? null // to disable add button
-              : () => _addTask(context),
-          child: const Text("Add"),
+              ? null // to disable update button
+              : () => _editTask(context),
+          child: const Text("Update"),
         ),
       ],
       actionsAlignment: MainAxisAlignment.center,

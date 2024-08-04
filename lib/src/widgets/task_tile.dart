@@ -7,8 +7,9 @@ class TaskTile extends StatelessWidget {
   final bool checkboxState;
   final int priority;
   final Function(bool?)? onCheckboxChanged;
-  final Function(BuildContext)? onDelete;
+  final void Function(BuildContext)? onDelete;
   final void Function()? onPriorityChange;
+  final void Function()? onTapTaskTile;
   final Color tileColor;
   final Color onTileColor;
   final DateTime? dateDue;
@@ -21,6 +22,7 @@ class TaskTile extends StatelessWidget {
     required this.onCheckboxChanged,
     required this.onDelete,
     required this.onPriorityChange,
+    required this.onTapTaskTile,
     required this.tileColor,
     required this.onTileColor,
     this.dateDue,
@@ -46,9 +48,7 @@ class TaskTile extends StatelessWidget {
         ],
       ),
       child: InkWell(
-        onTap: () {
-          debugPrint("tap");
-        },
+        onTap: onTapTaskTile,
         child: Container(
           decoration: BoxDecoration(
             color: checkboxState ? tileColor.withOpacity(0.7) : tileColor,
