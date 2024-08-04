@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
-import 'package:todo_list/src/constants/task_group_headings.dart';
-import 'package:todo_list/src/providers/settings_controller.dart';
 
+import '../constants/task_group_headings.dart';
 import '../models/section_heading.dart';
-
 import '../models/task.dart';
 import '../providers/task_provider.dart';
+import '../providers/settings_controller.dart';
+
 import '../utils/filter_tasks.dart';
+// import '../utils/section_task_tiles.dart';
 import 'dialogs/change_priority_dialog.dart';
 import 'expandable_task_sections.dart';
 import 'task_tile.dart';
@@ -16,9 +17,6 @@ import 'task_tile.dart';
 class TaskSectionsBuilder extends StatelessWidget {
   final SettingsController settings;
   const TaskSectionsBuilder({super.key, required this.settings});
-
-  //TODO: Don't show empty sections...
-
   @override
   Widget build(BuildContext context) {
     final tasks = Provider.of<TaskProvider>(context).todoList;
@@ -32,6 +30,8 @@ class TaskSectionsBuilder extends StatelessWidget {
     Color onTileColor = themeColors.primaryContainer;
 
     final FilterTasks filterTasks = FilterTasks(tasks: tasks);
+
+    // final SectionTaskTiles sectionTaskTiles = SectionTaskTiles();
 
     const TaskGroupHeadings headingOptions = TaskGroupHeadings();
 
