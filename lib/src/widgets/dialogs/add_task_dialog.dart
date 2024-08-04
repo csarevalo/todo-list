@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_list/src/providers/task_provider.dart';
 
 class AddTaskDialog extends StatefulWidget {
-  AddTaskDialog({super.key});
+  const AddTaskDialog({super.key});
 
   @override
   State<AddTaskDialog> createState() => _AddTaskDialogState();
@@ -17,7 +18,11 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
   DateTime? _newDateDue;
 
   void _addTask(BuildContext context) {
-    final taskTitleText = _taskTitleController.text;
+    String taskTitleText = _taskTitleController.text;
+    while (taskTitleText.contains(RegExp(r'  '))) {
+      // Remove all extra spaces in sentence.
+      taskTitleText = taskTitleText.replaceAll(RegExp(r'  '), ' ');
+    }
     final taskProvider = Provider.of<TaskProvider>(context, listen: false);
     final task = taskProvider.createTask(
       title: taskTitleText,
@@ -52,8 +57,8 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
     showDatePicker(
       context: context,
       initialDate: _newDateDue ?? today,
-      firstDate: today.subtract(const Duration(days: 365 * 25)),
-      lastDate: today.add(const Duration(days: 365 * 50)),
+      firstDate: today.subtract(const Duration(days: 365 * 25)), // 25 yrs ago
+      lastDate: today.add(const Duration(days: 365 * 50)), // 50 yrs in future
     ).then(
       (value) {
         setState(() {
@@ -78,6 +83,14 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
             textInputAction:
                 TextInputAction.done, // submit on enter... no new lines
             maxLines: 3, // limit lines displayed
+            maxLength: 150, // max # of chars
+            maxLengthEnforcement:
+                MaxLengthEnforcement.truncateAfterCompositionEnds,
+            textCapitalization: TextCapitalization.sentences,
+            inputFormatters: [
+              FilteringTextInputFormatter.deny(RegExp(r"\n")),
+              FilteringTextInputFormatter.deny(RegExp(r"\t")),
+            ],
             controller: _taskTitleController,
             decoration: const InputDecoration(
               hintText: 'What are you going to do?',
