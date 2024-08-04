@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_list/src/constants/task_group_headings.dart';
 import 'package:todo_list/src/providers/settings_controller.dart';
@@ -150,14 +151,16 @@ class TaskSectionsBuilder extends StatelessWidget {
     }
 
     return SingleChildScrollView(
-      child: Column(
-        children: [
-          ...getSectionedTaskTiles(settings.taskViewOptions.groupBy),
-          ExpandableTaskSection(
-            titleText: "Completed",
-            children: getTaskTilesBasedOnCompletion(isCompleted: true),
-          ),
-        ],
+      child: SlidableAutoCloseBehavior(
+        child: Column(
+          children: [
+            ...getSectionedTaskTiles(settings.taskViewOptions.groupBy),
+            ExpandableTaskSection(
+              titleText: "Completed",
+              children: getTaskTilesBasedOnCompletion(isCompleted: true),
+            ),
+          ],
+        ),
       ),
     );
   }
