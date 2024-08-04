@@ -136,12 +136,15 @@ class TaskSectionsBuilder extends StatelessWidget {
               (String s) => getTaskTilesBasedOnCompletion(isCompleted: false);
       }
       for (var section in groupHeaders) {
-        sectionTiles.add(
-          ExpandableTaskSection(
-            titleText: section.heading,
-            children: getChildren(section.heading.split(' ')[0]),
-          ),
-        );
+        var children = getChildren(section.heading.split(' ')[0]);
+        if (children.isNotEmpty) {
+          sectionTiles.add(
+            ExpandableTaskSection(
+              titleText: section.heading,
+              children: children,
+            ),
+          );
+        }
       }
       return sectionTiles;
     }
