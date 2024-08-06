@@ -17,6 +17,7 @@ import 'task_tile.dart';
 class TaskSectionsBuilder extends StatelessWidget {
   final SettingsController settings;
   const TaskSectionsBuilder({super.key, required this.settings});
+
   @override
   Widget build(BuildContext context) {
     final taskProvider = Provider.of<TaskProvider>(context);
