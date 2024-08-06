@@ -10,7 +10,6 @@ import '../providers/task_provider.dart';
 import '../providers/settings_controller.dart';
 
 import '../utils/filter_tasks.dart';
-// import '../utils/section_task_tiles.dart';
 import 'dialogs/change_priority_dialog.dart';
 import 'expandable_task_sections.dart';
 import 'task_tile.dart';
@@ -20,8 +19,9 @@ class TaskSectionsBuilder extends StatelessWidget {
   const TaskSectionsBuilder({super.key, required this.settings});
   @override
   Widget build(BuildContext context) {
-    final tasks = Provider.of<TaskProvider>(context).todoList;
-    final taskProvider = Provider.of<TaskProvider>(context, listen: false);
+    final taskProvider = Provider.of<TaskProvider>(context);
+    // taskProvider.init();
+    final tasks = taskProvider.todoList;
 
     final themeColors = Theme.of(context).colorScheme;
     // final textTheme = Theme.of(context).textTheme;
@@ -31,8 +31,6 @@ class TaskSectionsBuilder extends StatelessWidget {
     Color onTileColor = themeColors.primaryContainer;
 
     final FilterTasks filterTasks = FilterTasks(tasks: tasks);
-
-    // final SectionTaskTiles sectionTaskTiles = SectionTaskTiles();
 
     const TaskGroupHeadings headingOptions = TaskGroupHeadings();
 

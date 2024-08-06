@@ -17,6 +17,8 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
   int _priority = 0;
   DateTime? _newDateDue;
 
+  bool _isTextFieldEmpty = true;
+
   void _addTask(BuildContext context) {
     String taskTitleText = _taskTitleController.text;
     while (taskTitleText.contains(RegExp(r'  '))) {
@@ -97,7 +99,12 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
               border: InputBorder.none, //OutlineInputBorder(),
             ),
             onSubmitted: (value) {
-              _addTask(context);
+              if (value.isNotEmpty) _addTask(context);
+            },
+            onChanged: (value) {
+              setState(() {
+                _isTextFieldEmpty = value.isEmpty;
+              });
             },
           ),
         ],
@@ -163,8 +170,8 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
             disabledBackgroundColor: themeColors.error,
             disabledForegroundColor: themeColors.onError,
           ),
-          onPressed: _taskTitleController.text.isEmpty
-              ? null // to disable add button
+          onPressed: _isTextFieldEmpty
+              ? null // to disable update button
               : () => _addTask(context),
           child: const Text("Add"),
         ),

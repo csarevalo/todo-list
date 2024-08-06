@@ -27,6 +27,8 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
   int _priority = 0;
   DateTime? _newDateDue;
 
+  bool _isTextFieldEmpty = false;
+
   void _editTask(BuildContext context) {
     String taskTitleText = _taskTitleController.text;
     while (taskTitleText.contains(RegExp(r'  '))) {
@@ -80,14 +82,20 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final themeColors = Theme.of(context).colorScheme;
-    // final textTheme = Theme.of(context).textTheme;
+  void initState() {
+    super.initState();
 
     _taskTitleController.text = widget.task.title; //task title
     _dropdownPriorityValue =
         _priorityCallbackOptions[widget.task.priority]; //task priority
     _newDateDue = widget.task.dateDue; //task due date
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final themeColors = Theme.of(context).colorScheme;
+    // final textTheme = Theme.of(context).textTheme;
+
     return AlertDialog(
       backgroundColor: themeColors.primaryContainer,
       title: const Text("My Task"),
@@ -114,6 +122,11 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
             ),
             onSubmitted: (value) {
               _editTask(context);
+            },
+            onChanged: (value) {
+              setState(() {
+                _isTextFieldEmpty = value.isEmpty;
+              });
             },
           ),
         ],
@@ -179,7 +192,7 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
             disabledBackgroundColor: themeColors.error,
             disabledForegroundColor: themeColors.onError,
           ),
-          onPressed: _taskTitleController.text.isEmpty
+          onPressed: _isTextFieldEmpty
               ? null // to disable update button
               : () => _editTask(context),
           child: const Text("Update"),

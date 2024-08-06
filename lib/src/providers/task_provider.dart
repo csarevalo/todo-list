@@ -8,34 +8,37 @@ class TaskProvider with ChangeNotifier {
     return _internalIdCounter;
   }
 
-  final List<Task> _todoList = [
-    //should leave empty list here
-    //get todo list from somewhere else
-    //avoid using negative integers
-    Task(
-      id: -1,
-      title: "Task 1",
-      isDone: false,
-      priority: 1,
-      dateCreated: DateTime.now(),
-    ),
-    Task(
-      id: -2,
-      title: "Task 2",
-      isDone: true,
-      priority: 2,
-      dateCreated: DateTime.now(),
-    ),
-    Task(
-      id: -3,
-      title: "Task 3",
-      isDone: false,
-      priority: 3,
-      dateCreated: DateTime.now(),
-    ),
-  ];
+  final List<Task> _todoList = [];
 
   List<Task> get todoList => _todoList;
+
+  void init() {
+    initTasks();
+  }
+
+  void initTasks() {
+    _todoList.add(
+      createTask(
+        title: "Task 1",
+        isDone: false,
+        priority: 3,
+      ),
+    );
+    _todoList.add(
+      createTask(
+        title: "Task 2",
+        isDone: true,
+        priority: 2,
+      ),
+    );
+    _todoList.add(
+      createTask(
+        title: "Task 3",
+        isDone: false,
+        priority: 1,
+      ),
+    );
+  }
 
   void toggleDone(int taskId) {
     final index = _todoList.indexWhere((task) => task.id == taskId);
