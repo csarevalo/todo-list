@@ -20,9 +20,10 @@ class TaskSectionsBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final taskProvider = Provider.of<TaskProvider>(context);
-    // taskProvider.init();
-    final tasks = taskProvider.todoList;
+    final taskProvider = Provider.of<TaskProvider>(context, listen: false);
+    // taskProvider.init(); //CAN'T CALL THIS HERE?? WTH
+    //TODO: Plz optimize ...REBUILDS this whole big ass widget
+    final tasks = Provider.of<TaskProvider>(context).todoList;
 
     final themeColors = Theme.of(context).colorScheme;
     // final textTheme = Theme.of(context).textTheme;
