@@ -45,7 +45,8 @@ class FilterTasks {
         priority = 0;
     }
     filteredTasks.retainWhere(
-        (task) => task.priority == priority && task.isDone == isCompleted);
+      (task) => task.priority == priority && task.isDone == isCompleted,
+    );
     filteredTasks.sort((a, b) {
       int dueDateComp = 0;
       if (b.dateDue != null && a.dateDue != null) {
@@ -79,65 +80,59 @@ class FilterTasks {
     switch (datePeriod) {
       case "overdue":
         filteredTasks.retainWhere((task) {
-          bool logic = task.isDone == isCompleted;
           int? dayDiff = getDateFromTask(task: task, dateType: dateType)
               ?.difference(todaysDate!)
               .inDays;
           if (dayDiff != null) {
-            return dayDiff < 0 && logic;
+            return dayDiff < 0 && task.isDone == isCompleted;
           }
           return false;
         });
       case "today":
         filteredTasks.retainWhere((task) {
-          bool logic = task.isDone == isCompleted;
           int? dayDiff = getDateFromTask(task: task, dateType: dateType)
               ?.difference(todaysDate!)
               .inDays;
           if (dayDiff != null) {
-            return dayDiff == 0 && logic;
+            return dayDiff == 0 && task.isDone == isCompleted;
           }
           return false;
         });
       case "tomorrow":
         filteredTasks.retainWhere((task) {
-          bool logic = task.isDone == isCompleted;
           int? dayDiff = getDateFromTask(task: task, dateType: dateType)
               ?.difference(todaysDate!)
               .inDays;
           if (dayDiff != null) {
-            return dayDiff == 1 && logic;
+            return dayDiff == 1 && task.isDone == isCompleted;
           }
           return false;
         });
       case "next": //next 7 days (2-7) days
         filteredTasks.retainWhere((task) {
-          bool logic = task.isDone == isCompleted;
           int? dayDiff = getDateFromTask(task: task, dateType: dateType)
               ?.difference(todaysDate!)
               .inDays;
           if (dayDiff != null) {
-            return dayDiff > 1 && dayDiff <= 7 && logic;
+            return dayDiff > 1 && dayDiff <= 7 && task.isDone == isCompleted;
           }
           return false;
         });
       case "later": //later
         filteredTasks.retainWhere((task) {
-          bool logic = task.isDone == isCompleted;
           int? dayDiff = getDateFromTask(task: task, dateType: dateType)
               ?.difference(todaysDate!)
               .inDays;
           if (dayDiff != null) {
-            return dayDiff > 7 && logic;
+            return dayDiff > 7 && task.isDone == isCompleted;
           }
           return false;
         });
       default: //no date
         filteredTasks.retainWhere((task) {
-          bool logic = task.isDone == isCompleted;
           DateTime? date = getDateFromTask(task: task, dateType: dateType);
           if (date == null) {
-            return logic;
+            return task.isDone == isCompleted;
           }
           return false;
         });
@@ -183,4 +178,9 @@ class FilterTasks {
     if (date == null) return null;
     return DateTime(date.year, date.month, date.day);
   }
+}
+
+//TODO: Pass Settings Controller here
+List<Task> sortTasks() {
+  return [];
 }
