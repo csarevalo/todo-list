@@ -138,21 +138,23 @@ class FilterTasks {
         });
     }
 
-    filteredTasks.sort((a, b) {
-      int dueDateComp = 0;
-      if (b.dateDue != null && a.dateDue != null) {
-        dueDateComp = b.dateDue!.compareTo(a.dateDue!);
-      } else if (a.dateDue == null && b.dateDue != null) {
-        dueDateComp = 1; // b is after a (task w/date goes 1st)
-      } else if (b.dateDue == null && a.dateDue != null) {
-        dueDateComp = -1; // a is after b (task w/date goes 1st)
-      }
+    // filteredTasks.sort((a, b) {
+    //   int dueDateComp = 0;
+    //   if (b.dateDue != null && a.dateDue != null) {
+    //     dueDateComp = b.dateDue!.compareTo(a.dateDue!);
+    //   } else if (a.dateDue == null && b.dateDue != null) {
+    //     dueDateComp = 1; // b is after a (task w/date goes 1st)
+    //   } else if (b.dateDue == null && a.dateDue != null) {
+    //     dueDateComp = -1; // a is after b (task w/date goes 1st)
+    //   }
+    //   // Primary comparison by due date
+    //   if (dueDateComp != 0) return dueDateComp;
+    //   // Secondary comparison by date created
+    //   return b.dateCreated.compareTo(a.dateCreated);
+    // });
 
-      // Primary comparison by due date
-      if (dueDateComp != 0) return dueDateComp;
-      // Secondary comparison by date created
-      return b.dateCreated.compareTo(a.dateCreated);
-    });
+    filteredTasks.sort(sortTasksBy("due_date", desc: true));
+    filteredTasks.sort(sortTasksBy("priority", desc: true));
 
     return filteredTasks;
   }
@@ -180,7 +182,54 @@ class FilterTasks {
   }
 }
 
-//TODO: Pass Settings Controller here
-List<Task> sortTasks() {
-  return [];
+typedef SortTask = int Function(Task a, Task b);
+// typedef SortF = SortTask Function(String sortField);
+SortTask sortTasksBy(
+  String sortBy, {
+  bool desc = true, // order of sort by
+  bool isCompleted = false,
+}) {
+  switch (sortBy) {
+    case 'due_date':
+      return (a, b) {
+        int dueDateComp = 0;
+        if (b.dateDue != null && a.dateDue != null) {
+          dueDateComp = b.dateDue!.compareTo(a.dateDue!);
+        } else if (a.dateDue == null && b.dateDue != null) {
+          dueDateComp = 1; // b is after a (task w/date goes 1st)
+        } else if (b.dateDue == null && a.dateDue != null) {
+          dueDateComp = -1; // a is after b (task w/date goes 1st)
+        }
+        // Primary comparison by due date
+        if (dueDateComp != 0) {
+          if (desc) {
+            return dueDateComp;
+          } else {
+            return dueDateComp * -1;
+          }
+        }
+        // Secondary comparison by date created
+        int dateCreatedComp = b.dateCreated.compareTo(a.dateCreated);
+        if (desc) {
+          return dateCreatedComp;
+        } else {
+          return dateCreatedComp * -1;
+        }
+      };
+    case 'priority':
+      return (a, b) {
+        int priorityComp = b.priority.compareTo(a.priority);
+        if (desc) {
+          return priorityComp;
+        } else {
+          return priorityComp * -1;
+        }
+      };
+    case 'title':
+      break;
+    case 'last_modified':
+      break;
+    default: // 'date_created'
+  }
+  return (a, b) => 0;
 }
