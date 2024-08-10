@@ -54,7 +54,6 @@ class FilterTasks {
   }) {
     dateType = dateType.toLowerCase();
     datePeriod = datePeriod.toLowerCase();
-    // DateTime? todaysDate = dateOnly(DateTime.now());
 
     List<Task> filteredTasks = List.from(tasks);
     filteredTasks.retainWhere(retainTaskWhere(
