@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import 'package:todo_list/src/models/task.dart';
 import 'package:todo_list/src/models/task_view_options.dart';
 
