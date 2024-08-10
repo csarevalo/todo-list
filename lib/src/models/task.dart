@@ -4,7 +4,7 @@ class Task {
   bool isDone;
   int priority;
   DateTime dateCreated;
-  DateTime? dateModified;
+  DateTime dateModified;
   DateTime? dateDue;
   DateTime? dateDone;
 
@@ -14,7 +14,7 @@ class Task {
     required this.isDone,
     required this.priority,
     required this.dateCreated,
-    this.dateModified,
+    required this.dateModified,
     this.dateDue,
     this.dateDone,
   });
