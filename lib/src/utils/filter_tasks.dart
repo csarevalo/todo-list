@@ -107,11 +107,13 @@ RetainTaskWhere retainTaskWhere({
   };
 }
 
+/// Used to compare date relative to days
 DateTime? dateOnly(DateTime? date) {
   if (date == null) return null;
   return DateTime(date.year, date.month, date.day);
 }
 
+/// Gets the date only based on datetype (done, modifed, due, created)
 DateTime? getDateFromTask({
   required Task task,
   required String dateType,
