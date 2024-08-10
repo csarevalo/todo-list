@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/src/providers/settings_controller.dart';
 
-class SortByDialog extends StatelessWidget {
+class SortTasksDialog extends StatelessWidget {
   final SettingsController settingsController;
-  const SortByDialog({
+  const SortTasksDialog({
     super.key,
     required this.settingsController,
   });
@@ -31,7 +31,8 @@ class SortByDialog extends StatelessWidget {
             children: [
               TextButton(
                 onPressed: () => settingsController.updateTaskSettings(
-                    newGroupBy: "Priority"),
+                  newGroupBy: "Priority",
+                ),
                 child: const Text("Priority"),
               ),
               TextButton(
@@ -41,12 +42,43 @@ class SortByDialog extends StatelessWidget {
                 child: const Text("Due Date"),
               ),
               TextButton(
-                onPressed: () =>
-                    settingsController.updateTaskSettings(newGroupBy: "None"),
+                onPressed: () => settingsController.updateTaskSettings(
+                  newGroupBy: "None",
+                ),
                 child: const Text("None"),
               ),
             ],
-          )
+          ),
+          Row(
+            children: [
+              Text(
+                "Sort 1st By",
+                style: textTheme.titleSmall,
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              TextButton(
+                onPressed: () => settingsController.updateTaskSettings(
+                  newSort1stBy: "Priority",
+                ),
+                child: const Text("Priority"),
+              ),
+              TextButton(
+                onPressed: () => settingsController.updateTaskSettings(
+                  newSort1stBy: "Date_Due",
+                ),
+                child: const Text("Due Date"),
+              ),
+              TextButton(
+                onPressed: () => settingsController.updateTaskSettings(
+                  newSort1stBy: "None",
+                ),
+                child: const Text("None"),
+              ),
+            ],
+          ),
         ],
       ),
     );

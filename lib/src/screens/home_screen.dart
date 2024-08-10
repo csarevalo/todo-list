@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todo_list/src/providers/settings_controller.dart';
 
 import '../screens/settings_view.dart';
-import '../widgets/dialogs/sort_by_dialog.dart';
+import '../widgets/dialogs/sort_tasks_dialog.dart';
 import '../widgets/task_sections_builder.dart';
 import '../widgets/dialogs/add_task_dialog.dart';
 
@@ -45,7 +45,7 @@ class HomeScreen extends StatelessWidget {
               PopupMenuItem<String>(
                 value: "Sort",
                 child: const Text("Sort By"),
-                onTap: () => displaySortByDialog(
+                onTap: () => displaySortTasksDialog(
                   context,
                   settingsController: settingsController,
                 ),
@@ -78,11 +78,11 @@ Future<void> displayAddTaskDialog(BuildContext context) async {
   );
 }
 
-Future<void> displaySortByDialog(BuildContext context,
+Future<void> displaySortTasksDialog(BuildContext context,
     {required settingsController}) async {
   return showDialog<void>(
     context: context,
     builder: (BuildContext context) =>
-        SortByDialog(settingsController: settingsController),
+        SortTasksDialog(settingsController: settingsController),
   );
 }

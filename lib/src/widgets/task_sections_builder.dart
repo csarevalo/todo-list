@@ -98,8 +98,6 @@ class TaskSectionsBuilder extends StatelessWidget {
 
     List<ExpandableTaskSection> getSectionedTaskTiles({
       required String groupBy,
-      required String sort1stBy,
-      required String sort2ndBy,
     }) {
       groupBy = groupBy.toLowerCase().trim();
       final List<SectionHeading> priorityHeadings =
@@ -166,8 +164,6 @@ class TaskSectionsBuilder extends StatelessWidget {
           children: [
             ...getSectionedTaskTiles(
               groupBy: settings.taskViewOptions.groupBy,
-              sort1stBy: settings.taskViewOptions.sort1stBy,
-              sort2ndBy: settings.taskViewOptions.sort2ndBy,
             ),
             ExpandableTaskSection(
               titleText: "Completed",

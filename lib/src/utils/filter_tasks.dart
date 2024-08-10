@@ -40,8 +40,8 @@ class FilterTasks {
       (task) => task.priority == priority && task.isDone == isCompleted,
     );
     filteredTasks.sort(sortTasksBy(
-      sort1stBy: 'due_date',
-      sort2ndBy: 'last_modified',
+      sort1stBy: taskViewOptions.sort1stBy,
+      sort2ndBy: taskViewOptions.sort2ndBy,
     ));
     return filteredTasks;
   }
@@ -62,8 +62,8 @@ class FilterTasks {
     ));
 
     filteredTasks.sort(sortTasksBy(
-      sort1stBy: "due_date",
-      sort2ndBy: "priority",
+      sort1stBy: taskViewOptions.sort1stBy,
+      sort2ndBy: taskViewOptions.sort2ndBy,
       desc1: true,
       desc2: false,
     ));
