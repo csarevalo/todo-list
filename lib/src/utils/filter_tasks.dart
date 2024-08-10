@@ -1,30 +1,22 @@
 import 'package:todo_list/src/models/task.dart';
+import 'package:todo_list/src/models/task_view_options.dart';
 
 class FilterTasks {
   final List<Task> tasks;
-  FilterTasks({required this.tasks});
+  final TaskViewOptions taskViewOptions;
+  FilterTasks({
+    required this.tasks,
+    required this.taskViewOptions,
+  });
 
   //TODO: add sort option to be controlled from settings_controller
 
   List<Task> basedOnCompletion({required bool isCompleted}) {
     List<Task> filteredTasks = List.from(tasks);
     filteredTasks.retainWhere((task) => task.isDone == isCompleted);
-    filteredTasks.sort((a, b) {
-      // Primary comparison by completion date
-      if (isCompleted && b.dateDone != null && a.dateDone != null) {
-        return b.dateDone!.compareTo(a.dateDone!);
-      }
-      // Secondary comparison by due date
-      if (a.dateDue != null && b.dateDue != null) {
-        return b.dateDue!.compareTo(a.dateDue!);
-      } else if (a.dateDue == null && b.dateDue != null) {
-        return 1; // b is after a (task w/date goes 1st)
-      } else if (b.dateDue == null && a.dateDue != null) {
-        return -1; // a is after b (task w/date goes 1st)
-      }
-      // Tertiary comparison by date created
-      return b.dateCreated.compareTo(a.dateCreated);
-    });
+    filteredTasks.sort(isCompleted
+        ? (a, b) => b.dateDone!.compareTo(a.dateDone!)
+        : sortTasksBy(sort1stBy: 'title', desc1: true));
     return filteredTasks;
   }
 
@@ -47,21 +39,10 @@ class FilterTasks {
     filteredTasks.retainWhere(
       (task) => task.priority == priority && task.isDone == isCompleted,
     );
-    filteredTasks.sort((a, b) {
-      int dueDateComp = 0;
-      if (b.dateDue != null && a.dateDue != null) {
-        dueDateComp = b.dateDue!.compareTo(a.dateDue!);
-      } else if (a.dateDue == null && b.dateDue != null) {
-        dueDateComp = 1; // b is after a (task w/date goes 1st)
-      } else if (b.dateDue == null && a.dateDue != null) {
-        dueDateComp = -1; // a is after b (task w/date goes 1st)
-      }
-
-      // Primary comparison by due date
-      if (dueDateComp != 0) return dueDateComp;
-      // Secondary comparison by date created
-      return b.dateCreated.compareTo(a.dateCreated);
-    });
+    filteredTasks.sort(sortTasksBy(
+      sort1stBy: 'due_date',
+      sort2ndBy: 'last_modified',
+    ));
     return filteredTasks;
   }
 
@@ -153,8 +134,12 @@ class FilterTasks {
     //   return b.dateCreated.compareTo(a.dateCreated);
     // });
 
-    filteredTasks.sort(sortTasksBy("due_date", desc: true));
-    // filteredTasks.sort(sortTasksBy("priority", desc: true));
+    filteredTasks.sort(sortTasksBy(
+      sort1stBy: "due_date",
+      sort2ndBy: "priority",
+      desc1: true,
+      desc2: false,
+    ));
 
     return filteredTasks;
   }
@@ -184,50 +169,21 @@ class FilterTasks {
 
 typedef SortTask = int Function(Task a, Task b);
 // typedef SortF = SortTask Function(String sortField);
-SortTask sortTasksBy(
-  String sortBy, {
-  bool desc = true, // order of sort by
+SortTask sortTasksBy({
+  required String sort1stBy,
+  String sort2ndBy = '',
+  bool desc1 = true, // order of 1st sort by
+  bool desc2 = true, // order of 2nd sort by
   bool isCompleted = false,
 }) {
-  switch (sortBy) {
-    case 'due_date':
-      return (a, b) {
-        // Primary comparison by due date
-        int dueDateComp = compareBasedOn(
-          "due_date",
-          taskA: a,
-          taskB: b,
-          desc: desc,
-        );
-        if (dueDateComp != 0) {
-          return desc ? dueDateComp : dueDateComp * -1;
-        }
-        // Secondary comparison by date created
-        int dateCreatedComp = compareBasedOn(
-          "date_created",
-          taskA: a,
-          taskB: b,
-          desc: desc,
-        );
-        return dateCreatedComp;
-      };
-    case 'priority':
-      return (a, b) {
-        int priorityComp = compareBasedOn(
-          "priority",
-          taskA: a,
-          taskB: b,
-          desc: desc,
-        );
-        return priorityComp;
-      };
-    case 'title':
-      break;
-    case 'last_modified':
-      break;
-    default: // 'date_created'
-  }
-  return (a, b) => 0;
+  return (a, b) {
+    // Primary comparison by 1st sortBy
+    int firstComp = compareBasedOn(sort1stBy, taskA: a, taskB: b, desc: desc1);
+    if (firstComp != 0) return firstComp;
+    // Secondary comparison by 2nd sortBy
+    int secondComp = compareBasedOn(sort2ndBy, taskA: a, taskB: b, desc: desc2);
+    return secondComp;
+  };
 }
 
 int compareBasedOn(

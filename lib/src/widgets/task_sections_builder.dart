@@ -32,7 +32,10 @@ class TaskSectionsBuilder extends StatelessWidget {
     Color tileColor = themeColors.primary.withOpacity(0.8);
     Color onTileColor = themeColors.primaryContainer;
 
-    final FilterTasks filterTasks = FilterTasks(tasks: tasks);
+    final FilterTasks filterTasks = FilterTasks(
+      tasks: tasks,
+      taskViewOptions: settings.taskViewOptions,
+    );
 
     const TaskGroupHeadings headingOptions = TaskGroupHeadings();
 
@@ -93,7 +96,11 @@ class TaskSectionsBuilder extends StatelessWidget {
       return taskTiles;
     }
 
-    List<ExpandableTaskSection> getSectionedTaskTiles(String groupBy) {
+    List<ExpandableTaskSection> getSectionedTaskTiles({
+      required String groupBy,
+      required String sort1stBy,
+      required String sort2ndBy,
+    }) {
       groupBy = groupBy.toLowerCase().trim();
       final List<SectionHeading> priorityHeadings =
           headingOptions.priorityHeadings();
@@ -157,7 +164,11 @@ class TaskSectionsBuilder extends StatelessWidget {
       child: SlidableAutoCloseBehavior(
         child: Column(
           children: [
-            ...getSectionedTaskTiles(settings.taskViewOptions.groupBy),
+            ...getSectionedTaskTiles(
+              groupBy: settings.taskViewOptions.groupBy,
+              sort1stBy: settings.taskViewOptions.sort1stBy,
+              sort2ndBy: settings.taskViewOptions.sort2ndBy,
+            ),
             ExpandableTaskSection(
               titleText: "Completed",
               children: getTaskTilesBasedOnCompletion(isCompleted: true),
