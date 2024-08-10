@@ -58,6 +58,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
     final today = DateTime.now();
     showDatePicker(
       context: context,
+      cancelText: "Clear",
       initialDate: _newDateDue ?? today,
       firstDate: today.subtract(const Duration(days: 365 * 25)), // 25 yrs ago
       lastDate: today.add(const Duration(days: 365 * 50)), // 50 yrs in future
