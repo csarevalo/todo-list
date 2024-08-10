@@ -154,7 +154,7 @@ class FilterTasks {
     // });
 
     filteredTasks.sort(sortTasksBy("due_date", desc: true));
-    filteredTasks.sort(sortTasksBy("priority", desc: true));
+    // filteredTasks.sort(sortTasksBy("priority", desc: true));
 
     return filteredTasks;
   }

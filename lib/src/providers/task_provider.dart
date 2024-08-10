@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/task.dart';
 
 class TaskProvider with ChangeNotifier {
-  int _internalIdCounter = 0;
+  int _internalIdCounter = -1; // id counter starts at 0
   int _getNewId() {
     _internalIdCounter += 1;
     return _internalIdCounter;
@@ -62,13 +62,14 @@ class TaskProvider with ChangeNotifier {
     DateTime? dateDue,
     DateTime? dateDone,
   }) {
+    DateTime rn = DateTime.now();
     return Task(
       id: _getNewId(),
       title: title,
       isDone: isDone,
       priority: priority,
-      dateCreated: DateTime.now(),
-      dateModified: dateModified,
+      dateCreated: rn,
+      dateModified: rn,
       dateDue: dateDue,
       dateDone: dateDone,
     );
@@ -76,15 +77,16 @@ class TaskProvider with ChangeNotifier {
 
   void updateTask(
     int taskId, {
-    String? newTitle,
-    int? newPriority,
-    DateTime? newDateDue,
+    required String newTitle,
+    required int newPriority,
+    required DateTime? newDateDue,
   }) {
     final index = _todoList.indexWhere((task) => task.id == taskId);
     if (index == -1) return; // exit if index is Not Found
-    _todoList[index].title = newTitle ?? _todoList[index].title;
-    _todoList[index].priority = newPriority ?? _todoList[index].priority;
-    _todoList[index].dateDue = newDateDue ?? _todoList[index].dateDue;
+    if (newTitle.isEmpty) newTitle = _todoList[index].title;
+    _todoList[index].title = newTitle;
+    _todoList[index].priority = newPriority;
+    _todoList[index].dateDue = newDateDue;
     _todoList[index].dateModified = DateTime.now();
     notifyListeners();
   }

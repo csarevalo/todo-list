@@ -69,6 +69,7 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
     final today = DateTime.now();
     showDatePicker(
       context: context,
+      cancelText: "Clear",
       initialDate: _newDateDue ?? today,
       firstDate: today.subtract(const Duration(days: 365 * 25)), // 25 yrs ago
       lastDate: today.add(const Duration(days: 365 * 50)), // 50 yrs in future
@@ -87,7 +88,8 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
 
     _taskTitleController.text = widget.task.title; //task title
     _dropdownPriorityValue =
-        _priorityCallbackOptions[widget.task.priority]; //task priority
+        _priorityCallbackOptions[widget.task.priority]; //dropdown priority val
+    _priority = widget.task.priority; //task priority
     _newDateDue = widget.task.dateDue; //task due date
   }
 
@@ -95,7 +97,6 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
   Widget build(BuildContext context) {
     final themeColors = Theme.of(context).colorScheme;
     // final textTheme = Theme.of(context).textTheme;
-
     return AlertDialog(
       backgroundColor: themeColors.primaryContainer,
       title: const Text("My Task"),
