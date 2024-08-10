@@ -36,9 +36,9 @@ class SortByDialog extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () => settingsController.updateTaskSettings(
-                  newGroupBy: "DateDue",
+                  newGroupBy: "Date_Due",
                 ),
-                child: const Text("Date"),
+                child: const Text("Due Date"),
               ),
               TextButton(
                 onPressed: () =>

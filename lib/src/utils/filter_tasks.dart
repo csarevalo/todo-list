@@ -192,38 +192,34 @@ SortTask sortTasksBy(
   switch (sortBy) {
     case 'due_date':
       return (a, b) {
-        int dueDateComp = 0;
-        if (b.dateDue != null && a.dateDue != null) {
-          dueDateComp = b.dateDue!.compareTo(a.dateDue!);
-        } else if (a.dateDue == null && b.dateDue != null) {
-          dueDateComp = 1; // b is after a (task w/date goes 1st)
-        } else if (b.dateDue == null && a.dateDue != null) {
-          dueDateComp = -1; // a is after b (task w/date goes 1st)
-        }
         // Primary comparison by due date
+        int dueDateComp = compareBasedOn(
+          "due_date",
+          taskA: a,
+          taskB: b,
+          desc: desc,
+        );
         if (dueDateComp != 0) {
-          if (desc) {
-            return dueDateComp;
-          } else {
-            return dueDateComp * -1;
-          }
+          return desc ? dueDateComp : dueDateComp * -1;
         }
         // Secondary comparison by date created
-        int dateCreatedComp = b.dateCreated.compareTo(a.dateCreated);
-        if (desc) {
-          return dateCreatedComp;
-        } else {
-          return dateCreatedComp * -1;
-        }
+        int dateCreatedComp = compareBasedOn(
+          "date_created",
+          taskA: a,
+          taskB: b,
+          desc: desc,
+        );
+        return dateCreatedComp;
       };
     case 'priority':
       return (a, b) {
-        int priorityComp = b.priority.compareTo(a.priority);
-        if (desc) {
-          return priorityComp;
-        } else {
-          return priorityComp * -1;
-        }
+        int priorityComp = compareBasedOn(
+          "priority",
+          taskA: a,
+          taskB: b,
+          desc: desc,
+        );
+        return priorityComp;
       };
     case 'title':
       break;
@@ -232,4 +228,41 @@ SortTask sortTasksBy(
     default: // 'date_created'
   }
   return (a, b) => 0;
+}
+
+int compareBasedOn(
+  String compBy, {
+  required Task taskA,
+  required Task taskB,
+  bool desc = true,
+}) {
+  switch (compBy) {
+    case "due_date":
+      int dueDateComp;
+      if (taskB.dateDue == null && taskA.dateDue == null) {
+        dueDateComp = 0; // both a & b have no due date
+      } else if (taskA.dateDue == null) {
+        dueDateComp = 1; // b is after a (task w/date goes 1st)
+      } else if (taskB.dateDue == null) {
+        dueDateComp = -1; // a is after b (task w/date goes 1st)
+      } else {
+        dueDateComp = taskB.dateDue!.compareTo(taskA.dateDue!);
+      }
+      return desc ? dueDateComp : dueDateComp * -1;
+    case "last_modified":
+      int lastModComp = taskB.dateModified.compareTo(taskA.dateModified);
+      return desc ? lastModComp : lastModComp * -1;
+    case "date_created":
+      int dateCreatedComp = taskB.dateCreated.compareTo(taskA.dateCreated);
+      return desc ? dateCreatedComp : dateCreatedComp * -1;
+    case "priority":
+      int priorityComp = taskB.priority.compareTo(taskA.priority);
+      return desc ? priorityComp : priorityComp * -1;
+    case "title":
+      int titleComp =
+          taskB.title.toLowerCase().compareTo(taskA.title.toLowerCase());
+      return desc ? titleComp : titleComp * -1;
+    default:
+      return 0;
+  }
 }

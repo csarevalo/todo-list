@@ -108,32 +108,33 @@ class TaskSectionsBuilder extends StatelessWidget {
           groupHeaders = priorityHeadings;
           getChildren =
               (String s) => getTaskTileBasedOnPriority(strPriority: s);
-        case "datecreated": //Date Created
-          groupHeaders = dateSections;
-          getChildren = (String s) => getTaskTileBasedOnDate(
-                datePeriod: s,
-                dateType: 'created',
-              );
-        case "datemodified": //Date Modified
-          groupHeaders = dateSections;
-          getChildren = (String s) => getTaskTileBasedOnDate(
-                datePeriod: s,
-                dateType: 'modified',
-              );
-        case "datedue": //Date Due
+        case "date_due": //Date Due
           groupHeaders = dateSections;
           getChildren = (String s) => getTaskTileBasedOnDate(
                 datePeriod: s,
                 dateType: 'due',
               );
-        case "datedone": //Date Done
-          groupHeaders = dateSections;
-          getChildren = (String s) => getTaskTileBasedOnDate(
-                datePeriod: s,
-                dateType: 'done',
-              );
+        // Unnecessary options
+        // case "date_created": //Date Created
+        //   groupHeaders = dateSections;
+        //   getChildren = (String s) => getTaskTileBasedOnDate(
+        //         datePeriod: s,
+        //         dateType: 'created',
+        //       );
+        // case "date_modified": //Date Modified
+        //   groupHeaders = dateSections;
+        //   getChildren = (String s) => getTaskTileBasedOnDate(
+        //         datePeriod: s,
+        //         dateType: 'modified',
+        //       );
+        // case "date_done": //Date Done
+        //   groupHeaders = dateSections;
+        //   getChildren = (String s) => getTaskTileBasedOnDate(
+        //         datePeriod: s,
+        //         dateType: 'done',
+        //       );
         default:
-          //TODO: Do not add a section and just include the tasks
+          //TODO: Do not add a section and just the tasks
           groupHeaders = [SectionHeading(heading: "Not Completed")];
           getChildren =
               (String s) => getTaskTilesBasedOnCompletion(isCompleted: false);

@@ -74,7 +74,7 @@ class HomeScreen extends StatelessWidget {
 Future<void> displayAddTaskDialog(BuildContext context) async {
   return showDialog<void>(
     context: context,
-    builder: (BuildContext context) => AddTaskDialog(),
+    builder: (BuildContext context) => const AddTaskDialog(),
   );
 }
 
