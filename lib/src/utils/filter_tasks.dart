@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:todo_list/src/models/task.dart';
 import 'package:todo_list/src/models/task_view_options.dart';
 
@@ -54,85 +55,13 @@ class FilterTasks {
   }) {
     dateType = dateType.toLowerCase();
     datePeriod = datePeriod.toLowerCase();
-    DateTime? todaysDate = DateTime.now();
-    todaysDate = dateOnly(todaysDate);
+    // DateTime? todaysDate = dateOnly(DateTime.now());
 
     List<Task> filteredTasks = List.from(tasks);
-    switch (datePeriod) {
-      case "overdue":
-        filteredTasks.retainWhere((task) {
-          int? dayDiff = getDateFromTask(task: task, dateType: dateType)
-              ?.difference(todaysDate!)
-              .inDays;
-          if (dayDiff != null) {
-            return dayDiff < 0 && task.isDone == isCompleted;
-          }
-          return false;
-        });
-      case "today":
-        filteredTasks.retainWhere((task) {
-          int? dayDiff = getDateFromTask(task: task, dateType: dateType)
-              ?.difference(todaysDate!)
-              .inDays;
-          if (dayDiff != null) {
-            return dayDiff == 0 && task.isDone == isCompleted;
-          }
-          return false;
-        });
-      case "tomorrow":
-        filteredTasks.retainWhere((task) {
-          int? dayDiff = getDateFromTask(task: task, dateType: dateType)
-              ?.difference(todaysDate!)
-              .inDays;
-          if (dayDiff != null) {
-            return dayDiff == 1 && task.isDone == isCompleted;
-          }
-          return false;
-        });
-      case "next": //next 7 days (2-7) days
-        filteredTasks.retainWhere((task) {
-          int? dayDiff = getDateFromTask(task: task, dateType: dateType)
-              ?.difference(todaysDate!)
-              .inDays;
-          if (dayDiff != null) {
-            return dayDiff > 1 && dayDiff <= 7 && task.isDone == isCompleted;
-          }
-          return false;
-        });
-      case "later": //later
-        filteredTasks.retainWhere((task) {
-          int? dayDiff = getDateFromTask(task: task, dateType: dateType)
-              ?.difference(todaysDate!)
-              .inDays;
-          if (dayDiff != null) {
-            return dayDiff > 7 && task.isDone == isCompleted;
-          }
-          return false;
-        });
-      default: //no date
-        filteredTasks.retainWhere((task) {
-          DateTime? date = getDateFromTask(task: task, dateType: dateType);
-          if (date == null) {
-            return task.isDone == isCompleted;
-          }
-          return false;
-        });
-    }
-
-    // filteredTasks.sort((a, b) {
-    //   int dueDateComp = 0;
-    //   if (b.dateDue != null && a.dateDue != null) {
-    //     dueDateComp = b.dateDue!.compareTo(a.dateDue!);
-    //   } else if (a.dateDue == null && b.dateDue != null) {
-    //     dueDateComp = 1; // b is after a (task w/date goes 1st)
-    //   } else if (b.dateDue == null && a.dateDue != null) {
-    //     dueDateComp = -1; // a is after b (task w/date goes 1st)
-    //   }
-    //   // Primary comparison by due date
-    //   if (dueDateComp != 0) return dueDateComp;
-    //   // Secondary comparison by date created
-    //   return b.dateCreated.compareTo(a.dateCreated);
-    // });
+    filteredTasks.retainWhere(retainTaskWhere(
+      dateType: dateType,
+      datePeriod: datePeriod,
+    ));
 
     filteredTasks.sort(sortTasksBy(
       sort1stBy: "due_date",
@@ -143,32 +72,65 @@ class FilterTasks {
 
     return filteredTasks;
   }
+}
 
-  DateTime? getDateFromTask({
-    required Task task,
-    required String dateType,
-  }) {
-    dateType = dateType.toLowerCase();
-    switch (dateType) {
-      case "done":
-        return dateOnly(task.dateDone);
-      case "modified":
-        return dateOnly(task.dateModified);
-      case "due":
-        return dateOnly(task.dateDue);
-      default: //created
-        return dateOnly(task.dateCreated);
-    }
+typedef RetainTaskWhere = bool Function(Task task);
+
+RetainTaskWhere retainTaskWhere({
+  required String dateType, // Options: done, modified, due, created
+  required String datePeriod, // Options: overdue, today, tomorrow, next, later
+  bool isCompleted = false,
+}) {
+  dateType = dateType.toLowerCase();
+
+  DateTime? todaysDate = dateOnly(DateTime.now());
+  bool Function(int) dayComp;
+  switch (datePeriod) {
+    case 'overdue':
+      dayComp = (dayDiff) => dayDiff < 0;
+    case 'today':
+      dayComp = (dayDiff) => dayDiff == 0;
+    case 'tomorrow':
+      dayComp = (dayDiff) => dayDiff == 1;
+    case 'next': //next 7 days (2-7) days
+      dayComp = (dayDiff) => dayDiff >= 2 && dayDiff <= 7;
+    case 'later':
+      dayComp = (dayDiff) => dayDiff > 7;
+    default: //no date.. is not used
+      dayComp = (_) => false;
   }
+  return (Task task) {
+    if (task.isDone != isCompleted) return false;
+    DateTime? taskDate = getDateFromTask(task: task, dateType: dateType);
+    int? dayDiff = taskDate?.difference(todaysDate!).inDays;
+    if (dayDiff != null) return dayComp(dayDiff);
+    return true;
+  };
+}
 
-  DateTime? dateOnly(DateTime? date) {
-    if (date == null) return null;
-    return DateTime(date.year, date.month, date.day);
+DateTime? dateOnly(DateTime? date) {
+  if (date == null) return null;
+  return DateTime(date.year, date.month, date.day);
+}
+
+DateTime? getDateFromTask({
+  required Task task,
+  required String dateType,
+}) {
+  switch (dateType) {
+    case "done":
+      return dateOnly(task.dateDone);
+    case "modified":
+      return dateOnly(task.dateModified);
+    case "due":
+      return dateOnly(task.dateDue);
+    default: //created
+      return dateOnly(task.dateCreated);
   }
 }
 
 typedef SortTask = int Function(Task a, Task b);
-// typedef SortF = SortTask Function(String sortField);
+
 SortTask sortTasksBy({
   required String sort1stBy,
   String sort2ndBy = '',
