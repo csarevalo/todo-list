@@ -1,8 +1,10 @@
 class TaskViewOptions {
   String groupBy;
-  String sortBy;
+  String sort1stBy;
+  String sort2ndBy;
   TaskViewOptions({
     required this.groupBy,
-    required this.sortBy,
+    required this.sort1stBy,
+    required this.sort2ndBy,
   });
 }

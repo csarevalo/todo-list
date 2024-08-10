@@ -30,7 +30,8 @@ class SettingsService {
   /// Loads the User's preferred TaskSettings from local or remote storage.
   Future<TaskViewOptions> taskViewOptions() async => TaskViewOptions(
         groupBy: "Completed",
-        sortBy: "None",
+        sort1stBy: "None",
+        sort2ndBy: "None",
       );
 
   /// Persists the user's preferred ThemeMode to local or remote storage.

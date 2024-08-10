@@ -94,25 +94,29 @@ class SettingsController with ChangeNotifier {
 
   /// Update and persist the ThemeMode based on the user's selection.
   Future<void> updateTaskSettings({
-    String? newSortBy,
+    String? newSort1stBy,
+    String? newSort2ndBy,
     String? newGroupBy,
   }) async {
-    if (newSortBy == null && newGroupBy == null) {
+    if (newGroupBy == null && newSort1stBy == null && newSort2ndBy == null) {
       return;
     } else {
       newGroupBy ??= _taskViewOptions.groupBy;
-      newSortBy ??= _taskViewOptions.sortBy;
+      newSort1stBy ??= _taskViewOptions.sort1stBy;
+      newSort2ndBy ??= _taskViewOptions.sort2ndBy;
     }
     // Do not perform any work if new and old Task Settings are identical
-    if (newSortBy == _taskViewOptions.sortBy &&
-        newGroupBy == _taskViewOptions.groupBy) {
+    if (newGroupBy == _taskViewOptions.groupBy &&
+        newSort1stBy == _taskViewOptions.sort1stBy &&
+        newSort2ndBy == _taskViewOptions.sort2ndBy) {
       return;
     }
 
     // Otherwise, store the new Task Settings in memory
     _taskViewOptions = TaskViewOptions(
-      sortBy: newSortBy,
       groupBy: newGroupBy,
+      sort1stBy: newSort1stBy,
+      sort2ndBy: newSort2ndBy,
     );
     // Important! Inform listeners a change has occurred.
     notifyListeners();
