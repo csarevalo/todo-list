@@ -82,7 +82,6 @@ RetainTaskWhere retainTaskWhere({
   bool isCompleted = false,
 }) {
   dateType = dateType.toLowerCase();
-
   DateTime? todaysDate = dateOnly(DateTime.now());
   bool Function(int) dayComp;
   switch (datePeriod) {
