@@ -16,7 +16,8 @@ class FilterTasks {
     filteredTasks.retainWhere((task) => task.isDone == isCompleted);
     filteredTasks.sort(isCompleted
         ? (a, b) => b.dateDone!.compareTo(a.dateDone!)
-        : sortTasksBy(sort1stBy: 'title', desc1: true));
+        : sortTasksBy(
+            sort1stBy: taskViewOptions.sort1stBy, desc1: true));
     return filteredTasks;
   }
 

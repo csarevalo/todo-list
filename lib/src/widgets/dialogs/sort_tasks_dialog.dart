@@ -43,41 +43,6 @@ class SortTasksDialog extends StatelessWidget {
   }
 }
 
-class SortByRow extends StatelessWidget {
-  const SortByRow({
-    super.key,
-    required this.settingsController,
-  });
-
-  final SettingsController settingsController;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        TextButton(
-          onPressed: () => settingsController.updateTaskSettings(
-            newSort1stBy: "Priority",
-          ),
-          child: const Text("Priority"),
-        ),
-        TextButton(
-          onPressed: () => settingsController.updateTaskSettings(
-            newSort1stBy: "Due_Date",
-          ),
-          child: const Text("Due Date"),
-        ),
-        TextButton(
-          onPressed: () => settingsController.updateTaskSettings(
-            newSort1stBy: "None",
-          ),
-          child: const Text("None"),
-        ),
-      ],
-    );
-  }
-}
-
 class GroupByRow extends StatelessWidget {
   const GroupByRow({
     super.key,
@@ -107,6 +72,41 @@ class GroupByRow extends StatelessWidget {
             newGroupBy: "None",
           ),
           child: const Text("None"),
+        ),
+      ],
+    );
+  }
+}
+
+class SortByRow extends StatelessWidget {
+  const SortByRow({
+    super.key,
+    required this.settingsController,
+  });
+
+  final SettingsController settingsController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        TextButton(
+          onPressed: () => settingsController.updateTaskSettings(
+            newSort1stBy: "Priority",
+          ),
+          child: const Text("Priority"),
+        ),
+        TextButton(
+          onPressed: () => settingsController.updateTaskSettings(
+            newSort1stBy: "Due_Date",
+          ),
+          child: const Text("Due Date"),
+        ),
+        TextButton(
+          onPressed: () => settingsController.updateTaskSettings(
+            newSort1stBy: "Title",
+          ),
+          child: const Text("Title"),
         ),
       ],
     );

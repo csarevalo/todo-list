@@ -32,7 +32,7 @@ class TaskSectionsBuilder extends StatelessWidget {
     Color tileColor = themeColors.primary.withOpacity(0.8);
     Color onTileColor = themeColors.primaryContainer;
 
-    FilterTasks filterTasks = FilterTasks(
+    final FilterTasks filterTasks = FilterTasks(
       tasks: tasks,
       taskViewOptions: settings.taskViewOptions,
     );

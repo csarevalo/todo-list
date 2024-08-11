@@ -116,10 +116,13 @@ class SettingsController with ChangeNotifier {
 
     // Otherwise, store the new Task Settings in memory
     _taskViewOptions = TaskViewOptions(
-      groupBy: newGroupBy,
-      sort1stBy: newSort1stBy,
-      sort2ndBy: newSort2ndBy,
+      groupBy: newGroupBy.toLowerCase(),
+      sort1stBy: newSort1stBy.toLowerCase(),
+      sort2ndBy: newSort2ndBy.toLowerCase(),
     );
+    debugPrint("group by: ${taskViewOptions.groupBy}");
+    debugPrint("sort 1st by: ${taskViewOptions.sort1stBy}");
+    debugPrint("sort 2nd by: ${taskViewOptions.sort2ndBy}");
     // Important! Inform listeners a change has occurred.
     notifyListeners();
 
