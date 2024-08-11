@@ -34,6 +34,16 @@ class SortTasksDialog extends StatelessWidget {
                 "Sort 1st By",
                 style: textTheme.titleSmall,
               ),
+              TextButton(
+                onPressed: () =>
+                    settingsController.updateTaskViewOptions(newDesc1: true),
+                child: const Text("Desc"),
+              ),
+              TextButton(
+                onPressed: () =>
+                    settingsController.updateTaskViewOptions(newDesc1: false),
+                child: const Text("Asc"),
+              ),
             ],
           ),
           SortByRow(settingsController: settingsController, initSort: true),
@@ -65,19 +75,19 @@ class GroupByRow extends StatelessWidget {
     return Row(
       children: [
         TextButton(
-          onPressed: () => settingsController.updateTaskSettings(
+          onPressed: () => settingsController.updateTaskViewOptions(
             newGroupBy: "Priority",
           ),
           child: const Text("Priority"),
         ),
         TextButton(
-          onPressed: () => settingsController.updateTaskSettings(
+          onPressed: () => settingsController.updateTaskViewOptions(
             newGroupBy: "Date_Due",
           ),
           child: const Text("Due Date"),
         ),
         TextButton(
-          onPressed: () => settingsController.updateTaskSettings(
+          onPressed: () => settingsController.updateTaskViewOptions(
             newGroupBy: "None",
           ),
           child: const Text("None"),
@@ -99,7 +109,7 @@ class SortByRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var update = settingsController.updateTaskSettings;
+    var update = settingsController.updateTaskViewOptions;
     return Row(
       children: [
         TextButton(

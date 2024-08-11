@@ -92,8 +92,8 @@ class SettingsController with ChangeNotifier {
     await _settingsService.updateContrast(newContrast);
   }
 
-  /// Update and persist the ThemeMode based on the user's selection.
-  Future<void> updateTaskSettings({
+  /// Update and persist the Task View Options based on the user's selection.
+  Future<void> updateTaskViewOptions({
     String? newSort1stBy,
     String? newSort2ndBy,
     String? newGroupBy,
