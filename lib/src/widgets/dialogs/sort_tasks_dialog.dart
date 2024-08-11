@@ -34,15 +34,17 @@ class SortTasksDialog extends StatelessWidget {
                 "Sort 1st By",
                 style: textTheme.titleSmall,
               ),
-              TextButton(
-                onPressed: () =>
-                    settingsController.updateTaskViewOptions(newDesc1: true),
-                child: const Text("Desc"),
-              ),
-              TextButton(
-                onPressed: () =>
-                    settingsController.updateTaskViewOptions(newDesc1: false),
-                child: const Text("Asc"),
+              ElevatedButton(
+                onPressed: () {
+                  settingsController.taskViewOptions.desc1
+                      ? settingsController.updateTaskViewOptions(
+                          newDesc1: false)
+                      : settingsController.updateTaskViewOptions(
+                          newDesc1: true);
+                },
+                child: settingsController.taskViewOptions.desc1
+                    ? const Text("Desc")
+                    : const Text("Asc"),
               ),
             ],
           ),
@@ -53,15 +55,17 @@ class SortTasksDialog extends StatelessWidget {
                 "Sort 2nd By",
                 style: textTheme.titleSmall,
               ),
-              TextButton(
-                onPressed: () =>
-                    settingsController.updateTaskViewOptions(newDesc2: true),
-                child: const Text("Desc"),
-              ),
-              TextButton(
-                onPressed: () =>
-                    settingsController.updateTaskViewOptions(newDesc2: false),
-                child: const Text("Asc"),
+              ElevatedButton(
+                onPressed: () {
+                  settingsController.taskViewOptions.desc2
+                      ? settingsController.updateTaskViewOptions(
+                          newDesc2: false)
+                      : settingsController.updateTaskViewOptions(
+                          newDesc2: true);
+                },
+                child: settingsController.taskViewOptions.desc2
+                    ? const Text("Desc")
+                    : const Text("Asc"),
               ),
             ],
           ),
@@ -120,25 +124,45 @@ class SortByRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var update = settingsController.updateTaskViewOptions;
-    return Row(
+    return Column(
       children: [
-        TextButton(
-          onPressed: () => initSort
-              ? update(newSort1stBy: "Priority")
-              : update(newSort2ndBy: "Priority"),
-          child: const Text("Priority"),
+        Row(
+          children: [
+            TextButton(
+              onPressed: () => initSort
+                  ? update(newSort1stBy: "Priority")
+                  : update(newSort2ndBy: "Priority"),
+              child: const Text("Priority"),
+            ),
+            TextButton(
+              onPressed: () => initSort
+                  ? update(newSort1stBy: "Due_Date")
+                  : update(newSort2ndBy: "Due_Date"),
+              child: const Text("Due Date"),
+            ),
+            TextButton(
+              onPressed: () => initSort
+                  ? update(newSort1stBy: "Title")
+                  : update(newSort2ndBy: "Title"),
+              child: const Text("Title"),
+            ),
+          ],
         ),
-        TextButton(
-          onPressed: () => initSort
-              ? update(newSort1stBy: "Due_Date")
-              : update(newSort2ndBy: "Due_Date"),
-          child: const Text("Due Date"),
-        ),
-        TextButton(
-          onPressed: () => initSort
-              ? update(newSort1stBy: "Title")
-              : update(newSort2ndBy: "Title"),
-          child: const Text("Title"),
+        Row(
+          children: [
+            TextButton(
+              onPressed: () => initSort
+                  ? update(newSort1stBy: "Last_modified")
+                  : update(newSort2ndBy: "Last_modified"),
+              child: const Text("Last Modified"),
+            ),
+            TextButton(
+              onPressed: () => initSort
+                  ? update(newSort1stBy: "Date_created")
+                  : update(newSort2ndBy: "Date_created"),
+              child: const Text("Date Created"),
+            ),
+          ],
         ),
         initSort
             ? const SizedBox.shrink()

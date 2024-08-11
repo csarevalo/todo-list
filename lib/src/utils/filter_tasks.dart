@@ -9,8 +9,6 @@ class FilterTasks {
     required this.taskViewOptions,
   });
 
-  //TODO: add sort option to be controlled from settings_controller
-
   List<Task> basedOnCompletion({required bool isCompleted}) {
     List<Task> filteredTasks = List.from(tasks);
     filteredTasks.retainWhere((task) => task.isDone == isCompleted);
