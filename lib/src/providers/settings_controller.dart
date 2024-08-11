@@ -97,8 +97,8 @@ class SettingsController with ChangeNotifier {
     String? newSort1stBy,
     String? newSort2ndBy,
     String? newGroupBy,
-    bool newDesc1 = true,
-    bool newDesc2 = true,
+    bool? newDesc1,
+    bool? newDesc2,
   }) async {
     if (newGroupBy == null && newSort1stBy == null && newSort2ndBy == null) {
       return;
@@ -106,6 +106,8 @@ class SettingsController with ChangeNotifier {
       newGroupBy ??= _taskViewOptions.groupBy;
       newSort1stBy ??= _taskViewOptions.sort1stBy;
       newSort2ndBy ??= _taskViewOptions.sort2ndBy;
+      newDesc1 ??= _taskViewOptions.desc1;
+      newDesc2 ??= _taskViewOptions.desc2;
     }
     // Do not perform any work if new and old Task Settings are identical
     if (newGroupBy == _taskViewOptions.groupBy &&
