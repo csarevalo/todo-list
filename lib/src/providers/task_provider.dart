@@ -3,8 +3,8 @@ import 'package:todo_list/src/utils/task_provider_service.dart';
 import '../models/task.dart';
 
 class TaskProvider with ChangeNotifier {
-  // TaskProvider(this._taskProviderService);
-  final TaskProviderService _taskProviderService = TaskProviderService();
+  TaskProvider(this._taskProviderService);
+  final TaskProviderService _taskProviderService;
 
   int _internalIdCounter = -1; // id counter starts at 0
   int _getNewId() {
@@ -16,7 +16,7 @@ class TaskProvider with ChangeNotifier {
 
   List<Task> get todoList => _todoList;
 
-  void init() async {
+  Future<void> init() async {
     _todoList = await _taskProviderService.loadTasks();
 
     // Important! Inform listeners a change has occurred.

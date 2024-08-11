@@ -14,26 +14,17 @@ import 'dialogs/change_priority_dialog.dart';
 import 'expandable_task_sections.dart';
 import 'task_tile.dart';
 
-class TaskSectionsBuilder extends StatefulWidget {
+class TaskSectionsBuilder extends StatelessWidget {
   final SettingsController settings;
   const TaskSectionsBuilder({super.key, required this.settings});
 
-  @override
-  State<TaskSectionsBuilder> createState() => _TaskSectionsBuilderState();
-}
-
-class _TaskSectionsBuilderState extends State<TaskSectionsBuilder> {
   // @override
-  // void initState() {
-  //   super.initState();
-  // }
-
   @override
   Widget build(BuildContext context) {
+    //TODO: final settings = Provider.of<SettingsController>(context);
     final taskProvider = Provider.of<TaskProvider>(context, listen: false);
     //TODO: Plz optimize ...REBUILDS this whole big ass widget
     final tasks = Provider.of<TaskProvider>(context).todoList;
-
     final themeColors = Theme.of(context).colorScheme;
     // final textTheme = Theme.of(context).textTheme;
 
@@ -43,7 +34,7 @@ class _TaskSectionsBuilderState extends State<TaskSectionsBuilder> {
 
     final FilterTasks filterTasks = FilterTasks(
       tasks: tasks,
-      taskViewOptions: widget.settings.taskViewOptions,
+      taskViewOptions: settings.taskViewOptions,
     );
 
     const TaskGroupHeadings headingOptions = TaskGroupHeadings();
@@ -171,7 +162,7 @@ class _TaskSectionsBuilderState extends State<TaskSectionsBuilder> {
         child: Column(
           children: [
             ...getSectionedTaskTiles(
-              groupBy: widget.settings.taskViewOptions.groupBy,
+              groupBy: settings.taskViewOptions.groupBy,
             ),
             ExpandableTaskSection(
               titleText: "Completed",

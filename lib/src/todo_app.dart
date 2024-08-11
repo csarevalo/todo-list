@@ -8,15 +8,17 @@ import 'screens/settings_view.dart';
 
 class TodoApp extends StatelessWidget {
   final SettingsController settingsController;
+  final TaskProvider taskProvider;
   const TodoApp({
     super.key,
     required this.settingsController,
+    required this.taskProvider,
   });
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (BuildContext context) => TaskProvider(),
+      create: (BuildContext context) => taskProvider,
       child: ListenableBuilder(
         listenable: settingsController,
         builder: (BuildContext context, Widget? child) {
