@@ -97,6 +97,8 @@ class SettingsController with ChangeNotifier {
     String? newSort1stBy,
     String? newSort2ndBy,
     String? newGroupBy,
+    bool sort1stDesc = true,
+    bool sort2ndDesc = true,
   }) async {
     if (newGroupBy == null && newSort1stBy == null && newSort2ndBy == null) {
       return;

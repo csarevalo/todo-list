@@ -130,13 +130,15 @@ DateTime? getDateFromTask({
 
 typedef SortTask = int Function(Task a, Task b);
 
+///Sorting Options: title, priority, due_date, last_modified, date_created
 SortTask sortTasksBy({
   required String sort1stBy,
   String sort2ndBy = '',
   bool desc1 = true, // order of 1st sort by
   bool desc2 = true, // order of 2nd sort by
-  bool isCompleted = false,
 }) {
+  sort1stBy = sort1stBy.toLowerCase();
+  sort2ndBy = sort2ndBy.toLowerCase();
   return (a, b) {
     // Primary comparison by 1st sortBy
     int firstComp = compareBasedOn(sort1stBy, taskA: a, taskB: b, desc: desc1);

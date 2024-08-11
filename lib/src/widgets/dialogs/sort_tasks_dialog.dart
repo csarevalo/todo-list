@@ -27,28 +27,7 @@ class SortTasksDialog extends StatelessWidget {
               ),
             ],
           ),
-          Row(
-            children: [
-              TextButton(
-                onPressed: () => settingsController.updateTaskSettings(
-                  newGroupBy: "Priority",
-                ),
-                child: const Text("Priority"),
-              ),
-              TextButton(
-                onPressed: () => settingsController.updateTaskSettings(
-                  newGroupBy: "Date_Due",
-                ),
-                child: const Text("Due Date"),
-              ),
-              TextButton(
-                onPressed: () => settingsController.updateTaskSettings(
-                  newGroupBy: "None",
-                ),
-                child: const Text("None"),
-              ),
-            ],
-          ),
+          GroupByRow(settingsController: settingsController),
           Row(
             children: [
               Text(
@@ -57,30 +36,79 @@ class SortTasksDialog extends StatelessWidget {
               ),
             ],
           ),
-          Row(
-            children: [
-              TextButton(
-                onPressed: () => settingsController.updateTaskSettings(
-                  newSort1stBy: "Priority",
-                ),
-                child: const Text("Priority"),
-              ),
-              TextButton(
-                onPressed: () => settingsController.updateTaskSettings(
-                  newSort1stBy: "Date_Due",
-                ),
-                child: const Text("Due Date"),
-              ),
-              TextButton(
-                onPressed: () => settingsController.updateTaskSettings(
-                  newSort1stBy: "None",
-                ),
-                child: const Text("None"),
-              ),
-            ],
-          ),
+          SortByRow(settingsController: settingsController),
         ],
       ),
+    );
+  }
+}
+
+class SortByRow extends StatelessWidget {
+  const SortByRow({
+    super.key,
+    required this.settingsController,
+  });
+
+  final SettingsController settingsController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        TextButton(
+          onPressed: () => settingsController.updateTaskSettings(
+            newSort1stBy: "Priority",
+          ),
+          child: const Text("Priority"),
+        ),
+        TextButton(
+          onPressed: () => settingsController.updateTaskSettings(
+            newSort1stBy: "Due_Date",
+          ),
+          child: const Text("Due Date"),
+        ),
+        TextButton(
+          onPressed: () => settingsController.updateTaskSettings(
+            newSort1stBy: "None",
+          ),
+          child: const Text("None"),
+        ),
+      ],
+    );
+  }
+}
+
+class GroupByRow extends StatelessWidget {
+  const GroupByRow({
+    super.key,
+    required this.settingsController,
+  });
+
+  final SettingsController settingsController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        TextButton(
+          onPressed: () => settingsController.updateTaskSettings(
+            newGroupBy: "Priority",
+          ),
+          child: const Text("Priority"),
+        ),
+        TextButton(
+          onPressed: () => settingsController.updateTaskSettings(
+            newGroupBy: "Date_Due",
+          ),
+          child: const Text("Due Date"),
+        ),
+        TextButton(
+          onPressed: () => settingsController.updateTaskSettings(
+            newGroupBy: "None",
+          ),
+          child: const Text("None"),
+        ),
+      ],
     );
   }
 }
