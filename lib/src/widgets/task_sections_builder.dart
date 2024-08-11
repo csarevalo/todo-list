@@ -21,7 +21,6 @@ class TaskSectionsBuilder extends StatelessWidget {
   // @override
   @override
   Widget build(BuildContext context) {
-    //TODO: final settings = Provider.of<SettingsController>(context);
     final taskProvider = Provider.of<TaskProvider>(context, listen: false);
     //TODO: Plz optimize ...REBUILDS this whole big ass widget
     final tasks = Provider.of<TaskProvider>(context).todoList;
@@ -118,25 +117,6 @@ class TaskSectionsBuilder extends StatelessWidget {
                 datePeriod: s,
                 dateType: 'due',
               );
-        // Unnecessary options
-        // case "date_created": //Date Created
-        //   groupHeaders = dateSections;
-        //   getChildren = (String s) => getTaskTileBasedOnDate(
-        //         datePeriod: s,
-        //         dateType: 'created',
-        //       );
-        // case "date_modified": //Date Modified
-        //   groupHeaders = dateSections;
-        //   getChildren = (String s) => getTaskTileBasedOnDate(
-        //         datePeriod: s,
-        //         dateType: 'modified',
-        //       );
-        // case "date_done": //Date Done
-        //   groupHeaders = dateSections;
-        //   getChildren = (String s) => getTaskTileBasedOnDate(
-        //         datePeriod: s,
-        //         dateType: 'done',
-        //       );
         default:
           //TODO: Do not add a section and just the tasks
           groupHeaders = [SectionHeading(heading: "Not Completed")];
