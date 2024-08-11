@@ -37,6 +37,7 @@ class TaskSectionsBuilder extends StatelessWidget {
     );
 
     const TaskGroupHeadings headingOptions = TaskGroupHeadings();
+
     List<TaskTile> createTaskTileListFrom(List<Task> taskList) {
       List<TaskTile> taskTiles = [];
       for (var task in taskList) {
@@ -84,7 +85,7 @@ class TaskSectionsBuilder extends StatelessWidget {
 
     List<TaskTile> getTaskTileBasedOnDate({
       required String
-          datePeriod, // Options: overdue, today, tomorrow, next, later
+          datePeriod, // Options: overdue, today, tomorrow, next, later, no..date
       required String dateType, // Options: done, modified, due, created
       bool isCompleted = false, // Default: uncompleted
     }) {

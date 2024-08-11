@@ -53,7 +53,7 @@ class FilterTasks {
 
   List<Task> basedOnDate({
     required String
-        datePeriod, // Options: overdue, today, tomorrow, next, later
+        datePeriod, // Options: overdue, today, tomorrow, next, later, no..date
     required String dateType, // Options: done, modified, due, created
     bool isCompleted = false, // Default: uncompleted
   }) {
@@ -81,7 +81,8 @@ typedef RetainTaskWhere = bool Function(Task task);
 
 RetainTaskWhere retainTaskWhere({
   required String dateType, // Options: done, modified, due, created
-  required String datePeriod, // Options: overdue, today, tomorrow, next, later
+  required String
+      datePeriod, // Options: overdue, today, tomorrow, next, later, no..date
   bool isCompleted = false,
 }) {
   dateType = dateType.toLowerCase();
@@ -98,7 +99,7 @@ RetainTaskWhere retainTaskWhere({
       dayComp = (dayDiff) => dayDiff >= 2 && dayDiff <= 7;
     case 'later':
       dayComp = (dayDiff) => dayDiff > 7;
-    default: //no date.. is not used
+    default: //no date.. is not used..is never called bc dayDiff==null
       dayComp = (_) => false;
   }
   return (Task task) {
@@ -106,7 +107,8 @@ RetainTaskWhere retainTaskWhere({
     DateTime? taskDate = getDateFromTask(task: task, dateType: dateType);
     int? dayDiff = taskDate?.difference(todaysDate!).inDays;
     if (dayDiff != null) return dayComp(dayDiff);
-    return true;
+    if (datePeriod == "no") return true; //no date
+    return false;
   };
 }
 
@@ -128,8 +130,10 @@ DateTime? getDateFromTask({
       return dateOnly(task.dateModified);
     case "due":
       return dateOnly(task.dateDue);
-    default: //created
+    case "created":
       return dateOnly(task.dateCreated);
+    default:
+      return null;
   }
 }
 
