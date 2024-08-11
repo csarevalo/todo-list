@@ -1,43 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:todo_list/src/utils/task_provider_service.dart';
 import '../models/task.dart';
 
 class TaskProvider with ChangeNotifier {
+  // TaskProvider(this._taskProviderService);
+  final TaskProviderService _taskProviderService = TaskProviderService();
+
   int _internalIdCounter = -1; // id counter starts at 0
   int _getNewId() {
     _internalIdCounter += 1;
     return _internalIdCounter;
   }
 
-  final List<Task> _todoList = [];
+  late List<Task> _todoList = [];
 
   List<Task> get todoList => _todoList;
 
-  void init() {
-    initTasks();
-  }
+  void init() async {
+    _todoList = await _taskProviderService.loadTasks();
 
-  void initTasks() {
-    _todoList.add(
-      createTask(
-        title: "Task 1",
-        isDone: false,
-        priority: 3,
-      ),
-    );
-    _todoList.add(
-      createTask(
-        title: "Task 2",
-        isDone: true,
-        priority: 2,
-      ),
-    );
-    _todoList.add(
-      createTask(
-        title: "Task 3",
-        isDone: false,
-        priority: 1,
-      ),
-    );
+    // Important! Inform listeners a change has occurred.
+    notifyListeners();
   }
 
   void toggleDone(int taskId) {
