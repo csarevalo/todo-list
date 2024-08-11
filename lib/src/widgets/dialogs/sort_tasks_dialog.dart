@@ -53,6 +53,16 @@ class SortTasksDialog extends StatelessWidget {
                 "Sort 2nd By",
                 style: textTheme.titleSmall,
               ),
+              TextButton(
+                onPressed: () =>
+                    settingsController.updateTaskViewOptions(newDesc2: true),
+                child: const Text("Desc"),
+              ),
+              TextButton(
+                onPressed: () =>
+                    settingsController.updateTaskViewOptions(newDesc2: false),
+                child: const Text("Asc"),
+              ),
             ],
           ),
           SortByRow(settingsController: settingsController, initSort: false),
