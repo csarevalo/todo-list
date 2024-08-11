@@ -36,7 +36,16 @@ class SortTasksDialog extends StatelessWidget {
               ),
             ],
           ),
-          SortByRow(settingsController: settingsController),
+          SortByRow(settingsController: settingsController, initSort: true),
+          Row(
+            children: [
+              Text(
+                "Sort 2nd By",
+                style: textTheme.titleSmall,
+              ),
+            ],
+          ),
+          SortByRow(settingsController: settingsController, initSort: false),
         ],
       ),
     );
@@ -82,32 +91,41 @@ class SortByRow extends StatelessWidget {
   const SortByRow({
     super.key,
     required this.settingsController,
+    this.initSort = true,
   });
 
   final SettingsController settingsController;
+  final bool initSort;
 
   @override
   Widget build(BuildContext context) {
+    var update = settingsController.updateTaskSettings;
     return Row(
       children: [
         TextButton(
-          onPressed: () => settingsController.updateTaskSettings(
-            newSort1stBy: "Priority",
-          ),
+          onPressed: () => initSort
+              ? update(newSort1stBy: "Priority")
+              : update(newSort2ndBy: "Priority"),
           child: const Text("Priority"),
         ),
         TextButton(
-          onPressed: () => settingsController.updateTaskSettings(
-            newSort1stBy: "Due_Date",
-          ),
+          onPressed: () => initSort
+              ? update(newSort1stBy: "Due_Date")
+              : update(newSort2ndBy: "Due_Date"),
           child: const Text("Due Date"),
         ),
         TextButton(
-          onPressed: () => settingsController.updateTaskSettings(
-            newSort1stBy: "Title",
-          ),
+          onPressed: () => initSort
+              ? update(newSort1stBy: "Title")
+              : update(newSort2ndBy: "Title"),
           child: const Text("Title"),
         ),
+        initSort
+            ? const SizedBox.shrink()
+            : TextButton(
+                onPressed: () => update(newSort2ndBy: "None"),
+                child: const Text("None"),
+              ),
       ],
     );
   }

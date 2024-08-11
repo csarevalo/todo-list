@@ -17,7 +17,11 @@ class FilterTasks {
     filteredTasks.sort(isCompleted
         ? (a, b) => b.dateDone!.compareTo(a.dateDone!)
         : sortTasksBy(
-            sort1stBy: taskViewOptions.sort1stBy, desc1: true));
+            sort1stBy: taskViewOptions.sort1stBy,
+            desc1: taskViewOptions.desc1,
+            sort2ndBy: taskViewOptions.sort2ndBy,
+            desc2: taskViewOptions.desc2,
+          ));
     return filteredTasks;
   }
 
@@ -42,7 +46,9 @@ class FilterTasks {
     );
     filteredTasks.sort(sortTasksBy(
       sort1stBy: taskViewOptions.sort1stBy,
+      desc1: taskViewOptions.desc1,
       sort2ndBy: taskViewOptions.sort2ndBy,
+      desc2: taskViewOptions.desc2,
     ));
     return filteredTasks;
   }
@@ -64,9 +70,9 @@ class FilterTasks {
 
     filteredTasks.sort(sortTasksBy(
       sort1stBy: taskViewOptions.sort1stBy,
+      desc1: taskViewOptions.desc1,
       sort2ndBy: taskViewOptions.sort2ndBy,
-      desc1: true,
-      desc2: false,
+      desc2: taskViewOptions.desc2,
     ));
 
     return filteredTasks;

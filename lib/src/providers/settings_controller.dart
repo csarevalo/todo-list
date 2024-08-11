@@ -97,8 +97,8 @@ class SettingsController with ChangeNotifier {
     String? newSort1stBy,
     String? newSort2ndBy,
     String? newGroupBy,
-    bool sort1stDesc = true,
-    bool sort2ndDesc = true,
+    bool newDesc1 = true,
+    bool newDesc2 = true,
   }) async {
     if (newGroupBy == null && newSort1stBy == null && newSort2ndBy == null) {
       return;
@@ -110,7 +110,9 @@ class SettingsController with ChangeNotifier {
     // Do not perform any work if new and old Task Settings are identical
     if (newGroupBy == _taskViewOptions.groupBy &&
         newSort1stBy == _taskViewOptions.sort1stBy &&
-        newSort2ndBy == _taskViewOptions.sort2ndBy) {
+        newSort2ndBy == _taskViewOptions.sort2ndBy &&
+        newDesc1 == _taskViewOptions.desc1 &&
+        newDesc2 == _taskViewOptions.desc2) {
       return;
     }
 
@@ -118,11 +120,11 @@ class SettingsController with ChangeNotifier {
     _taskViewOptions = TaskViewOptions(
       groupBy: newGroupBy.toLowerCase(),
       sort1stBy: newSort1stBy.toLowerCase(),
+      desc1: newDesc1,
       sort2ndBy: newSort2ndBy.toLowerCase(),
+      desc2: newDesc2,
     );
-    debugPrint("group by: ${taskViewOptions.groupBy}");
-    debugPrint("sort 1st by: ${taskViewOptions.sort1stBy}");
-    debugPrint("sort 2nd by: ${taskViewOptions.sort2ndBy}");
+
     // Important! Inform listeners a change has occurred.
     notifyListeners();
 
