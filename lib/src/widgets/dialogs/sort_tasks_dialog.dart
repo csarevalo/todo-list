@@ -23,11 +23,13 @@ class _SortTasksDialogState extends State<SortTasksDialog> {
   ];
   // Initial Selected Value
   String dropdownValue = _sortOptions.first;
+  String dropdownValue2 = "None";
 
   @override
   Widget build(BuildContext context) {
     final themeColors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+    dropdownValue = widget.settingsController.taskViewOptions.sort1stBy;
 
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -72,13 +74,16 @@ class _SortTasksDialogState extends State<SortTasksDialog> {
           DropdownButton(
             value: dropdownValue,
             onChanged: (String? value) {
-              setState(() {
-                dropdownValue = value!;
-              });
+              // setState(() {
+              //   dropdownValue = value!;
+              // });
+              widget.settingsController.updateTaskViewOptions(
+                newSort1stBy: value,
+              );
             },
             items: _sortOptions.map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem(
-                value: value.replaceAll(" ", "_"),
+                value: value.toLowerCase().replaceAll(" ", "_"),
                 child: Text(value),
               );
             }).toList(),
@@ -106,6 +111,21 @@ class _SortTasksDialogState extends State<SortTasksDialog> {
           SortByRow(
             settingsController: widget.settingsController,
             initSort: false,
+          ),
+          DropdownButton(
+            value: dropdownValue2,
+            onChanged: (String? value) {
+              setState(() {
+                dropdownValue2 = value!;
+              });
+            },
+            items: (_sortOptions + ["None"])
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem(
+                value: value.replaceAll(" ", "_"),
+                child: Text(value),
+              );
+            }).toList(),
           ),
         ],
       ),
