@@ -30,7 +30,7 @@ class _SortTasksDialogState extends State<SortTasksDialog> {
     final themeColors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     dropdownValue = widget.settingsController.taskViewOptions.sort1stBy;
-    debugPrint(dropdownValue);
+    dropdownValue2 = widget.settingsController.taskViewOptions.sort2ndBy;
 
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -75,9 +75,6 @@ class _SortTasksDialogState extends State<SortTasksDialog> {
           DropdownButton(
             value: dropdownValue,
             onChanged: (String? value) {
-              // setState(() {
-              //   dropdownValue = value!;
-              // });
               widget.settingsController.updateTaskViewOptions(
                 newSort1stBy: value,
               );
@@ -116,9 +113,9 @@ class _SortTasksDialogState extends State<SortTasksDialog> {
           DropdownButton(
             value: dropdownValue2,
             onChanged: (String? value) {
-              setState(() {
-                dropdownValue2 = value!;
-              });
+              widget.settingsController.updateTaskViewOptions(
+                newSort2ndBy: value,
+              );
             },
             items: (_sortOptions + ["None"])
                 .map<DropdownMenuItem<String>>((String value) {
