@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/src/providers/settings_controller.dart';
 
-class SortTasksDialog extends StatelessWidget {
+class SortTasksDialog extends StatefulWidget {
   final SettingsController settingsController;
   const SortTasksDialog({
     super.key,
@@ -9,9 +9,26 @@ class SortTasksDialog extends StatelessWidget {
   });
 
   @override
+  State<SortTasksDialog> createState() => _SortTasksDialogState();
+}
+
+class _SortTasksDialogState extends State<SortTasksDialog> {
+  // List of items in our dropdown menu
+  static const List<String> _sortOptions = [
+    "Priority",
+    "Due Date",
+    "Title",
+    "Last Modified",
+    "Date Created",
+  ];
+  // Initial Selected Value
+  String dropdownValue = _sortOptions.first;
+
+  @override
   Widget build(BuildContext context) {
     final themeColors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       backgroundColor: themeColors.primaryContainer,
@@ -27,7 +44,7 @@ class SortTasksDialog extends StatelessWidget {
               ),
             ],
           ),
-          GroupByRow(settingsController: settingsController),
+          GroupByRow(settingsController: widget.settingsController),
           Row(
             children: [
               Text(
@@ -36,19 +53,36 @@ class SortTasksDialog extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  settingsController.taskViewOptions.desc1
-                      ? settingsController.updateTaskViewOptions(
-                          newDesc1: false)
-                      : settingsController.updateTaskViewOptions(
-                          newDesc1: true);
+                  widget.settingsController.taskViewOptions.desc1
+                      ? widget.settingsController
+                          .updateTaskViewOptions(newDesc1: false)
+                      : widget.settingsController
+                          .updateTaskViewOptions(newDesc1: true);
                 },
-                child: settingsController.taskViewOptions.desc1
+                child: widget.settingsController.taskViewOptions.desc1
                     ? const Text("Desc")
                     : const Text("Asc"),
               ),
             ],
           ),
-          SortByRow(settingsController: settingsController, initSort: true),
+          SortByRow(
+            settingsController: widget.settingsController,
+            initSort: true,
+          ),
+          DropdownButton(
+            value: dropdownValue,
+            onChanged: (String? value) {
+              setState(() {
+                dropdownValue = value!;
+              });
+            },
+            items: _sortOptions.map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem(
+                value: value.replaceAll(" ", "_"),
+                child: Text(value),
+              );
+            }).toList(),
+          ),
           Row(
             children: [
               Text(
@@ -57,19 +91,22 @@ class SortTasksDialog extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  settingsController.taskViewOptions.desc2
-                      ? settingsController.updateTaskViewOptions(
-                          newDesc2: false)
-                      : settingsController.updateTaskViewOptions(
-                          newDesc2: true);
+                  widget.settingsController.taskViewOptions.desc2
+                      ? widget.settingsController
+                          .updateTaskViewOptions(newDesc2: false)
+                      : widget.settingsController
+                          .updateTaskViewOptions(newDesc2: true);
                 },
-                child: settingsController.taskViewOptions.desc2
+                child: widget.settingsController.taskViewOptions.desc2
                     ? const Text("Desc")
                     : const Text("Asc"),
               ),
             ],
           ),
-          SortByRow(settingsController: settingsController, initSort: false),
+          SortByRow(
+            settingsController: widget.settingsController,
+            initSort: false,
+          ),
         ],
       ),
     );
