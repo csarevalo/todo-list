@@ -12,6 +12,9 @@ class SortTasksDialog extends StatefulWidget {
   State<SortTasksDialog> createState() => _SortTasksDialogState();
 }
 
+//TODO: Shorten Button names to make it more appealing...
+// es: "Last Modified" to simply "Modified"
+
 class _SortTasksDialogState extends State<SortTasksDialog> {
   // List of items in our dropdown menu
   static const List<String> _sortOptions = [
@@ -24,6 +27,7 @@ class _SortTasksDialogState extends State<SortTasksDialog> {
   // Initial Selected Value
   String dropdownValue = _sortOptions.first;
   String dropdownValue2 = "None";
+  String segmentedButtonValue = "Priority";
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +52,22 @@ class _SortTasksDialogState extends State<SortTasksDialog> {
             ],
           ),
           GroupByRow(settingsController: widget.settingsController),
+          SegmentedButton(
+            segments: ["Priority", "Due Date", "Title"]
+                .map<ButtonSegment<String>>((String value) {
+              return ButtonSegment(
+                value: value.replaceAll(" ", "_"),
+                label: Text(value),
+              );
+            }).toList(),
+            selected: <String>{segmentedButtonValue},
+            showSelectedIcon: false,
+            onSelectionChanged: (value) {
+              setState(() {
+                segmentedButtonValue = value.first;
+              });
+            },
+          ),
           Row(
             children: [
               Text(
