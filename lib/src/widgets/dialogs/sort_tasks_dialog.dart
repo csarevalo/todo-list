@@ -30,6 +30,7 @@ class _SortTasksDialogState extends State<SortTasksDialog> {
     final themeColors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     dropdownValue = widget.settingsController.taskViewOptions.sort1stBy;
+    debugPrint(dropdownValue);
 
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -83,7 +84,7 @@ class _SortTasksDialogState extends State<SortTasksDialog> {
             },
             items: _sortOptions.map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem(
-                value: value.toLowerCase().replaceAll(" ", "_"),
+                value: value.replaceAll(" ", "_"),
                 child: Text(value),
               );
             }).toList(),
