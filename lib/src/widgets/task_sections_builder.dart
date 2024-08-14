@@ -112,7 +112,7 @@ class TaskSectionsBuilder extends StatelessWidget {
           groupHeaders = priorityHeadings;
           getChildren =
               (String s) => getTaskTileBasedOnPriority(strPriority: s);
-        case "date_due": //Date Due
+        case "due_date": //Date Due
           groupHeaders = dateSections;
           getChildren = (String s) => getTaskTileBasedOnDate(
                 datePeriod: s,

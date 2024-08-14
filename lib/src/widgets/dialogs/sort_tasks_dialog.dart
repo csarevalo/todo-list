@@ -25,16 +25,16 @@ class _SortTasksDialogState extends State<SortTasksDialog> {
     "Date Created",
   ];
   // Initial Selected Value
-  String dropdownValue = _sortOptions.first;
-  String dropdownValue2 = "None";
+  // String dropdownValue = _sortOptions.first;
+  // String dropdownValue2 = "None";
   String segmentedButtonValue = "Priority";
 
   @override
   Widget build(BuildContext context) {
     final themeColors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
-    dropdownValue = widget.settingsController.taskViewOptions.sort1stBy;
-    dropdownValue2 = widget.settingsController.taskViewOptions.sort2ndBy;
+    // dropdownValue = widget.settingsController.taskViewOptions.sort1stBy;
+    // dropdownValue2 = widget.settingsController.taskViewOptions.sort2ndBy;
 
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -51,9 +51,13 @@ class _SortTasksDialogState extends State<SortTasksDialog> {
               ),
             ],
           ),
-          GroupByRow(settingsController: widget.settingsController),
+          SortButtons(
+            settingsController: widget.settingsController,
+            sort: "group", // Call update tasks group by in settings
+            sortOptions: const ["Priority", "Due Date", "None"],
+          ),
           SegmentedButton(
-            segments: ["Priority", "Due Date", "Title"]
+            segments: ["Priority", "Due Date", "None"]
                 .map<ButtonSegment<String>>((String value) {
               return ButtonSegment(
                 value: value.replaceAll(" ", "_"),
@@ -88,23 +92,14 @@ class _SortTasksDialogState extends State<SortTasksDialog> {
               ),
             ],
           ),
-          SortByRow(
+          // SortByRow(
+          //   settingsController: widget.settingsController,
+          //   initSort: true,
+          // ),
+          SortDropdownButton(
+            sort1st: true,
             settingsController: widget.settingsController,
-            initSort: true,
-          ),
-          DropdownButton(
-            value: dropdownValue,
-            onChanged: (String? value) {
-              widget.settingsController.updateTaskViewOptions(
-                newSort1stBy: value,
-              );
-            },
-            items: _sortOptions.map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem(
-                value: value.replaceAll(" ", "_"),
-                child: Text(value),
-              );
-            }).toList(),
+            menuItems: _sortOptions,
           ),
           Row(
             children: [
@@ -126,24 +121,14 @@ class _SortTasksDialogState extends State<SortTasksDialog> {
               ),
             ],
           ),
-          SortByRow(
+          // SortByRow(
+          //   settingsController: widget.settingsController,
+          //   initSort: false,
+          // ),
+          SortDropdownButton(
+            sort1st: false,
             settingsController: widget.settingsController,
-            initSort: false,
-          ),
-          DropdownButton(
-            value: dropdownValue2,
-            onChanged: (String? value) {
-              widget.settingsController.updateTaskViewOptions(
-                newSort2ndBy: value,
-              );
-            },
-            items: (_sortOptions + ["None"])
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem(
-                value: value.replaceAll(" ", "_"),
-                child: Text(value),
-              );
-            }).toList(),
+            menuItems: _sortOptions + ["None"],
           ),
         ],
       ),
@@ -151,37 +136,83 @@ class _SortTasksDialogState extends State<SortTasksDialog> {
   }
 }
 
-class GroupByRow extends StatelessWidget {
-  const GroupByRow({
+class SortDropdownButton extends StatelessWidget {
+  const SortDropdownButton({
     super.key,
+    required this.sort1st,
+    // required this.dropdownValue,
     required this.settingsController,
+    required this.menuItems,
   });
 
+  final bool sort1st;
+  // final String dropdownValue;
   final SettingsController settingsController;
+  final List<String> menuItems;
 
   @override
   Widget build(BuildContext context) {
+    return DropdownButton(
+      isExpanded: true,
+      underline: const SizedBox.shrink(),
+      value: sort1st
+          ? settingsController.taskViewOptions.sort1stBy
+          : settingsController.taskViewOptions.sort2ndBy,
+      onChanged: (String? value) {
+        if (sort1st) {
+          settingsController.updateTaskViewOptions(newSort1stBy: value);
+        } else {
+          settingsController.updateTaskViewOptions(newSort2ndBy: value);
+        }
+      },
+      items: (menuItems).map<DropdownMenuItem<String>>((String strMenuItem) {
+        return DropdownMenuItem(
+          value: strMenuItem.replaceAll(" ", "_"),
+          child: Text(strMenuItem),
+        );
+      }).toList(),
+    );
+  }
+}
+
+class SortButtons extends StatelessWidget {
+  const SortButtons({
+    super.key,
+    required this.settingsController,
+    required this.sort,
+    required this.sortOptions,
+  });
+
+  final SettingsController settingsController;
+  final List<String> sortOptions;
+  final String sort; //options: "group", "sort1", "sort2"
+
+  @override
+  Widget build(BuildContext context) {
+    var update = settingsController.updateTaskViewOptions;
     return Row(
-      children: [
-        TextButton(
-          onPressed: () => settingsController.updateTaskViewOptions(
-            newGroupBy: "Priority",
-          ),
-          child: const Text("Priority"),
-        ),
-        TextButton(
-          onPressed: () => settingsController.updateTaskViewOptions(
-            newGroupBy: "Date_Due",
-          ),
-          child: const Text("Due Date"),
-        ),
-        TextButton(
-          onPressed: () => settingsController.updateTaskViewOptions(
-            newGroupBy: "None",
-          ),
-          child: const Text("None"),
-        ),
-      ],
+      children: (sortOptions).map<Widget>((String strOption) {
+        return TextButton(
+          onPressed: () {
+            switch (sort.toLowerCase()) {
+              case "group":
+                update(
+                  newGroupBy: strOption.replaceAll(" ", "_"),
+                );
+              case "sort1":
+                update(
+                  newSort1stBy: strOption.replaceAll(" ", "_"),
+                );
+              case "sort2":
+                update(
+                  newSort2ndBy: strOption.replaceAll(" ", "_"),
+                );
+              default:
+            }
+          },
+          child: Text(strOption),
+        );
+      }).toList(),
     );
   }
 }
@@ -227,14 +258,14 @@ class SortByRow extends StatelessWidget {
           children: [
             TextButton(
               onPressed: () => initSort
-                  ? update(newSort1stBy: "Last_modified")
-                  : update(newSort2ndBy: "Last_modified"),
+                  ? update(newSort1stBy: "Last_Modified")
+                  : update(newSort2ndBy: "Last_Modified"),
               child: const Text("Last Modified"),
             ),
             TextButton(
               onPressed: () => initSort
-                  ? update(newSort1stBy: "Date_created")
-                  : update(newSort2ndBy: "Date_created"),
+                  ? update(newSort1stBy: "Date_Created")
+                  : update(newSort2ndBy: "Date_Created"),
               child: const Text("Date Created"),
             ),
           ],
