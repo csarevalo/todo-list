@@ -24,17 +24,11 @@ class _SortTasksDialogState extends State<SortTasksDialog> {
     "Last Modified",
     "Date Created",
   ];
-  // Initial Selected Value
-  // String dropdownValue = _sortOptions.first;
-  // String dropdownValue2 = "None";
-  String segmentedButtonValue = "Priority";
 
   @override
   Widget build(BuildContext context) {
     final themeColors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
-    // dropdownValue = widget.settingsController.taskViewOptions.sort1stBy;
-    // dropdownValue2 = widget.settingsController.taskViewOptions.sort2ndBy;
 
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -51,51 +45,47 @@ class _SortTasksDialogState extends State<SortTasksDialog> {
               ),
             ],
           ),
-          SortButtons(
-            settingsController: widget.settingsController,
-            sort: "group", // Call update tasks group by in settings
-            sortOptions: const ["Priority", "Due Date", "None"],
-          ),
-          SegmentedButton(
-            segments: ["Priority", "Due Date", "None"]
-                .map<ButtonSegment<String>>((String value) {
-              return ButtonSegment(
-                value: value.replaceAll(" ", "_"),
-                label: Text(value),
-              );
-            }).toList(),
-            selected: <String>{segmentedButtonValue},
-            showSelectedIcon: false,
-            onSelectionChanged: (value) {
-              setState(() {
-                segmentedButtonValue = value.first;
-              });
-            },
+          // SortButtons(
+          //   settingsController: widget.settingsController,
+          //   sort: "group", // Call update tasks group by in settings
+          //   sortOptions: const ["Priority", "Due Date", "None"],
+          // ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SegmentedButton(
+              style: SegmentedButton.styleFrom(
+                selectedBackgroundColor: themeColors.tertiaryContainer,
+                selectedForegroundColor: themeColors.onTertiaryContainer,
+                backgroundColor: themeColors.primaryContainer,
+                foregroundColor: themeColors.onPrimaryContainer,
+              ),
+              segments: ["Priority", "Due Date", "None"]
+                  .map<ButtonSegment<String>>((String value) {
+                return ButtonSegment(
+                  //TODO: Add an icon for each GROUPBY
+                  value: value.replaceAll(" ", "_"),
+                  label: Text(value),
+                );
+              }).toList(),
+              selected: <String>{
+                widget.settingsController.taskViewOptions.groupBy
+              },
+              showSelectedIcon: false,
+              onSelectionChanged: (value) {
+                widget.settingsController.updateTaskViewOptions(
+                  newGroupBy: value.first,
+                );
+              },
+            ),
           ),
           Row(
             children: [
               Text(
-                "Sort 1st By",
+                "Sort By",
                 style: textTheme.titleSmall,
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  widget.settingsController.taskViewOptions.desc1
-                      ? widget.settingsController
-                          .updateTaskViewOptions(newDesc1: false)
-                      : widget.settingsController
-                          .updateTaskViewOptions(newDesc1: true);
-                },
-                child: widget.settingsController.taskViewOptions.desc1
-                    ? const Text("Desc")
-                    : const Text("Asc"),
               ),
             ],
           ),
-          // SortByRow(
-          //   settingsController: widget.settingsController,
-          //   initSort: true,
-          // ),
           SortDropdownButton(
             sort1st: true,
             settingsController: widget.settingsController,
@@ -104,27 +94,11 @@ class _SortTasksDialogState extends State<SortTasksDialog> {
           Row(
             children: [
               Text(
-                "Sort 2nd By",
+                "Then By",
                 style: textTheme.titleSmall,
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  widget.settingsController.taskViewOptions.desc2
-                      ? widget.settingsController
-                          .updateTaskViewOptions(newDesc2: false)
-                      : widget.settingsController
-                          .updateTaskViewOptions(newDesc2: true);
-                },
-                child: widget.settingsController.taskViewOptions.desc2
-                    ? const Text("Desc")
-                    : const Text("Asc"),
               ),
             ],
           ),
-          // SortByRow(
-          //   settingsController: widget.settingsController,
-          //   initSort: false,
-          // ),
           SortDropdownButton(
             sort1st: false,
             settingsController: widget.settingsController,
@@ -140,38 +114,72 @@ class SortDropdownButton extends StatelessWidget {
   const SortDropdownButton({
     super.key,
     required this.sort1st,
-    // required this.dropdownValue,
     required this.settingsController,
     required this.menuItems,
   });
 
   final bool sort1st;
-  // final String dropdownValue;
   final SettingsController settingsController;
   final List<String> menuItems;
 
   @override
   Widget build(BuildContext context) {
+    ColorScheme themeColors = Theme.of(context).colorScheme;
+    TextTheme textTheme = Theme.of(context).textTheme;
     return DropdownButton(
-      isExpanded: true,
-      underline: const SizedBox.shrink(),
-      value: sort1st
-          ? settingsController.taskViewOptions.sort1stBy
-          : settingsController.taskViewOptions.sort2ndBy,
-      onChanged: (String? value) {
-        if (sort1st) {
-          settingsController.updateTaskViewOptions(newSort1stBy: value);
-        } else {
-          settingsController.updateTaskViewOptions(newSort2ndBy: value);
-        }
-      },
-      items: (menuItems).map<DropdownMenuItem<String>>((String strMenuItem) {
-        return DropdownMenuItem(
-          value: strMenuItem.replaceAll(" ", "_"),
-          child: Text(strMenuItem),
-        );
-      }).toList(),
-    );
+        isExpanded: true,
+        style: textTheme.titleMedium!.copyWith(color: themeColors.primary),
+        underline: const SizedBox.shrink(),
+        value: sort1st
+            ? settingsController.taskViewOptions.sort1stBy
+            : settingsController.taskViewOptions.sort2ndBy,
+        onChanged: (String? value) {
+          if (sort1st) {
+            settingsController.updateTaskViewOptions(newSort1stBy: value);
+          } else {
+            settingsController.updateTaskViewOptions(newSort2ndBy: value);
+          }
+        },
+        items: (menuItems).map<DropdownMenuItem<String>>((String strMenuItem) {
+          return DropdownMenuItem(
+            value: strMenuItem.replaceAll(" ", "_"),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  backgroundColor: themeColors.tertiary,
+                  radius: 5,
+                ),
+                const SizedBox.square(dimension: 8),
+                Text(strMenuItem),
+              ],
+            ),
+          );
+        }).toList(),
+        icon: IconButton(
+          onPressed: () {
+            if (sort1st) {
+              settingsController.updateTaskViewOptions(
+                newDesc1: !settingsController.taskViewOptions.desc1,
+              );
+            } else {
+              settingsController.updateTaskViewOptions(
+                newDesc2: !settingsController.taskViewOptions.desc2,
+              );
+            }
+          },
+          // icon: Icon(Icons.swap_vert, color: themeColors.primary),
+          icon: sort1st
+              ? (settingsController.taskViewOptions.desc1
+                  ? Icon(Icons.keyboard_double_arrow_down,
+                      color: themeColors.primary)
+                  : Icon(Icons.keyboard_double_arrow_up,
+                      color: themeColors.primary))
+              : (settingsController.taskViewOptions.desc2
+                  ? Icon(Icons.keyboard_double_arrow_down,
+                      color: themeColors.primary)
+                  : Icon(Icons.keyboard_double_arrow_up,
+                      color: themeColors.primary)),
+        ));
   }
 }
 
@@ -217,66 +225,66 @@ class SortButtons extends StatelessWidget {
   }
 }
 
-class SortByRow extends StatelessWidget {
-  const SortByRow({
-    super.key,
-    required this.settingsController,
-    this.initSort = true,
-  });
+// class SortByRow extends StatelessWidget {
+//   const SortByRow({
+//     super.key,
+//     required this.settingsController,
+//     this.initSort = true,
+//   });
 
-  final SettingsController settingsController;
-  final bool initSort;
+//   final SettingsController settingsController;
+//   final bool initSort;
 
-  @override
-  Widget build(BuildContext context) {
-    var update = settingsController.updateTaskViewOptions;
-    return Column(
-      children: [
-        Row(
-          children: [
-            TextButton(
-              onPressed: () => initSort
-                  ? update(newSort1stBy: "Priority")
-                  : update(newSort2ndBy: "Priority"),
-              child: const Text("Priority"),
-            ),
-            TextButton(
-              onPressed: () => initSort
-                  ? update(newSort1stBy: "Due_Date")
-                  : update(newSort2ndBy: "Due_Date"),
-              child: const Text("Due Date"),
-            ),
-            TextButton(
-              onPressed: () => initSort
-                  ? update(newSort1stBy: "Title")
-                  : update(newSort2ndBy: "Title"),
-              child: const Text("Title"),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            TextButton(
-              onPressed: () => initSort
-                  ? update(newSort1stBy: "Last_Modified")
-                  : update(newSort2ndBy: "Last_Modified"),
-              child: const Text("Last Modified"),
-            ),
-            TextButton(
-              onPressed: () => initSort
-                  ? update(newSort1stBy: "Date_Created")
-                  : update(newSort2ndBy: "Date_Created"),
-              child: const Text("Date Created"),
-            ),
-          ],
-        ),
-        initSort
-            ? const SizedBox.shrink()
-            : TextButton(
-                onPressed: () => update(newSort2ndBy: "None"),
-                child: const Text("None"),
-              ),
-      ],
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     var update = settingsController.updateTaskViewOptions;
+//     return Column(
+//       children: [
+//         Row(
+//           children: [
+//             TextButton(
+//               onPressed: () => initSort
+//                   ? update(newSort1stBy: "Priority")
+//                   : update(newSort2ndBy: "Priority"),
+//               child: const Text("Priority"),
+//             ),
+//             TextButton(
+//               onPressed: () => initSort
+//                   ? update(newSort1stBy: "Due_Date")
+//                   : update(newSort2ndBy: "Due_Date"),
+//               child: const Text("Due Date"),
+//             ),
+//             TextButton(
+//               onPressed: () => initSort
+//                   ? update(newSort1stBy: "Title")
+//                   : update(newSort2ndBy: "Title"),
+//               child: const Text("Title"),
+//             ),
+//           ],
+//         ),
+//         Row(
+//           children: [
+//             TextButton(
+//               onPressed: () => initSort
+//                   ? update(newSort1stBy: "Last_Modified")
+//                   : update(newSort2ndBy: "Last_Modified"),
+//               child: const Text("Last Modified"),
+//             ),
+//             TextButton(
+//               onPressed: () => initSort
+//                   ? update(newSort1stBy: "Date_Created")
+//                   : update(newSort2ndBy: "Date_Created"),
+//               child: const Text("Date Created"),
+//             ),
+//           ],
+//         ),
+//         initSort
+//             ? const SizedBox.shrink()
+//             : TextButton(
+//                 onPressed: () => update(newSort2ndBy: "None"),
+//                 child: const Text("None"),
+//               ),
+//       ],
+//     );
+//   }
+// }
