@@ -44,16 +44,16 @@ class HomeScreen extends StatelessWidget {
             itemBuilder: (context) => [
               PopupMenuItem<String>(
                 value: "Sort",
-                child: const Text("Sort By"),
+                child: const Text("Sort"),
                 onTap: () => displaySortTasksDialog(
                   context,
                   settingsController: settingsController,
                 ),
               ),
-              const PopupMenuItem<String>(
-                value: "Filter",
-                child: Text("Filter By"),
-              ),
+              //TODO: add more options
+              //show completed
+              //show details
+              //show select.. tasks for bulk edits/deletes
             ],
           ),
           const SizedBox(width: 16)
