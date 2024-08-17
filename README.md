@@ -1,3 +1,3 @@
-# todo_list
+# Snazzy Todo List
 
-A new Flutter project.
+A Snazzy Todo Flutter app.

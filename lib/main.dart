@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/src/providers/task_provider.dart';
 import 'package:todo_list/src/utils/task_provider_service.dart';
-// import 'package:todo_list/screens/add_task_dialog.dart';
 
 import 'src/providers/settings_controller.dart';
 import 'src/todo_app.dart';
