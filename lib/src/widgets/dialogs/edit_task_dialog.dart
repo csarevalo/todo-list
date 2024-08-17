@@ -66,7 +66,7 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
   }
 
   void _showDatePicker() {
-    final today = DateTime.now();
+    final today = DateUtils.dateOnly(DateTime.now());
     showDatePicker(
       context: context,
       cancelText: "Clear",
