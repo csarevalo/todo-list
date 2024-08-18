@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list/src/providers/settings_controller.dart';
+
+import '../../providers/settings_controller.dart';
 
 class SortTasksDialog extends StatefulWidget {
   final SettingsController settingsController;

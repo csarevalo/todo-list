@@ -1,5 +1,5 @@
-import 'package:todo_list/src/models/task.dart';
-import 'package:todo_list/src/models/task_view_options.dart';
+import '../models/task.dart';
+import '../models/task_view_options.dart';
 
 class FilterTasks {
   final List<Task> tasks;

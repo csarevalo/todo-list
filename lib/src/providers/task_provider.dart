@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list/src/utils/task_provider_service.dart';
+
+import '../utils/task_provider_service.dart';
 import '../models/task.dart';
 
 class TaskProvider with ChangeNotifier {

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:todo_list/src/providers/settings_controller.dart';
-import 'package:todo_list/src/providers/task_provider.dart';
-import 'package:todo_list/src/screens/home_screen.dart';
 
+import 'providers/task_provider.dart';
+import 'providers/settings_controller.dart';
+import 'screens/home_screen.dart';
 import 'screens/settings_view.dart';
 
 class TodoApp extends StatelessWidget {

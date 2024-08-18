@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list/src/constants/green_tea_theme.dart';
-import 'package:todo_list/src/constants/mustard_theme.dart';
+
+import '../constants/green_tea_theme.dart';
+import '../constants/mustard_theme.dart';
 
 class AppTheme {
   String title;

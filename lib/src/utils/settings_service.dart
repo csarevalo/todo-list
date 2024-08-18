@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list/src/utils/app_theme.dart';
 
 import '../models/task_view_options.dart';
+import '../utils/app_theme.dart';
 
 /// A service that stores and retrieves user settings.
 ///

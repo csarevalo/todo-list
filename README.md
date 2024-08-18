@@ -1,3 +1,3 @@
-# Snazzy Todo List
+# snazzy_todo_list
 
-A Snazzy Todo Flutter app.
+A Snazzy Todo App using Flutter.

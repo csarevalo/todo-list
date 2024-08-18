@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list/src/utils/app_theme.dart';
 
 import '../models/task_view_options.dart';
 import '../utils/settings_service.dart';
+import '../utils/app_theme.dart';
 
 /// A class that many Widgets can interact with to read user settings, update
 /// user settings, or listen to user settings changes.

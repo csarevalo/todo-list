@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:todo_list/src/providers/task_provider.dart';
+
+import '../../providers/task_provider.dart';
 
 class AddTaskDialog extends StatefulWidget {
   const AddTaskDialog({super.key});

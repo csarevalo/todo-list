@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list/src/providers/settings_controller.dart';
+
+import '../providers/settings_controller.dart';
 
 import '../screens/settings_view.dart';
 import '../widgets/dialogs/sort_tasks_dialog.dart';
