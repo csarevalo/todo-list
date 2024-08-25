@@ -44,6 +44,7 @@ class TaskProvider with ChangeNotifier {
     int priority = 1,
     DateTime? dateModified,
     DateTime? dateDue,
+    bool? hasDueByTime,
     DateTime? dateDone,
   }) {
     DateTime rn = DateTime.now();
@@ -55,6 +56,7 @@ class TaskProvider with ChangeNotifier {
       dateCreated: rn,
       dateModified: rn,
       dateDue: dateDue,
+      hasDueByTime: hasDueByTime,
       dateDone: dateDone,
     );
   }
@@ -64,6 +66,7 @@ class TaskProvider with ChangeNotifier {
     required String newTitle,
     required int newPriority,
     required DateTime? newDateDue,
+    required bool? hasDueByTime,
   }) {
     final index = _todoList.indexWhere((task) => task.id == taskId);
     if (index == -1) return; // exit if index is Not Found
@@ -71,6 +74,7 @@ class TaskProvider with ChangeNotifier {
     _todoList[index].title = newTitle;
     _todoList[index].priority = newPriority;
     _todoList[index].dateDue = newDateDue;
+    _todoList[index].hasDueByTime = hasDueByTime;
     _todoList[index].dateModified = DateTime.now();
     notifyListeners();
   }

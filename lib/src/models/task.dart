@@ -6,6 +6,7 @@ class Task {
   DateTime dateCreated;
   DateTime dateModified;
   DateTime? dateDue;
+  bool? hasDueByTime;
   DateTime? dateDone;
 
   Task({
@@ -16,6 +17,7 @@ class Task {
     required this.dateCreated,
     required this.dateModified,
     this.dateDue,
+    this.hasDueByTime,
     this.dateDone,
   });
 }

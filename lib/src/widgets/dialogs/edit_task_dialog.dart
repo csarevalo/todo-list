@@ -43,6 +43,7 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
         newTitle: taskTitleText,
         newPriority: _priority,
         newDateDue: _newDateDue,
+        hasDueByTime: false, //TODO: Change
       );
     }
     _taskTitleController.clear();

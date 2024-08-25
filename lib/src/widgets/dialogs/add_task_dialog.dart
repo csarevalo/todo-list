@@ -17,6 +17,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
   String? _dropdownPriorityValue = "None";
   int _priority = 0;
   DateTime? _newDateDue;
+  bool _hasDueByTime = false;
 
   bool _isTextFieldEmpty = true;
 
@@ -31,6 +32,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
       title: taskTitleText,
       priority: _priority,
       dateDue: _newDateDue,
+      hasDueByTime: _hasDueByTime,
     );
     if (taskTitleText.isNotEmpty) {
       taskProvider.addTask(task);
@@ -57,6 +59,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
 
   void _showDatePicker() {
     final today = DateTime.now();
+    final prevDate = _newDateDue;
     showDatePicker(
       context: context,
       cancelText: "Clear",
@@ -65,15 +68,27 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
       lastDate: today.add(const Duration(days: 365 * 50)), // 50 yrs from now
     ).then((datePicked) {
       setState(() {
-        _newDateDue = datePicked;
+        if (datePicked != null && prevDate != null && _hasDueByTime) {
+          _newDateDue = DateTime(
+            datePicked.year,
+            datePicked.month,
+            datePicked.day,
+            prevDate.hour,
+            prevDate.minute,
+          );
+        } else {
+          _newDateDue = datePicked;
+        }
       });
     });
   }
 
   void _showTimePicker() {
+    final TimeOfDay? prevTime =
+        _newDateDue == null ? null : TimeOfDay.fromDateTime(_newDateDue!);
     showTimePicker(
       context: context,
-      initialTime: TimeOfDay.now(),
+      initialTime: prevTime ?? TimeOfDay.now(),
     ).then(
       (timePicked) {
         setState(() {
@@ -81,6 +96,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
           if (timePicked == null) {
             //TODO: hasDueByTime = false
             _newDateDue = date;
+            _hasDueByTime = false;
           } else {
             _newDateDue = DateTime(
               date.year,
@@ -89,6 +105,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
               timePicked.hour,
               timePicked.minute,
             );
+            _hasDueByTime = true;
           }
         });
       },
@@ -107,6 +124,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
     if (datePicked == null) {
       setState(() {
         _newDateDue = datePicked;
+        _hasDueByTime = false;
       });
     } else {
       var timePicked = await showTimePicker(
@@ -118,6 +136,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
         if (timePicked == null) {
           //TODO: hasDueBy = false
           _newDateDue = datePicked;
+          _hasDueByTime = false;
         } else {
           _newDateDue = DateTime(
             datePicked.year,
@@ -126,6 +145,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
             timePicked.hour,
             timePicked.minute,
           );
+          _hasDueByTime = true;
         }
       });
     }
@@ -187,26 +207,28 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 20,
-                    child: VerticalDivider(
-                      width: 8,
-                      thickness: 1.5,
-                      color: themeColors.onPrimaryContainer.withAlpha(75),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: _showTimePicker,
-                    style: TextButton.styleFrom(
-                      overlayColor: Colors.transparent,
-                    ),
-                    child: Text(
-                      formatterTime.format(_newDateDue!),
-                      style: textTheme.titleSmall!.copyWith(
-                        color: themeColors.secondary,
+                  if (_hasDueByTime) ...[
+                    SizedBox(
+                      height: 20,
+                      child: VerticalDivider(
+                        width: 8,
+                        thickness: 1.5,
+                        color: themeColors.onPrimaryContainer.withAlpha(75),
                       ),
                     ),
-                  ),
+                    TextButton(
+                      onPressed: _showTimePicker,
+                      style: TextButton.styleFrom(
+                        overlayColor: Colors.transparent,
+                      ),
+                      child: Text(
+                        formatterTime.format(_newDateDue!),
+                        style: textTheme.titleSmall!.copyWith(
+                          color: themeColors.secondary,
+                        ),
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),
