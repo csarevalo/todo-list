@@ -23,7 +23,7 @@ class _SmallTaskDialogState extends State<SmallTaskDialog> {
     "Medium",
     "High",
   ];
-  String? _dropdownPriorityValue;
+  String? _dropdownPriorityValue = "None";
   int _priority = 0;
   DateTime? _newDateDue;
   bool _hasDueByTime = false;
