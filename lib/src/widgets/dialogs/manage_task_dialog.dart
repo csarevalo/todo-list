@@ -363,7 +363,9 @@ class _ManageTaskDialogState extends State<ManageTaskDialog> {
                   : widget.task != null
                       ? () => _editTask()
                       : () => _addTask,
-              icon: const Icon(Icons.check),
+              icon: widget.task != null
+                  ? const Icon(Icons.check)
+                  : const Icon(Icons.add),
             ),
           ],
         )
