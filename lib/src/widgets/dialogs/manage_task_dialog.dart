@@ -8,7 +8,7 @@ import '../../providers/task_provider.dart';
 
 class ManageTaskDialog extends StatefulWidget {
   final Task? task;
-  const ManageTaskDialog({super.key, required this.task});
+  const ManageTaskDialog({super.key, this.task});
 
   @override
   State<ManageTaskDialog> createState() => _ManageTaskDialogState();
@@ -294,7 +294,7 @@ class _ManageTaskDialogState extends State<ManageTaskDialog> {
             ),
             onSubmitted: (value) {
               if (value.isNotEmpty) {
-                if (widget.task == null) {
+                if (widget.task != null) {
                   _editTask();
                 } else {
                   _addTask();
@@ -362,7 +362,7 @@ class _ManageTaskDialogState extends State<ManageTaskDialog> {
                   ? null // to disable update button
                   : widget.task != null
                       ? () => _editTask()
-                      : () => _addTask,
+                      : () => _addTask(),
               icon: widget.task != null
                   ? const Icon(Icons.check)
                   : const Icon(Icons.add),

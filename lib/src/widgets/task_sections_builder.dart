@@ -10,7 +10,7 @@ import '../providers/settings_controller.dart';
 import '../utils/filter_tasks.dart';
 
 import 'dialogs/change_priority_dialog.dart';
-import 'dialogs/edit_task_dialog.dart';
+import 'dialogs/manage_task_dialog.dart';
 import 'expandable_task_sections.dart';
 import 'task_tile.dart';
 
@@ -176,6 +176,6 @@ Future<void> displayUpdateTaskDialog(
 ) async {
   return showDialog<void>(
     context: context,
-    builder: (BuildContext context) => EditTaskDialog(task: task),
+    builder: (BuildContext context) => ManageTaskDialog(task: task),
   );
 }
