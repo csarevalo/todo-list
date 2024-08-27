@@ -93,7 +93,6 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
         setState(() {
           var date = _newDateDue!;
           if (timePicked == null) {
-            //TODO: hasDueByTime = false
             _newDateDue = date;
             _hasDueByTime = false;
           } else {
@@ -133,7 +132,6 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
       );
       setState(() {
         if (timePicked == null) {
-          //TODO: hasDueBy = false
           _newDateDue = datePicked;
           _hasDueByTime = false;
         } else {
@@ -254,9 +252,11 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
               if (value.isNotEmpty) _addTask(context);
             },
             onChanged: (value) {
-              setState(() {
-                _isTextFieldEmpty = value.isEmpty;
-              });
+              if (_isTextFieldEmpty != value.isEmpty) {
+                setState(() {
+                  _isTextFieldEmpty = value.isEmpty;
+                });
+              }
             },
           ),
         ],

@@ -6,16 +6,16 @@ import 'package:provider/provider.dart';
 import '../../models/task.dart';
 import '../../providers/task_provider.dart';
 
-class EditTaskDialog extends StatefulWidget {
-  final Task task;
-  const EditTaskDialog({super.key, required this.task});
+class ManageTaskDialog extends StatefulWidget {
+  final Task? task;
+  const ManageTaskDialog({super.key, required this.task});
 
   @override
-  State<EditTaskDialog> createState() => _EditTaskDialogState();
+  State<ManageTaskDialog> createState() => _ManageTaskDialogState();
 }
 
-class _EditTaskDialogState extends State<EditTaskDialog> {
-  _EditTaskDialogState();
+class _ManageTaskDialogState extends State<ManageTaskDialog> {
+  _ManageTaskDialogState();
   final TextEditingController _taskTitleController = TextEditingController();
   final List<String> _priorityCallbackOptions = [
     "None",
@@ -32,17 +32,18 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
   @override
   void initState() {
     super.initState();
-
-    _taskTitleController.text = widget.task.title; //task title
-    _dropdownPriorityValue =
-        _priorityCallbackOptions[widget.task.priority]; //dropdown priority val
-    _priority = widget.task.priority; //task priority
-    _newDateDue = widget.task.dateDue; //task due date
-    _hasDueByTime = widget.task.hasDueByTime ?? false; //task has due by time
-    _isTextFieldEmpty = false;
+    if (widget.task != null) {
+      _taskTitleController.text = widget.task!.title; //task title
+      _dropdownPriorityValue = _priorityCallbackOptions[
+          widget.task!.priority]; //dropdown priority val
+      _priority = widget.task!.priority; //task priority
+      _newDateDue = widget.task!.dateDue; //task due date
+      _hasDueByTime = widget.task!.hasDueByTime ?? false; //task has due by time
+      _isTextFieldEmpty = false;
+    }
   }
 
-  void _editTask(BuildContext context) {
+  void _editTask() {
     String taskTitleText = _taskTitleController.text;
     while (taskTitleText.contains(RegExp(r'  '))) {
       // Remove all extra spaces in sentence.
@@ -52,7 +53,7 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
 
     if (taskTitleText.isNotEmpty) {
       taskProvider.updateTask(
-        widget.task.id,
+        widget.task!.id,
         newTitle: taskTitleText,
         newPriority: _priority,
         newDateDue: _newDateDue,
@@ -61,6 +62,26 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
     }
     _taskTitleController.clear();
     Navigator.of(context).pop();
+  }
+
+  void _addTask() {
+    String taskTitleText = _taskTitleController.text;
+    while (taskTitleText.contains(RegExp(r'  '))) {
+      // Remove all extra spaces in sentence.
+      taskTitleText = taskTitleText.replaceAll(RegExp(r'  '), ' ');
+    }
+    final taskProvider = Provider.of<TaskProvider>(context, listen: false);
+    final task = taskProvider.createTask(
+      title: taskTitleText,
+      priority: _priority,
+      dateDue: _newDateDue,
+      hasDueByTime: _hasDueByTime,
+    );
+    if (taskTitleText.isNotEmpty) {
+      taskProvider.addTask(task);
+      _taskTitleController.clear();
+      Navigator.of(context).pop();
+    }
   }
 
   void dropdownPriorityCallback(String? priority) {
@@ -272,7 +293,13 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
               border: InputBorder.none, //OutlineInputBorder(),
             ),
             onSubmitted: (value) {
-              if (value.isNotEmpty) _editTask(context);
+              if (value.isNotEmpty) {
+                if (widget.task == null) {
+                  _editTask();
+                } else {
+                  _addTask();
+                }
+              }
             },
             onChanged: (value) {
               if (_isTextFieldEmpty != value.isEmpty) {
@@ -333,7 +360,9 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
               color: themeColors.primaryContainer, //icon color
               onPressed: _isTextFieldEmpty
                   ? null // to disable update button
-                  : () => _editTask(context),
+                  : widget.task != null
+                      ? () => _editTask()
+                      : () => _addTask,
               icon: const Icon(Icons.check),
             ),
           ],
