@@ -114,19 +114,13 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
 
   void _showDateTimePicker() async {
     final today = DateTime.now();
-    final ctx = context;
     var datePicked = await showDatePicker(
-      context: ctx,
+      context: context,
       cancelText: "Clear",
       initialDate: _newDateDue ?? today,
       firstDate: today.subtract(const Duration(days: 365 * 25)), // 25 yrs ago
       lastDate: today.add(const Duration(days: 365 * 50)), // 50 yrs in future
     );
-    if (ctx.mounted) {
-      Navigator.of(ctx).pop();
-    } else {
-      return;
-    }
     if (datePicked == null) {
       setState(() {
         _newDateDue = datePicked;
@@ -134,7 +128,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
       });
     } else {
       var timePicked = await showTimePicker(
-        context: ctx,
+        context: context,
         initialTime: TimeOfDay.now(),
         cancelText: "Skip",
       );
