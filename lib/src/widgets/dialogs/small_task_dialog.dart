@@ -6,16 +6,16 @@ import 'package:provider/provider.dart';
 import '../../models/task.dart';
 import '../../providers/task_provider.dart';
 
-class ManageTaskDialog extends StatefulWidget {
+class SmallTaskDialog extends StatefulWidget {
   final Task? task;
-  const ManageTaskDialog({super.key, this.task});
+  const SmallTaskDialog({super.key, this.task});
 
   @override
-  State<ManageTaskDialog> createState() => _ManageTaskDialogState();
+  State<SmallTaskDialog> createState() => _SmallTaskDialogState();
 }
 
-class _ManageTaskDialogState extends State<ManageTaskDialog> {
-  _ManageTaskDialogState();
+class _SmallTaskDialogState extends State<SmallTaskDialog> {
+  _SmallTaskDialogState();
   final TextEditingController _taskTitleController = TextEditingController();
   final List<String> _priorityCallbackOptions = [
     "None",

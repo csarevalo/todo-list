@@ -5,7 +5,7 @@ import '../providers/settings_controller.dart';
 import '../screens/settings_view.dart';
 import '../widgets/dialogs/sort_tasks_dialog.dart';
 import '../widgets/task_sections_builder.dart';
-import '../widgets/dialogs/manage_task_dialog.dart';
+import '../widgets/dialogs/small_task_dialog.dart';
 
 class HomeScreen extends StatelessWidget {
   final SettingsController settingsController;
@@ -75,7 +75,7 @@ class HomeScreen extends StatelessWidget {
 Future<void> displayAddTaskDialog(BuildContext context) async {
   return showDialog<void>(
     context: context,
-    builder: (BuildContext context) => const ManageTaskDialog(),
+    builder: (BuildContext context) => const SmallTaskDialog(),
   );
 }
 
