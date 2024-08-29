@@ -60,7 +60,7 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(width: 16)
         ],
       ),
-      body: TaskSectionsBuilder(settings: settingsController),
+      body: const TaskSectionsBuilder(),
       floatingActionButton: FloatingActionButton(
         backgroundColor: themeColors.surfaceTint,
         foregroundColor: themeColors.surface,
@@ -83,7 +83,6 @@ Future<void> displaySortTasksDialog(BuildContext context,
     {required settingsController}) async {
   return showDialog<void>(
     context: context,
-    builder: (context) =>
-        SortTasksDialog(settingsController: settingsController),
+    builder: (context) => const SortTasksDialog(),
   );
 }

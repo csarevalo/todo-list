@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
+import 'package:snazzy_todo_list/src/providers/task_preferences_controller.dart';
 
 import '../constants/task_group_headings.dart';
 import '../models/section_heading.dart';
 import '../models/task.dart';
 import '../providers/task_provider.dart';
-import '../providers/settings_controller.dart';
 import '../utils/filter_tasks.dart';
 
 import 'dialogs/change_priority_dialog.dart';
@@ -15,8 +15,9 @@ import 'expandable_task_sections.dart';
 import 'task_tile.dart';
 
 class TaskSectionsBuilder extends StatelessWidget {
-  final SettingsController settings;
-  const TaskSectionsBuilder({super.key, required this.settings});
+  const TaskSectionsBuilder({
+    super.key,
+  });
 
   // @override
   @override
@@ -26,6 +27,7 @@ class TaskSectionsBuilder extends StatelessWidget {
     final tasks = Provider.of<TaskProvider>(context).todoList;
     final themeColors = Theme.of(context).colorScheme;
     // final textTheme = Theme.of(context).textTheme;
+    final taskPreferences = Provider.of<TaskPreferencesController>(context);
 
     /// Set the tile colors
     Color tileColor = themeColors.primary.withOpacity(0.8);
@@ -33,7 +35,7 @@ class TaskSectionsBuilder extends StatelessWidget {
 
     final FilterTasks filterTasks = FilterTasks(
       tasks: tasks,
-      taskSortOptions: settings.taskSortOptions,
+      taskSortOptions: taskPreferences.taskSortOptions,
     );
 
     const TaskGroupHeadings headingOptions = TaskGroupHeadings();
@@ -143,7 +145,7 @@ class TaskSectionsBuilder extends StatelessWidget {
         child: Column(
           children: [
             ...getSectionedTaskTiles(
-              groupBy: settings.taskSortOptions.groupBy,
+              groupBy: taskPreferences.taskSortOptions.groupBy,
             ),
             ExpandableTaskSection(
               titleText: "Completed",

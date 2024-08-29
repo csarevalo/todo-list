@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../providers/settings_controller.dart';
+import '../../providers/task_preferences_controller.dart';
 
 class SortTasksDialog extends StatelessWidget {
-  final SettingsController settingsController;
   const SortTasksDialog({
     super.key,
-    required this.settingsController,
   });
 
   // List of items in our dropdown menu
@@ -22,7 +21,7 @@ class SortTasksDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeColors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
-    // SettingsController settings = Provider.of<SettingsController>(context);
+    final taskPreferences = Provider.of<TaskPreferencesController>(context);
 
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -61,10 +60,12 @@ class SortTasksDialog extends StatelessWidget {
                   label: Text(value),
                 );
               }).toList(),
-              selected: <String>{settingsController.taskSortOptions.groupBy},
+              selected: <String>{
+                taskPreferences.taskSortOptions.groupBy
+              }, //FIXME: only update this else put listen false
               showSelectedIcon: false,
               onSelectionChanged: (value) {
-                settingsController.updateTaskSortOptions(
+                taskPreferences.updateTaskSortOptions(
                   newGroupBy: value.first,
                 );
               },
@@ -80,7 +81,7 @@ class SortTasksDialog extends StatelessWidget {
           ),
           SortDropdownButton(
             sort1st: true,
-            settingsController: settingsController,
+            taskPreferences: taskPreferences,
             menuItems: _sortOptions,
           ),
           Row(
@@ -93,7 +94,7 @@ class SortTasksDialog extends StatelessWidget {
           ),
           SortDropdownButton(
             sort1st: false,
-            settingsController: settingsController,
+            taskPreferences: taskPreferences,
             menuItems: _sortOptions + ["None"],
           ),
         ],
@@ -106,30 +107,31 @@ class SortDropdownButton extends StatelessWidget {
   const SortDropdownButton({
     super.key,
     required this.sort1st,
-    required this.settingsController,
+    required this.taskPreferences,
     required this.menuItems,
   });
 
   final bool sort1st;
-  final SettingsController settingsController;
+  final TaskPreferencesController taskPreferences;
   final List<String> menuItems;
 
   @override
   Widget build(BuildContext context) {
     ColorScheme themeColors = Theme.of(context).colorScheme;
     TextTheme textTheme = Theme.of(context).textTheme;
+
     return DropdownButton(
         isExpanded: true,
         style: textTheme.titleMedium!.copyWith(color: themeColors.primary),
         underline: const SizedBox.shrink(),
         value: sort1st
-            ? settingsController.taskSortOptions.sort1stBy
-            : settingsController.taskSortOptions.sort2ndBy,
+            ? taskPreferences.taskSortOptions.sort1stBy
+            : taskPreferences.taskSortOptions.sort2ndBy,
         onChanged: (String? value) {
           if (sort1st) {
-            settingsController.updateTaskSortOptions(newSort1stBy: value);
+            taskPreferences.updateTaskSortOptions(newSort1stBy: value);
           } else {
-            settingsController.updateTaskSortOptions(newSort2ndBy: value);
+            taskPreferences.updateTaskSortOptions(newSort2ndBy: value);
           }
         },
         items: (menuItems).map<DropdownMenuItem<String>>((String strMenuItem) {
@@ -150,23 +152,23 @@ class SortDropdownButton extends StatelessWidget {
         icon: IconButton(
           onPressed: () {
             if (sort1st) {
-              settingsController.updateTaskSortOptions(
-                newDesc1: !settingsController.taskSortOptions.desc1,
+              taskPreferences.updateTaskSortOptions(
+                newDesc1: !taskPreferences.taskSortOptions.desc1,
               );
             } else {
-              settingsController.updateTaskSortOptions(
-                newDesc2: !settingsController.taskSortOptions.desc2,
+              taskPreferences.updateTaskSortOptions(
+                newDesc2: !taskPreferences.taskSortOptions.desc2,
               );
             }
           },
           // icon: Icon(Icons.swap_vert, color: themeColors.primary),
           icon: sort1st
-              ? (settingsController.taskSortOptions.desc1
+              ? (taskPreferences.taskSortOptions.desc1
                   ? Icon(Icons.keyboard_double_arrow_down,
                       color: themeColors.primary)
                   : Icon(Icons.keyboard_double_arrow_up,
                       color: themeColors.primary))
-              : (settingsController.taskSortOptions.desc2
+              : (taskPreferences.taskSortOptions.desc2
                   ? Icon(Icons.keyboard_double_arrow_down,
                       color: themeColors.primary)
                   : Icon(Icons.keyboard_double_arrow_up,
@@ -178,18 +180,18 @@ class SortDropdownButton extends StatelessWidget {
 class SortButtons extends StatelessWidget {
   const SortButtons({
     super.key,
-    required this.settingsController,
+    required this.taskPreferences,
     required this.sort,
     required this.sortOptions,
   });
 
-  final SettingsController settingsController;
+  final TaskPreferencesController taskPreferences;
   final List<String> sortOptions;
   final String sort; //options: "group", "sort1", "sort2"
 
   @override
   Widget build(BuildContext context) {
-    var update = settingsController.updateTaskSortOptions;
+    var update = taskPreferences.updateTaskSortOptions;
     return Row(
       children: (sortOptions).map<Widget>((String strOption) {
         return TextButton(
@@ -229,7 +231,7 @@ class SortButtons extends StatelessWidget {
 
 //   @override
 //   Widget build(BuildContext context) {
-//     var update = settingsController.updateTaskSortOptions;
+//     var update = taskPreferences.updateTaskSortOptions;
 //     return Column(
 //       children: [
 //         Row(
