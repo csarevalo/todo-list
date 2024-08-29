@@ -3,6 +3,31 @@ import 'package:provider/provider.dart';
 
 import '../../providers/task_preferences_controller.dart';
 
+Future<void> showSortTasksDialog({
+  required BuildContext context,
+  bool barrierDismissible = true,
+  Color? barrierColor,
+  String? barrierLabel,
+  bool useRootNavigator = true,
+  RouteSettings? routeSettings,
+  Offset? anchorPoint,
+  TransitionBuilder? builder,
+}) async {
+  Widget dialog = const SortTasksDialog();
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: barrierDismissible,
+    barrierColor: barrierColor,
+    barrierLabel: barrierLabel,
+    useRootNavigator: useRootNavigator,
+    routeSettings: routeSettings,
+    builder: (BuildContext context) {
+      return builder == null ? dialog : builder(context, dialog);
+    },
+    anchorPoint: anchorPoint,
+  );
+}
+
 class SortTasksDialog extends StatelessWidget {
   const SortTasksDialog({
     super.key,

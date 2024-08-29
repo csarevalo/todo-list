@@ -6,6 +6,32 @@ import 'package:provider/provider.dart';
 import '../../models/task.dart';
 import '../../providers/task_provider.dart';
 
+Future<void> showAddTaskDialog({
+  required BuildContext context,
+  Task? task,
+  bool barrierDismissible = true,
+  Color? barrierColor,
+  String? barrierLabel,
+  bool useRootNavigator = true,
+  RouteSettings? routeSettings,
+  Offset? anchorPoint,
+  TransitionBuilder? builder,
+}) async {
+  Widget dialog = SmallTaskDialog(task: task);
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: barrierDismissible,
+    barrierColor: barrierColor,
+    barrierLabel: barrierLabel,
+    useRootNavigator: useRootNavigator,
+    routeSettings: routeSettings,
+    builder: (BuildContext context) {
+      return builder == null ? dialog : builder(context, dialog);
+    },
+    anchorPoint: anchorPoint,
+  );
+}
+
 class SmallTaskDialog extends StatefulWidget {
   final Task? task;
   const SmallTaskDialog({super.key, this.task});

@@ -43,7 +43,7 @@ class HomeScreen extends StatelessWidget {
               PopupMenuItem<String>(
                 value: "Sort",
                 child: const Text("Sort"),
-                onTap: () => displaySortTasksDialog(context),
+                onTap: () => showSortTasksDialog(context: context),
               ),
               //TODO: add more options
               //show completed
@@ -58,24 +58,9 @@ class HomeScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: themeColors.surfaceTint,
         foregroundColor: themeColors.surface,
-        onPressed: () => displayAddTaskDialog(context),
-        // onPressed: () => Navigator.of(context).pushNamed('/add-task'),
+        onPressed: () => showAddTaskDialog(context: context),
         child: const Icon(Icons.add),
       ),
     );
   }
-}
-
-Future<void> displayAddTaskDialog(BuildContext context) async {
-  return showDialog<void>(
-    context: context,
-    builder: (context) => const SmallTaskDialog(),
-  );
-}
-
-Future<void> displaySortTasksDialog(BuildContext context) async {
-  return showDialog<void>(
-    context: context,
-    builder: (context) => const SortTasksDialog(),
-  );
 }
