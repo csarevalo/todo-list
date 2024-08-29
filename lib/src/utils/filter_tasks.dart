@@ -1,12 +1,12 @@
 import '../models/task.dart';
-import '../models/task_view_options.dart';
+import '../models/task_sort_options.dart';
 
 class FilterTasks {
   final List<Task> tasks;
-  final TaskViewOptions taskViewOptions;
+  final TaskSortOptions taskSortOptions;
   FilterTasks({
     required this.tasks,
-    required this.taskViewOptions,
+    required this.taskSortOptions,
   });
 
   List<Task> basedOnCompletion({required bool isCompleted}) {
@@ -15,10 +15,10 @@ class FilterTasks {
     filteredTasks.sort(isCompleted
         ? (a, b) => b.dateDone!.compareTo(a.dateDone!)
         : sortTasksBy(
-            sort1stBy: taskViewOptions.sort1stBy,
-            desc1: taskViewOptions.desc1,
-            sort2ndBy: taskViewOptions.sort2ndBy,
-            desc2: taskViewOptions.desc2,
+            sort1stBy: taskSortOptions.sort1stBy,
+            desc1: taskSortOptions.desc1,
+            sort2ndBy: taskSortOptions.sort2ndBy,
+            desc2: taskSortOptions.desc2,
           ));
     return filteredTasks;
   }
@@ -43,10 +43,10 @@ class FilterTasks {
       (task) => task.priority == priority && task.isDone == isCompleted,
     );
     filteredTasks.sort(sortTasksBy(
-      sort1stBy: taskViewOptions.sort1stBy,
-      desc1: taskViewOptions.desc1,
-      sort2ndBy: taskViewOptions.sort2ndBy,
-      desc2: taskViewOptions.desc2,
+      sort1stBy: taskSortOptions.sort1stBy,
+      desc1: taskSortOptions.desc1,
+      sort2ndBy: taskSortOptions.sort2ndBy,
+      desc2: taskSortOptions.desc2,
     ));
     return filteredTasks;
   }
@@ -67,10 +67,10 @@ class FilterTasks {
     ));
 
     filteredTasks.sort(sortTasksBy(
-      sort1stBy: taskViewOptions.sort1stBy,
-      desc1: taskViewOptions.desc1,
-      sort2ndBy: taskViewOptions.sort2ndBy,
-      desc2: taskViewOptions.desc2,
+      sort1stBy: taskSortOptions.sort1stBy,
+      desc1: taskSortOptions.desc1,
+      sort2ndBy: taskSortOptions.sort2ndBy,
+      desc2: taskSortOptions.desc2,
     ));
 
     return filteredTasks;

@@ -1,10 +1,10 @@
-class TaskViewOptions {
+class TaskSortOptions {
   String groupBy;
   String sort1stBy;
   bool desc1;
   String sort2ndBy;
   bool desc2;
-  TaskViewOptions(
+  TaskSortOptions(
       {required this.groupBy,
       required this.sort1stBy,
       required this.desc1,

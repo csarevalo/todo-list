@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/task_view_options.dart';
+import '../models/task_sort_options.dart';
 import '../utils/settings_service.dart';
 import '../utils/app_theme.dart';
 
@@ -21,14 +21,14 @@ class SettingsController with ChangeNotifier {
   late TextTheme _textTheme;
   late String _contrast;
   late AppTheme _appTheme;
-  late TaskViewOptions _taskViewOptions;
+  late TaskSortOptions _taskSortOptions;
 
   // Allow Widgets to read the user's preferred settings:
   ThemeMode get themeMode => _themeMode;
   TextTheme get textTheme => _textTheme;
   AppTheme get appTheme => _appTheme;
   String get contrast => _contrast;
-  TaskViewOptions get taskViewOptions => _taskViewOptions;
+  TaskSortOptions get taskSortOptions => _taskSortOptions;
 
   /// Load the user's settings from the SettingsService. It may load from a
   /// local database or the internet. The controller only knows it can load the
@@ -38,7 +38,7 @@ class SettingsController with ChangeNotifier {
     _textTheme = await _settingsService.textTheme();
     _appTheme = await _settingsService.appTheme(_textTheme);
     _contrast = await _settingsService.contrast();
-    _taskViewOptions = await _settingsService.taskViewOptions();
+    _taskSortOptions = await _settingsService.taskSortOptions();
 
     // Important! Inform listeners a change has occurred.
     notifyListeners();
@@ -93,28 +93,28 @@ class SettingsController with ChangeNotifier {
   }
 
   /// Update and persist the Task View Options based on the user's selection.
-  Future<void> updateTaskViewOptions({
+  Future<void> updateTaskSortOptions({
     String? newSort1stBy,
     String? newSort2ndBy,
     String? newGroupBy,
     bool? newDesc1,
     bool? newDesc2,
   }) async {
-    newGroupBy ??= _taskViewOptions.groupBy;
-    newSort1stBy ??= _taskViewOptions.sort1stBy;
-    newSort2ndBy ??= _taskViewOptions.sort2ndBy;
-    newDesc1 ??= _taskViewOptions.desc1;
-    newDesc2 ??= _taskViewOptions.desc2;
+    newGroupBy ??= _taskSortOptions.groupBy;
+    newSort1stBy ??= _taskSortOptions.sort1stBy;
+    newSort2ndBy ??= _taskSortOptions.sort2ndBy;
+    newDesc1 ??= _taskSortOptions.desc1;
+    newDesc2 ??= _taskSortOptions.desc2;
     // Do not perform any work if new and old Task Settings are identical
-    if (newGroupBy == _taskViewOptions.groupBy &&
-        newSort1stBy == _taskViewOptions.sort1stBy &&
-        newSort2ndBy == _taskViewOptions.sort2ndBy &&
-        newDesc1 == _taskViewOptions.desc1 &&
-        newDesc2 == _taskViewOptions.desc2) {
+    if (newGroupBy == _taskSortOptions.groupBy &&
+        newSort1stBy == _taskSortOptions.sort1stBy &&
+        newSort2ndBy == _taskSortOptions.sort2ndBy &&
+        newDesc1 == _taskSortOptions.desc1 &&
+        newDesc2 == _taskSortOptions.desc2) {
       return;
     }
     // Otherwise, store the new Task Settings in memory
-    _taskViewOptions = TaskViewOptions(
+    _taskSortOptions = TaskSortOptions(
       groupBy: newGroupBy,
       sort1stBy: newSort1stBy,
       desc1: newDesc1,
@@ -127,6 +127,6 @@ class SettingsController with ChangeNotifier {
 
     // Persist the changes to a local database or the internet using the
     // SettingService.
-    await _settingsService.updateTaskViewOptions(taskViewOptions);
+    await _settingsService.updateTaskSortOptions(taskSortOptions);
   }
 }

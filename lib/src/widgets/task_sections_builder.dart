@@ -33,7 +33,7 @@ class TaskSectionsBuilder extends StatelessWidget {
 
     final FilterTasks filterTasks = FilterTasks(
       tasks: tasks,
-      taskViewOptions: settings.taskViewOptions,
+      taskSortOptions: settings.taskSortOptions,
     );
 
     const TaskGroupHeadings headingOptions = TaskGroupHeadings();
@@ -143,7 +143,7 @@ class TaskSectionsBuilder extends StatelessWidget {
         child: Column(
           children: [
             ...getSectionedTaskTiles(
-              groupBy: settings.taskViewOptions.groupBy,
+              groupBy: settings.taskSortOptions.groupBy,
             ),
             ExpandableTaskSection(
               titleText: "Completed",

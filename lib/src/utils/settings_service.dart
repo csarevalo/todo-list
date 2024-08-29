@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/task_view_options.dart';
+import '../models/task_sort_options.dart';
 import '../utils/app_theme.dart';
 
 /// A service that stores and retrieves user settings.
@@ -28,7 +28,7 @@ class SettingsService {
   Future<ThemeMode> themeMode() async => ThemeMode.system;
 
   /// Loads the User's preferred TaskSettings from local or remote storage.
-  Future<TaskViewOptions> taskViewOptions() async => TaskViewOptions(
+  Future<TaskSortOptions> taskSortOptions() async => TaskSortOptions(
       groupBy: "Completed",
       sort1stBy: "Priority",
       desc1: true,
@@ -59,7 +59,7 @@ class SettingsService {
     // since the TextThemes will be saved in constants
   }
 
-  Future<void> updateTaskViewOptions(TaskViewOptions taskViewOptions) async {
+  Future<void> updateTaskSortOptions(TaskSortOptions taskSortOptions) async {
     // Todo: in the future
   }
 }

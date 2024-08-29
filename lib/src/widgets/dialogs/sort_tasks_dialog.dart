@@ -61,10 +61,10 @@ class SortTasksDialog extends StatelessWidget {
                   label: Text(value),
                 );
               }).toList(),
-              selected: <String>{settingsController.taskViewOptions.groupBy},
+              selected: <String>{settingsController.taskSortOptions.groupBy},
               showSelectedIcon: false,
               onSelectionChanged: (value) {
-                settingsController.updateTaskViewOptions(
+                settingsController.updateTaskSortOptions(
                   newGroupBy: value.first,
                 );
               },
@@ -123,13 +123,13 @@ class SortDropdownButton extends StatelessWidget {
         style: textTheme.titleMedium!.copyWith(color: themeColors.primary),
         underline: const SizedBox.shrink(),
         value: sort1st
-            ? settingsController.taskViewOptions.sort1stBy
-            : settingsController.taskViewOptions.sort2ndBy,
+            ? settingsController.taskSortOptions.sort1stBy
+            : settingsController.taskSortOptions.sort2ndBy,
         onChanged: (String? value) {
           if (sort1st) {
-            settingsController.updateTaskViewOptions(newSort1stBy: value);
+            settingsController.updateTaskSortOptions(newSort1stBy: value);
           } else {
-            settingsController.updateTaskViewOptions(newSort2ndBy: value);
+            settingsController.updateTaskSortOptions(newSort2ndBy: value);
           }
         },
         items: (menuItems).map<DropdownMenuItem<String>>((String strMenuItem) {
@@ -150,23 +150,23 @@ class SortDropdownButton extends StatelessWidget {
         icon: IconButton(
           onPressed: () {
             if (sort1st) {
-              settingsController.updateTaskViewOptions(
-                newDesc1: !settingsController.taskViewOptions.desc1,
+              settingsController.updateTaskSortOptions(
+                newDesc1: !settingsController.taskSortOptions.desc1,
               );
             } else {
-              settingsController.updateTaskViewOptions(
-                newDesc2: !settingsController.taskViewOptions.desc2,
+              settingsController.updateTaskSortOptions(
+                newDesc2: !settingsController.taskSortOptions.desc2,
               );
             }
           },
           // icon: Icon(Icons.swap_vert, color: themeColors.primary),
           icon: sort1st
-              ? (settingsController.taskViewOptions.desc1
+              ? (settingsController.taskSortOptions.desc1
                   ? Icon(Icons.keyboard_double_arrow_down,
                       color: themeColors.primary)
                   : Icon(Icons.keyboard_double_arrow_up,
                       color: themeColors.primary))
-              : (settingsController.taskViewOptions.desc2
+              : (settingsController.taskSortOptions.desc2
                   ? Icon(Icons.keyboard_double_arrow_down,
                       color: themeColors.primary)
                   : Icon(Icons.keyboard_double_arrow_up,
@@ -189,7 +189,7 @@ class SortButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var update = settingsController.updateTaskViewOptions;
+    var update = settingsController.updateTaskSortOptions;
     return Row(
       children: (sortOptions).map<Widget>((String strOption) {
         return TextButton(
@@ -229,7 +229,7 @@ class SortButtons extends StatelessWidget {
 
 //   @override
 //   Widget build(BuildContext context) {
-//     var update = settingsController.updateTaskViewOptions;
+//     var update = settingsController.updateTaskSortOptions;
 //     return Column(
 //       children: [
 //         Row(
