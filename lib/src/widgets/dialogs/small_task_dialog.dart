@@ -212,7 +212,9 @@ class _SmallTaskDialogState extends State<SmallTaskDialog> {
             icon: const Icon(Icons.arrow_back),
           ),
           const SizedBox(width: 4),
-          const Text("Add a Task"),
+          widget.task != null
+              ? const Text("Edit Task")
+              : const Text("Add a Task"),
         ],
       ),
       contentPadding: EdgeInsetsDirectional.only(
@@ -275,7 +277,7 @@ class _SmallTaskDialogState extends State<SmallTaskDialog> {
             ),
           ],
           TextField(
-            autofocus: true,
+            autofocus: widget.task != null ? false : true,
             textInputAction:
                 TextInputAction.done, // submit on enter... no new lines
             maxLines: 3, // limit lines displayed
