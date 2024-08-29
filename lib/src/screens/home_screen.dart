@@ -75,7 +75,7 @@ class HomeScreen extends StatelessWidget {
 Future<void> displayAddTaskDialog(BuildContext context) async {
   return showDialog<void>(
     context: context,
-    builder: (BuildContext context) => const SmallTaskDialog(),
+    builder: (context) => const SmallTaskDialog(),
   );
 }
 
@@ -83,7 +83,7 @@ Future<void> displaySortTasksDialog(BuildContext context,
     {required settingsController}) async {
   return showDialog<void>(
     context: context,
-    builder: (BuildContext context) =>
+    builder: (context) =>
         SortTasksDialog(settingsController: settingsController),
   );
 }

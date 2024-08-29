@@ -2,21 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../../providers/settings_controller.dart';
 
-class SortTasksDialog extends StatefulWidget {
+class SortTasksDialog extends StatelessWidget {
   final SettingsController settingsController;
   const SortTasksDialog({
     super.key,
     required this.settingsController,
   });
 
-  @override
-  State<SortTasksDialog> createState() => _SortTasksDialogState();
-}
-
-//TODO: Shorten Button names to make it more appealing...
-// es: "Last Modified" to simply "Modified"
-
-class _SortTasksDialogState extends State<SortTasksDialog> {
   // List of items in our dropdown menu
   static const List<String> _sortOptions = [
     "Priority",
@@ -30,6 +22,7 @@ class _SortTasksDialogState extends State<SortTasksDialog> {
   Widget build(BuildContext context) {
     final themeColors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+    // SettingsController settings = Provider.of<SettingsController>(context);
 
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -68,12 +61,10 @@ class _SortTasksDialogState extends State<SortTasksDialog> {
                   label: Text(value),
                 );
               }).toList(),
-              selected: <String>{
-                widget.settingsController.taskViewOptions.groupBy
-              },
+              selected: <String>{settingsController.taskViewOptions.groupBy},
               showSelectedIcon: false,
               onSelectionChanged: (value) {
-                widget.settingsController.updateTaskViewOptions(
+                settingsController.updateTaskViewOptions(
                   newGroupBy: value.first,
                 );
               },
@@ -89,7 +80,7 @@ class _SortTasksDialogState extends State<SortTasksDialog> {
           ),
           SortDropdownButton(
             sort1st: true,
-            settingsController: widget.settingsController,
+            settingsController: settingsController,
             menuItems: _sortOptions,
           ),
           Row(
@@ -102,7 +93,7 @@ class _SortTasksDialogState extends State<SortTasksDialog> {
           ),
           SortDropdownButton(
             sort1st: false,
-            settingsController: widget.settingsController,
+            settingsController: settingsController,
             menuItems: _sortOptions + ["None"],
           ),
         ],
