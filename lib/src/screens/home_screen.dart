@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../providers/settings_controller.dart';
-
 import '../screens/settings_view.dart';
 import '../widgets/dialogs/sort_tasks_dialog.dart';
 import '../widgets/task_sections_builder.dart';
 import '../widgets/dialogs/small_task_dialog.dart';
 
 class HomeScreen extends StatelessWidget {
-  final SettingsController settingsController;
-  const HomeScreen({super.key, required this.settingsController});
+  const HomeScreen({super.key});
   static const routeName = '/';
 
   @override
@@ -46,10 +43,7 @@ class HomeScreen extends StatelessWidget {
               PopupMenuItem<String>(
                 value: "Sort",
                 child: const Text("Sort"),
-                onTap: () => displaySortTasksDialog(
-                  context,
-                  settingsController: settingsController,
-                ),
+                onTap: () => displaySortTasksDialog(context),
               ),
               //TODO: add more options
               //show completed
@@ -79,8 +73,7 @@ Future<void> displayAddTaskDialog(BuildContext context) async {
   );
 }
 
-Future<void> displaySortTasksDialog(BuildContext context,
-    {required settingsController}) async {
+Future<void> displaySortTasksDialog(BuildContext context) async {
   return showDialog<void>(
     context: context,
     builder: (context) => const SortTasksDialog(),
