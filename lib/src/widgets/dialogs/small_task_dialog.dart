@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import '../../models/task.dart';
 import '../../providers/task_provider.dart';
 
-Future<void> showAddTaskDialog({
+Future<void> showSmallTaskDialog({
   required BuildContext context,
   Task? task,
   bool barrierDismissible = true,

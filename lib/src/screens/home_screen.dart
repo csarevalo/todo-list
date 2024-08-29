@@ -58,7 +58,7 @@ class HomeScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: themeColors.surfaceTint,
         foregroundColor: themeColors.surface,
-        onPressed: () => showAddTaskDialog(context: context),
+        onPressed: () => showSmallTaskDialog(context: context),
         child: const Icon(Icons.add),
       ),
     );

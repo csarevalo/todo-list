@@ -3,6 +3,36 @@ import 'package:provider/provider.dart';
 
 import '../../providers/task_provider.dart';
 
+Future<void> showChangePriorityDialog({
+  required BuildContext context,
+  required int taskId,
+  required int currentPriority,
+  bool barrierDismissible = true,
+  Color? barrierColor,
+  String? barrierLabel,
+  bool useRootNavigator = true,
+  RouteSettings? routeSettings,
+  Offset? anchorPoint,
+  TransitionBuilder? builder,
+}) async {
+  Widget dialog = ChangePriorityDialog(
+    taskId: taskId,
+    currentPriority: currentPriority,
+  );
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: barrierDismissible,
+    barrierColor: barrierColor,
+    barrierLabel: barrierLabel,
+    useRootNavigator: useRootNavigator,
+    routeSettings: routeSettings,
+    builder: (BuildContext context) {
+      return builder == null ? dialog : builder(context, dialog);
+    },
+    anchorPoint: anchorPoint,
+  );
+}
+
 class ChangePriorityDialog extends StatelessWidget {
   final int taskId;
   final int currentPriority;

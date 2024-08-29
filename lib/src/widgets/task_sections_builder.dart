@@ -51,12 +51,13 @@ class TaskSectionsBuilder extends StatelessWidget {
             dateDue: task.dateDue,
             onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
             onDelete: (context) => taskProvider.deleteTask(task.id),
-            onPriorityChange: () => displayChangePriorityDialog(
-              context,
-              task.id,
-              task.priority,
+            onPriorityChange: () => showChangePriorityDialog(
+              context: context,
+              taskId: task.id,
+              currentPriority: task.priority,
             ),
-            onTapTaskTile: () => displayUpdateTaskDialog(context, task),
+            onTapTaskTile: () =>
+                showSmallTaskDialog(context: context, task: task),
             tileColor: tileColor,
             onTileColor: onTileColor,
           ),
@@ -156,28 +157,4 @@ class TaskSectionsBuilder extends StatelessWidget {
       ),
     );
   }
-}
-
-Future<void> displayChangePriorityDialog(
-  BuildContext context,
-  int taskId,
-  int currentPriority,
-) async {
-  return showDialog<void>(
-    context: context,
-    builder: (BuildContext context) => ChangePriorityDialog(
-      taskId: taskId,
-      currentPriority: currentPriority,
-    ),
-  );
-}
-
-Future<void> displayUpdateTaskDialog(
-  BuildContext context,
-  Task task,
-) async {
-  return showDialog<void>(
-    context: context,
-    builder: (BuildContext context) => SmallTaskDialog(task: task),
-  );
 }
