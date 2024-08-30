@@ -63,10 +63,10 @@ class TaskPreferencesController with ChangeNotifier {
   /// Loads the User's preferred TaskSettings from local or remote storage.
   Future<TaskSortOptions> getTaskSortOptions() async {
     return TaskSortOptions(
-      groupBy: "Completed",
+      groupBy: "None",
       sort1stBy: "Priority",
       desc1: true,
-      sort2ndBy: "None",
+      sort2ndBy: "Due_Date", //FIXME: use "_" instead of " "
       desc2: true,
     );
   }
