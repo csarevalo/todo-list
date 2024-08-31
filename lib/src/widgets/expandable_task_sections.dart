@@ -17,12 +17,12 @@ class ExpandableTaskSection extends StatelessWidget {
     final themeColors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.only(left: 8, right: 8, bottom: 16),
       child: ExpansionTile(
         leading: leading,
         initiallyExpanded: true,
         childrenPadding: const EdgeInsets.only(bottom: 10),
-        backgroundColor: themeColors.primary,
+        // backgroundColor: themeColors.primary,
         collapsedBackgroundColor: themeColors.primary,
         iconColor: themeColors.primaryContainer,
         collapsedIconColor: themeColors.primaryContainer,
@@ -32,6 +32,10 @@ class ExpandableTaskSection extends StatelessWidget {
             color: themeColors.primaryContainer,
           ),
         ),
+        // expansionAnimationStyle: AnimationStyle(
+        //   curve: Curves.easeIn,
+        //   duration: const Duration(milliseconds: 500),
+        // ),
         children: children,
       ),
     );

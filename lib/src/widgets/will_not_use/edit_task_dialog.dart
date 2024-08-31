@@ -3,41 +3,64 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../../providers/task_provider.dart';
+import '../../models/task.dart';
+import '../../providers/task_provider.dart';
 
-class AddTaskDialog extends StatefulWidget {
-  const AddTaskDialog({super.key});
+class EditTaskDialog extends StatefulWidget {
+  final Task task;
+  const EditTaskDialog({super.key, required this.task});
 
   @override
-  State<AddTaskDialog> createState() => _AddTaskDialogState();
+  State<EditTaskDialog> createState() => _EditTaskDialogState();
 }
 
-class _AddTaskDialogState extends State<AddTaskDialog> {
+class _EditTaskDialogState extends State<EditTaskDialog> {
+  _EditTaskDialogState();
   final TextEditingController _taskTitleController = TextEditingController();
-  String? _dropdownPriorityValue = "None";
+  final List<String> _priorityCallbackOptions = [
+    "None",
+    "Low",
+    "Medium",
+    "High",
+  ];
+  String? _dropdownPriorityValue;
   int _priority = 0;
   DateTime? _newDateDue;
   bool _hasDueByTime = false;
   bool _isTextFieldEmpty = true;
 
-  void _addTask(BuildContext context) {
+  @override
+  void initState() {
+    super.initState();
+
+    _taskTitleController.text = widget.task.title; //task title
+    _dropdownPriorityValue =
+        _priorityCallbackOptions[widget.task.priority]; //dropdown priority val
+    _priority = widget.task.priority; //task priority
+    _newDateDue = widget.task.dateDue; //task due date
+    _hasDueByTime = widget.task.hasDueByTime ?? false; //task has due by time
+    _isTextFieldEmpty = false;
+  }
+
+  void _editTask(BuildContext context) {
     String taskTitleText = _taskTitleController.text;
     while (taskTitleText.contains(RegExp(r'  '))) {
       // Remove all extra spaces in sentence.
       taskTitleText = taskTitleText.replaceAll(RegExp(r'  '), ' ');
     }
     final taskProvider = Provider.of<TaskProvider>(context, listen: false);
-    final task = taskProvider.createTask(
-      title: taskTitleText,
-      priority: _priority,
-      dateDue: _newDateDue,
-      hasDueByTime: _hasDueByTime,
-    );
+
     if (taskTitleText.isNotEmpty) {
-      taskProvider.addTask(task);
-      _taskTitleController.clear();
-      Navigator.of(context).pop();
+      taskProvider.updateTask(
+        widget.task.id,
+        newTitle: taskTitleText,
+        newPriority: _priority,
+        newDateDue: _newDateDue,
+        hasDueByTime: _hasDueByTime,
+      );
     }
+    _taskTitleController.clear();
+    Navigator.of(context).pop();
   }
 
   void dropdownPriorityCallback(String? priority) {
@@ -249,7 +272,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
               border: InputBorder.none, //OutlineInputBorder(),
             ),
             onSubmitted: (value) {
-              if (value.isNotEmpty) _addTask(context);
+              if (value.isNotEmpty) _editTask(context);
             },
             onChanged: (value) {
               if (_isTextFieldEmpty != value.isEmpty) {
@@ -310,8 +333,8 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
               color: themeColors.primaryContainer, //icon color
               onPressed: _isTextFieldEmpty
                   ? null // to disable update button
-                  : () => _addTask(context),
-              icon: const Icon(Icons.add),
+                  : () => _editTask(context),
+              icon: const Icon(Icons.check),
             ),
           ],
         )
