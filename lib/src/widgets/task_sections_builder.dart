@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
+import 'package:snazzy_todo_list/src/models/task_sort_options.dart';
 import 'package:snazzy_todo_list/src/providers/task_preferences_controller.dart';
 
 import '../constants/task_group_headings.dart';
@@ -29,7 +30,10 @@ class TaskSectionsBuilder extends StatelessWidget {
     );
     final themeColors = Theme.of(context).colorScheme;
     // final textTheme = Theme.of(context).textTheme;
-    final taskPreferences = context.watch<TaskPreferencesController>();
+    final taskSortOptions =
+        context.select<TaskPreferencesController, TaskSortOptions>(
+      (taskPrefs) => taskPrefs.taskSortOptions,
+    );
 
     /// Set the tile colors
     Color tileColor = themeColors.primary.withOpacity(0.8);
@@ -37,7 +41,7 @@ class TaskSectionsBuilder extends StatelessWidget {
 
     final FilterTasks filterTasks = FilterTasks(
       tasks: tasks,
-      taskSortOptions: taskPreferences.taskSortOptions,
+      taskSortOptions: taskSortOptions,
     );
 
     const TaskGroupHeadings headingOptions = TaskGroupHeadings();
@@ -69,7 +73,7 @@ class TaskSectionsBuilder extends StatelessWidget {
     }
 
     List<TaskTile> getTaskTilesBasedOnCompletion({required isCompleted}) {
-      List<Task> filteredTasks = filterTasks.basedOnCompletion(
+      List<Task> filteredTasks = filterTasks.byCompletion(
         isCompleted: isCompleted,
       );
       List<TaskTile> taskTiles = createTaskTileListFrom(filteredTasks);
@@ -80,7 +84,7 @@ class TaskSectionsBuilder extends StatelessWidget {
       required String strPriority,
       bool isCompleted = false, // By default show uncompleted tasks only
     }) {
-      List<Task> filteredTasks = filterTasks.basedOnPriority(
+      List<Task> filteredTasks = filterTasks.byPriority(
         strPriority: strPriority,
         isCompleted: isCompleted,
       );
@@ -94,8 +98,11 @@ class TaskSectionsBuilder extends StatelessWidget {
       required String dateType, // Options: done, modified, due, created
       bool isCompleted = false, // Default: uncompleted
     }) {
-      List<Task> filteredTasks = filterTasks.basedOnDate(
-          datePeriod: datePeriod, dateType: dateType, isCompleted: isCompleted);
+      List<Task> filteredTasks = filterTasks.byDate(
+        datePeriod: datePeriod,
+        dateType: dateType,
+        isCompleted: isCompleted,
+      );
       List<TaskTile> taskTiles = createTaskTileListFrom(filteredTasks);
       return taskTiles;
     }
@@ -148,7 +155,7 @@ class TaskSectionsBuilder extends StatelessWidget {
         child: Column(
           children: [
             ...getSectionedTaskTiles(
-              groupBy: taskPreferences.taskSortOptions.groupBy,
+              groupBy: taskSortOptions.groupBy,
             ),
             ExpandableTaskSection(
               titleText: "Completed",

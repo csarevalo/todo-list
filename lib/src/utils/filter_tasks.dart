@@ -9,7 +9,7 @@ class FilterTasks {
     required this.taskSortOptions,
   });
 
-  List<Task> basedOnCompletion({required bool isCompleted}) {
+  List<Task> byCompletion({required bool isCompleted}) {
     List<Task> filteredTasks = List.from(tasks);
     filteredTasks.retainWhere((task) => task.isDone == isCompleted);
     filteredTasks.sort(isCompleted
@@ -23,7 +23,7 @@ class FilterTasks {
     return filteredTasks;
   }
 
-  List<Task> basedOnPriority({
+  List<Task> byPriority({
     required String strPriority,
     bool isCompleted = false, //default: uncompleted
   }) {
@@ -51,7 +51,7 @@ class FilterTasks {
     return filteredTasks;
   }
 
-  List<Task> basedOnDate({
+  List<Task> byDate({
     required String
         datePeriod, // Options: overdue, today, tomorrow, next, later, no..date
     required String dateType, // Options: done, modified, due, created
@@ -137,7 +137,7 @@ DateTime? getDateFromTask({
   }
 }
 
-int compareBasedOn(
+int compareBy(
   String compBy, {
   required Task taskA,
   required Task taskB,
@@ -187,10 +187,10 @@ SortTask sortTasksBy({
   sort2ndBy = sort2ndBy.toLowerCase();
   return (a, b) {
     // Primary comparison by 1st sortBy
-    int firstComp = compareBasedOn(sort1stBy, taskA: a, taskB: b, desc: desc1);
+    int firstComp = compareBy(sort1stBy, taskA: a, taskB: b, desc: desc1);
     if (firstComp != 0) return firstComp;
     // Secondary comparison by 2nd sortBy
-    int secondComp = compareBasedOn(sort2ndBy, taskA: a, taskB: b, desc: desc2);
+    int secondComp = compareBy(sort2ndBy, taskA: a, taskB: b, desc: desc2);
     return secondComp;
   };
 }
