@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
-import 'package:snazzy_todo_list/src/models/task_sort_options.dart';
-import 'package:snazzy_todo_list/src/providers/task_preferences_controller.dart';
 
 import '../constants/task_group_headings.dart';
 import '../models/section_heading.dart';
 import '../models/task.dart';
+import '../models/task_sort_options.dart';
 import '../providers/task_provider.dart';
+import '../providers/task_preferences_controller.dart';
 import '../utils/filter_tasks.dart';
 
 import 'dialogs/change_priority_dialog.dart';
@@ -62,8 +62,10 @@ class TaskSectionsBuilder extends StatelessWidget {
               taskId: task.id,
               currentPriority: task.priority,
             ),
-            onTapTaskTile: () =>
-                showSmallTaskDialog(context: context, task: task),
+            onTapTaskTile: () => showSmallTaskDialog(
+              context: context,
+              task: task,
+            ),
             tileColor: tileColor,
             onTileColor: onTileColor,
           ),
