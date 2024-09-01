@@ -21,7 +21,7 @@ class TaskTile extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    // final taskProvider = Provider.of<TaskProvider>(context);
+    final taskProvider = Provider.of<TaskProvider>(context);
     final themeColors = Theme.of(context).colorScheme;
     // final textTheme = Theme.of(context).textTheme;
 
@@ -39,10 +39,10 @@ class TaskTile extends StatelessWidget {
       checkboxState: _task.isDone,
       priority: _task.priority,
       dateDue: _task.dateDue,
-      onCheckboxChanged: onCheckboxChanged,
-      onDelete: onDelete,
-      // onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
-      // onDelete: (context) => taskProvider.deleteTask(task.id),
+      // onCheckboxChanged: onCheckboxChanged,
+      // onDelete: onDelete,
+      onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
+      onDelete: (context) => taskProvider.deleteTask(task.id),
       onPriorityChange: () => showChangePriorityDialog(
         context: context,
         taskId: _task.id,
