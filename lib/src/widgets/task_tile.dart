@@ -21,7 +21,7 @@ class TaskTile extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    final taskProvider = Provider.of<TaskProvider>(context);
+    // final taskProvider = Provider.of<TaskProvider>(context);
     final themeColors = Theme.of(context).colorScheme;
     // final textTheme = Theme.of(context).textTheme;
 
@@ -39,10 +39,10 @@ class TaskTile extends StatelessWidget {
       checkboxState: _task.isDone,
       priority: _task.priority,
       dateDue: _task.dateDue,
-      // onCheckboxChanged: onCheckboxChanged,
-      // onDelete: onDelete,
-      onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
-      onDelete: (context) => taskProvider.deleteTask(task.id),
+      onCheckboxChanged: onCheckboxChanged,
+      onDelete: onDelete,
+      // onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
+      // onDelete: (context) => taskProvider.deleteTask(task.id),
       onPriorityChange: () => showChangePriorityDialog(
         context: context,
         taskId: _task.id,
@@ -118,52 +118,48 @@ class _TaskTile extends StatelessWidget {
             )
           ],
         ),
-        child: RepaintBoundary(
-          child: Material(
-            child: ListTile(
-              onTap: onTap,
-              onLongPress: onLongPress,
-              dense: true,
-              tileColor: checkboxState ? tileColor.withOpacity(0.9) : tileColor,
-              textColor:
-                  checkboxState ? onTileColor.withOpacity(0.4) : onTileColor,
-              iconColor: checkboxState ? iconColor.withOpacity(0.7) : iconColor,
-              leading: Checkbox(
-                value: checkboxState,
-                onChanged: onCheckboxChanged,
-                checkColor: tileColor.withOpacity(0.4),
-                activeColor: onTileColor.withOpacity(0.4),
-                side: BorderSide(color: onTileColor),
+        child: Material(
+          child: ListTile(
+            onTap: onTap,
+            onLongPress: onLongPress,
+            dense: true,
+            tileColor: checkboxState ? tileColor.withOpacity(0.9) : tileColor,
+            textColor:
+                checkboxState ? onTileColor.withOpacity(0.4) : onTileColor,
+            iconColor: checkboxState ? iconColor.withOpacity(0.7) : iconColor,
+            leading: Checkbox(
+              value: checkboxState,
+              onChanged: onCheckboxChanged,
+              checkColor: tileColor.withOpacity(0.4),
+              activeColor: onTileColor.withOpacity(0.4),
+              side: BorderSide(color: onTileColor),
+            ),
+            title: Text(
+              title,
+              style: textTheme.bodyLarge!.copyWith(
+                fontSize: 18,
+                color:
+                    checkboxState ? onTileColor.withOpacity(0.4) : onTileColor,
+                decoration: checkboxState
+                    ? TextDecoration.lineThrough
+                    : TextDecoration.none,
+                decorationColor:
+                    checkboxState ? onTileColor.withOpacity(0.4) : onTileColor,
+                decorationThickness: 1.5,
               ),
-              title: Text(
-                title,
-                style: textTheme.bodyLarge!.copyWith(
-                  fontSize: 18,
-                  color: checkboxState
-                      ? onTileColor.withOpacity(0.4)
-                      : onTileColor,
-                  decoration: checkboxState
-                      ? TextDecoration.lineThrough
-                      : TextDecoration.none,
-                  decorationColor: checkboxState
-                      ? onTileColor.withOpacity(0.4)
-                      : onTileColor,
-                  decorationThickness: 1.5,
-                ),
-                softWrap: false,
-              ),
-              subtitle: dateDue == null
-                  ? null
-                  : Text(
-                      DateFormat.yMMMd().format(dateDue!).toString(),
-                    ),
-              trailing: IconButton(
-                onPressed: onPriorityChange,
-                icon: priority == 0
-                    ? const Icon(Icons.flag_outlined)
-                    : const Icon(Icons.flag),
-                alignment: Alignment.topRight,
-              ),
+              softWrap: false,
+            ),
+            subtitle: dateDue == null
+                ? null
+                : Text(
+                    DateFormat.yMMMd().format(dateDue!).toString(),
+                  ),
+            trailing: IconButton(
+              onPressed: onPriorityChange,
+              icon: priority == 0
+                  ? const Icon(Icons.flag_outlined)
+                  : const Icon(Icons.flag),
+              alignment: Alignment.topRight,
             ),
           ),
         ),
