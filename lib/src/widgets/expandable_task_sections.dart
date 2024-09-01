@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class ExpandableTaskSection extends StatelessWidget {
@@ -21,6 +23,7 @@ class ExpandableTaskSection extends StatelessWidget {
       child: RepaintBoundary(
         child: Material(
           child: ExpansionTile(
+            maintainState: true,
             leading: leading,
             initiallyExpanded: true,
             // childrenPadding: const EdgeInsets.only(bottom: 10),
@@ -36,7 +39,8 @@ class ExpandableTaskSection extends StatelessWidget {
             ),
             expansionAnimationStyle: AnimationStyle(
               curve: Curves.easeInSine,
-              duration: const Duration(seconds: 1),
+              // duration: kThemeAnimationDuration,
+              duration: Duration(milliseconds: min(300, 50 * children.length)),
             ),
             children: children,
           ),
