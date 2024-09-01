@@ -55,11 +55,13 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       body: const TaskSectionsBuilder(),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: themeColors.surfaceTint,
-        foregroundColor: themeColors.surface,
-        onPressed: () => showSmallTaskDialog(context: context),
-        child: const Icon(Icons.add),
+      floatingActionButton: RepaintBoundary(
+        child: FloatingActionButton(
+          backgroundColor: themeColors.surfaceTint,
+          foregroundColor: themeColors.surface,
+          onPressed: () => showSmallTaskDialog(context: context),
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }

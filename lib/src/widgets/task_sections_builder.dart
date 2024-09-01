@@ -10,11 +10,7 @@ import '../providers/task_provider.dart';
 import '../providers/task_preferences_controller.dart';
 import '../utils/filter_tasks.dart';
 
-import 'dialogs/change_priority_dialog.dart';
-import 'dialogs/small_task_dialog.dart';
 import 'expandable_task_sections.dart';
-
-// import 'will_not_use/task_tile.dart';
 import 'task_tile.dart';
 
 class TaskSectionsBuilder extends StatelessWidget {
@@ -26,20 +22,13 @@ class TaskSectionsBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //FIXME: Plz optimize ...REBUILDS this whole big ass widget
-    final taskProvider = Provider.of<TaskProvider>(context);
     final tasks = context.select<TaskProvider, List<Task>>(
       (provider) => provider.todoList,
     );
-    final themeColors = Theme.of(context).colorScheme;
-    // final textTheme = Theme.of(context).textTheme;
     final taskSortOptions =
         context.select<TaskPreferencesController, TaskSortOptions>(
       (taskPrefs) => taskPrefs.taskSortOptions,
     );
-
-    /// Set the tile colors
-    Color tileColor = themeColors.primary;
-    Color onTileColor = themeColors.primaryContainer;
 
     final FilterTasks filterTasks = FilterTasks(
       tasks: tasks,
@@ -52,25 +41,26 @@ class TaskSectionsBuilder extends StatelessWidget {
       List<TaskTile> taskTiles = [];
       for (var task in taskList) {
         taskTiles.add(
-          TaskTile(
-            title: task.title,
-            checkboxState: task.isDone,
-            priority: task.priority,
-            dateDue: task.dateDue,
-            onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
-            onDelete: (context) => taskProvider.deleteTask(task.id),
-            onPriorityChange: () => showChangePriorityDialog(
-              context: context,
-              taskId: task.id,
-              currentPriority: task.priority,
-            ),
-            onTapTaskTile: () => showSmallTaskDialog(
-              context: context,
-              task: task,
-            ),
-            tileColor: tileColor,
-            onTileColor: onTileColor,
-          ),
+          TaskTile(task: task),
+          // TaskTile(
+          //   title: task.title,
+          //   checkboxState: task.isDone,
+          //   priority: task.priority,
+          //   dateDue: task.dateDue,
+          //   onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
+          //   onDelete: (context) => taskProvider.deleteTask(task.id),
+          //   onPriorityChange: () => showChangePriorityDialog(
+          //     context: context,
+          //     taskId: task.id,
+          //     currentPriority: task.priority,
+          //   ),
+          //   onTapTaskTile: () => showSmallTaskDialog(
+          //     context: context,
+          //     task: task,
+          //   ),
+          //   tileColor: tileColor,
+          //   onTileColor: onTileColor,
+          // ),
         );
       }
       return taskTiles;
@@ -154,19 +144,17 @@ class TaskSectionsBuilder extends StatelessWidget {
       return sectionTiles;
     }
 
-    return SingleChildScrollView(
-      child: SlidableAutoCloseBehavior(
-        child: Column(
-          children: [
-            ...getSectionedTaskTiles(
-              groupBy: taskSortOptions.groupBy,
-            ),
-            ExpandableTaskSection(
-              titleText: "Completed",
-              children: getTaskTilesBasedOnCompletion(isCompleted: true),
-            ),
-          ],
-        ),
+    return SlidableAutoCloseBehavior(
+      child: ListView(
+        children: [
+          ...getSectionedTaskTiles(
+            groupBy: taskSortOptions.groupBy,
+          ),
+          ExpandableTaskSection(
+            titleText: "Completed",
+            children: getTaskTilesBasedOnCompletion(isCompleted: true),
+          ),
+        ],
       ),
     );
   }
