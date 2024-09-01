@@ -60,52 +60,36 @@ class ChangePriorityDialog extends StatelessWidget {
       contentPadding: const EdgeInsets.only(top: 10),
       content: Column(
         mainAxisSize: MainAxisSize.min,
-        children: [
-          priorityButton(
-            priority: 3,
-            active: currentPriority == 3,
-            onPressed: () {
-              _changePriority(context, newPriority: 3);
-            },
-          ),
-          priorityButton(
-            priority: 2,
-            active: currentPriority == 2,
-            onPressed: () {
-              _changePriority(context, newPriority: 2);
-            },
-          ),
-          priorityButton(
-            priority: 1,
-            active: currentPriority == 1,
-            onPressed: () {
-              _changePriority(context, newPriority: 1);
-            },
-          ),
-          priorityButton(
-            priority: 0,
-            active: currentPriority == 0,
-            onPressed: () {
-              _changePriority(context, newPriority: 0);
-            },
-          ),
-        ],
+        children: List<Widget>.generate(4, (index) {
+          int i = 3 - index;
+          return RepaintBoundary(
+            child: priorityButton(
+              priority: i,
+              active: currentPriority == i,
+              onPressed: () {
+                _changePriority(context, newPriority: i);
+              },
+            ),
+          );
+        }),
       ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Cancel",
-                  textAlign: TextAlign.center,
-                  style: textTheme.titleMedium!
-                      .copyWith(color: themeColors.primary),
-                ),
-              ],
+        RepaintBoundary(
+          child: TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Cancel",
+                    textAlign: TextAlign.center,
+                    style: textTheme.titleMedium!
+                        .copyWith(color: themeColors.primary),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
