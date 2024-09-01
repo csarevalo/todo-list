@@ -10,36 +10,51 @@ import 'dialogs/small_task_dialog.dart';
 
 class TaskTile extends StatelessWidget {
   final Task task;
+  final Function(bool?)? onCheckboxChanged;
+  final void Function(BuildContext)? onDelete;
 
   const TaskTile({
     super.key,
     required this.task,
+    this.onCheckboxChanged,
+    this.onDelete,
   });
   @override
   Widget build(BuildContext context) {
-    final taskProvider = Provider.of<TaskProvider>(context, listen: false);
+    // final taskProvider = Provider.of<TaskProvider>(context);
     final themeColors = Theme.of(context).colorScheme;
     // final textTheme = Theme.of(context).textTheme;
+
+    Task _task = context.select<TaskProvider, Task>(
+      (p) => p.todoList.singleWhere((t) => t.id == task.id),
+    );
 
     /// Set the tile colors
     Color tileColor = themeColors.primary;
     Color onTileColor = themeColors.primaryContainer;
 
     _TaskTile taskTile = _TaskTile(
-      title: task.title,
-      checkboxState: task.isDone,
-      priority: task.priority,
-      dateDue: task.dateDue,
-      onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
-      onDelete: (context) => taskProvider.deleteTask(task.id),
+      key: super.key,
+      title: _task.title,
+      checkboxState: _task.isDone,
+      priority: _task.priority,
+      dateDue: _task.dateDue,
+      onCheckboxChanged: onCheckboxChanged,
+      onDelete: onDelete,
+      // onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
+      // onDelete: (context) => taskProvider.deleteTask(task.id),
       onPriorityChange: () => showChangePriorityDialog(
         context: context,
-        taskId: task.id,
-        currentPriority: task.priority,
+        taskId: _task.id,
+        currentPriority: _task.priority,
       ),
-      onTapTaskTile: () => showSmallTaskDialog(
+      onTap: () => showSmallTaskDialog(
         context: context,
-        task: task,
+        task: _task,
+      ),
+      onLongPress: () => showSmallTaskDialog(
+        context: context,
+        task: _task,
       ),
       tileColor: tileColor,
       onTileColor: onTileColor,
@@ -55,7 +70,7 @@ class _TaskTile extends StatelessWidget {
   final Function(bool?)? onCheckboxChanged;
   final void Function(BuildContext)? onDelete;
   final void Function()? onPriorityChange;
-  final void Function()? onTapTaskTile;
+  final void Function()? onTap;
   final void Function()? onLongPress;
   final Color tileColor;
   final Color onTileColor;
@@ -70,7 +85,7 @@ class _TaskTile extends StatelessWidget {
     required this.onCheckboxChanged,
     required this.onDelete,
     required this.onPriorityChange,
-    this.onTapTaskTile,
+    this.onTap,
     this.onLongPress,
     required this.tileColor,
     required this.onTileColor,
@@ -106,7 +121,7 @@ class _TaskTile extends StatelessWidget {
         child: RepaintBoundary(
           child: Material(
             child: ListTile(
-              onTap: onTapTaskTile,
+              onTap: onTap,
               onLongPress: onLongPress,
               dense: true,
               tileColor: checkboxState ? tileColor.withOpacity(0.9) : tileColor,

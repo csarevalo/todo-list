@@ -38,29 +38,15 @@ class TaskSectionsBuilder extends StatelessWidget {
     const TaskGroupHeadings headingOptions = TaskGroupHeadings();
 
     List<TaskTile> createTaskTileListFrom(List<Task> taskList) {
+      final taskProvider = Provider.of<TaskProvider>(context, listen: false);
       List<TaskTile> taskTiles = [];
       for (var task in taskList) {
         taskTiles.add(
-          TaskTile(task: task),
-          // TaskTile(
-          //   title: task.title,
-          //   checkboxState: task.isDone,
-          //   priority: task.priority,
-          //   dateDue: task.dateDue,
-          //   onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
-          //   onDelete: (context) => taskProvider.deleteTask(task.id),
-          //   onPriorityChange: () => showChangePriorityDialog(
-          //     context: context,
-          //     taskId: task.id,
-          //     currentPriority: task.priority,
-          //   ),
-          //   onTapTaskTile: () => showSmallTaskDialog(
-          //     context: context,
-          //     task: task,
-          //   ),
-          //   tileColor: tileColor,
-          //   onTileColor: onTileColor,
-          // ),
+          TaskTile(
+            task: task,
+            onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
+            onDelete: (context) => taskProvider.deleteTask(task.id),
+          ),
         );
       }
       return taskTiles;
