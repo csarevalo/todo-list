@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
 
 class TaskTile extends StatelessWidget {
   final String title;
@@ -11,6 +11,7 @@ class TaskTile extends StatelessWidget {
   final void Function()? onPriorityChange;
   final void Function()? onTapTaskTile;
   final void Function()? onLongPress;
+  final void Function()? onDoubleTap;
   final Color tileColor;
   final Color onTileColor;
   final DateTime? dateDue;
@@ -18,7 +19,6 @@ class TaskTile extends StatelessWidget {
   const TaskTile({
     super.key,
     required this.title,
-    this.dateDue,
     required this.checkboxState,
     required this.priority,
     required this.onCheckboxChanged,
@@ -26,75 +26,107 @@ class TaskTile extends StatelessWidget {
     required this.onPriorityChange,
     this.onTapTaskTile,
     this.onLongPress,
+    this.onDoubleTap,
     required this.tileColor,
     required this.onTileColor,
+    this.dateDue,
   });
 
   @override
   Widget build(BuildContext context) {
-    // final themeColors = Theme.of(context).colorScheme;
+    final themeColors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
-    final iconColor = priority == 0
-        ? Colors.grey.shade500
-        : priority == 1
-            ? Colors.blue
-            : priority == 2
-                ? Colors.yellow.shade700
-                : Colors.red.shade600;
-    return Slidable(
-      groupTag: '0', // only keep 1 open
-      endActionPane: ActionPane(
-        extentRatio: 0.25,
-        motion: const StretchMotion(),
-        children: [
-          SlidableAction(
-            onPressed: onDelete,
-            icon: Icons.delete,
-            borderRadius: BorderRadius.circular(15),
-            backgroundColor: Colors.red,
-            foregroundColor: onTileColor,
-          )
-        ],
-      ),
-      child: ListTile(
-        onTap: onTapTaskTile,
-        onLongPress: onLongPress,
-        dense: true,
-        tileColor: checkboxState ? tileColor.withOpacity(0.7) : tileColor,
-        textColor: checkboxState ? onTileColor.withOpacity(0.4) : onTileColor,
-        iconColor: checkboxState ? iconColor.withOpacity(0.4) : iconColor,
-        leading: Checkbox(
-          value: checkboxState,
-          onChanged: onCheckboxChanged,
-          checkColor: tileColor.withOpacity(0.4),
-          activeColor: onTileColor.withOpacity(0.4),
-          side: BorderSide(color: onTileColor),
+    return SafeArea(
+      top: false,
+      bottom: false,
+      child: Slidable(
+        groupTag: '0', // only keep 1 open
+        endActionPane: ActionPane(
+          extentRatio: 0.25,
+          motion: const StretchMotion(),
+          children: [
+            SlidableAction(
+              onPressed: onDelete,
+              icon: Icons.delete,
+              borderRadius: BorderRadius.circular(15),
+              backgroundColor: Colors.red,
+              foregroundColor: onTileColor,
+            )
+          ],
         ),
-        title: Text(
-          title,
-          style: textTheme.bodyLarge!.copyWith(
-            fontSize: 18,
-            color: checkboxState ? onTileColor.withOpacity(0.4) : onTileColor,
-            decoration: checkboxState
-                ? TextDecoration.lineThrough
-                : TextDecoration.none,
-            decorationColor:
-                checkboxState ? onTileColor.withOpacity(0.4) : onTileColor,
-            decorationThickness: 1.5,
+        //TODO: Use ListTile here!!!
+        child: InkWell(
+          onTap: onTapTaskTile,
+          onLongPress: onLongPress,
+          onDoubleTap: onDoubleTap,
+          child: Container(
+            decoration: BoxDecoration(
+              color: checkboxState ? tileColor.withOpacity(0.7) : tileColor,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 50),
+            child: Row(
+              children: [
+                Checkbox(
+                  value: checkboxState,
+                  onChanged: onCheckboxChanged,
+                  checkColor: tileColor.withOpacity(0.4),
+                  activeColor: onTileColor.withOpacity(0.4),
+                  side: BorderSide(color: onTileColor),
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        title,
+                        style: textTheme.bodyLarge!.copyWith(
+                          color: checkboxState
+                              ? onTileColor.withOpacity(0.4)
+                              : onTileColor,
+                          fontSize: 18,
+                          decoration: checkboxState
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none,
+                          decorationColor: checkboxState
+                              ? onTileColor.withOpacity(0.4)
+                              : onTileColor,
+                          decorationThickness: 1.5,
+                        ),
+                        softWrap: false,
+                      ),
+                      if (dateDue != null) ...[
+                        Text(
+                          DateFormat.yMMMd().format(dateDue!).toString(),
+                          style: textTheme.bodySmall!.copyWith(
+                            color: themeColors.onPrimary,
+                          ),
+                        ),
+                      ]
+                    ],
+                  ),
+                ),
+                IconButton(
+                  onPressed: onPriorityChange,
+                  icon: priority == 0
+                      ? const Icon(Icons.flag_outlined)
+                      : const Icon(Icons.flag),
+                  alignment: Alignment.topRight,
+                  color: priority == 0
+                      ? Colors.grey.shade500
+                      : priority == 1
+                          ? Colors.blue
+                          : priority == 2
+                              ? Colors.yellow.shade700
+                              : Colors.red.shade600,
+                ),
+              ],
+            ),
           ),
-          softWrap: false,
-        ),
-        subtitle: dateDue == null
-            ? null
-            : Text(
-                DateFormat.yMMMd().format(dateDue!).toString(),
-              ),
-        trailing: IconButton(
-          onPressed: onPriorityChange,
-          icon: priority == 0
-              ? const Icon(Icons.flag_outlined)
-              : const Icon(Icons.flag),
-          alignment: Alignment.topRight,
         ),
       ),
     );

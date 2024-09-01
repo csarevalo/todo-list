@@ -21,8 +21,8 @@ class ExpandableTaskSection extends StatelessWidget {
       child: ExpansionTile(
         leading: leading,
         initiallyExpanded: true,
-        childrenPadding: const EdgeInsets.only(bottom: 10),
-        // backgroundColor: themeColors.primary,
+        // childrenPadding: const EdgeInsets.only(bottom: 10),
+        backgroundColor: themeColors.primary,
         collapsedBackgroundColor: themeColors.primary,
         iconColor: themeColors.primaryContainer,
         collapsedIconColor: themeColors.primaryContainer,
@@ -32,10 +32,10 @@ class ExpandableTaskSection extends StatelessWidget {
             color: themeColors.primaryContainer,
           ),
         ),
-        // expansionAnimationStyle: AnimationStyle(
-        //   curve: Curves.easeIn,
-        //   duration: const Duration(milliseconds: 500),
-        // ),
+        expansionAnimationStyle: AnimationStyle(
+          curve: Curves.easeInSine,
+          duration: const Duration(seconds: 1),
+        ),
         children: children,
       ),
     );
