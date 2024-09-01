@@ -62,34 +62,30 @@ class ChangePriorityDialog extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: List<Widget>.generate(4, (index) {
           int i = 3 - index;
-          return RepaintBoundary(
-            child: priorityButton(
-              priority: i,
-              active: currentPriority == i,
-              onPressed: () {
-                _changePriority(context, newPriority: i);
-              },
-            ),
+          return priorityButton(
+            priority: i,
+            active: currentPriority == i,
+            onPressed: () {
+              _changePriority(context, newPriority: i);
+            },
           );
         }),
       ),
       actions: [
-        RepaintBoundary(
-          child: TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Cancel",
-                    textAlign: TextAlign.center,
-                    style: textTheme.titleMedium!
-                        .copyWith(color: themeColors.primary),
-                  ),
-                ],
-              ),
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Cancel",
+                  textAlign: TextAlign.center,
+                  style: textTheme.titleMedium!
+                      .copyWith(color: themeColors.primary),
+                ),
+              ],
             ),
           ),
         ),
