@@ -40,15 +40,15 @@ class TaskSectionsBuilder extends StatelessWidget {
     List<TaskTile> createTaskTileListFrom(List<Task> taskList) {
       final taskProvider = Provider.of<TaskProvider>(context);
       List<TaskTile> taskTiles = [];
-      for (var task in taskList) {
-        Task _task = context.select<TaskProvider, Task>(
-          (p) => p.todoList.singleWhere((t) => t.id == task.id),
+      for (var taskk in taskList) {
+        Task task = context.select<TaskProvider, Task>(
+          (p) => p.todoList.singleWhere((t) => t.id == taskk.id),
         );
         taskTiles.add(
           TaskTile(
-            task: _task,
-            onCheckboxChanged: (value) => taskProvider.toggleDone(_task.id),
-            onDelete: (context) => taskProvider.deleteTask(_task.id),
+            task: task,
+            onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
+            onDelete: (context) => taskProvider.deleteTask(task.id),
           ),
         );
       }
