@@ -16,23 +16,23 @@ class TodoApp extends StatelessWidget {
     return ListenableBuilder(
       listenable: settingsController,
       builder: (BuildContext context, Widget? child) {
+        final SettingsController settings = settingsController;
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: "Snazzy To-Do List",
           // theme: ThemeData(useMaterial3: true),
           // darkTheme: ThemeData.dark(useMaterial3: true),
-          theme: settingsController.appTheme.light(),
-          highContrastTheme: settingsController.appTheme
-              .lightContrast(settingsController.contrast),
-          darkTheme: settingsController.appTheme.dark(),
-          highContrastDarkTheme: settingsController.appTheme
-              .darkContrast(settingsController.contrast),
-          themeMode: settingsController.themeMode,
+          theme: settingsController.appTheme.lightContrast(settings.contrast),
+          highContrastTheme: settings.appTheme.lightContrast(settings.contrast),
+          darkTheme: settings.appTheme.darkContrast(settings.contrast),
+          highContrastDarkTheme:
+              settings.appTheme.darkContrast(settings.contrast),
+          themeMode: settings.themeMode,
           restorationScopeId: 'todoApp',
           initialRoute: '/',
           routes: {
             '/': (ctx) => const HomeScreen(),
-            '/settings': (ctx) => SettingsView(controller: settingsController),
+            '/settings': (ctx) => SettingsView(controller: settings),
           },
         );
       },
