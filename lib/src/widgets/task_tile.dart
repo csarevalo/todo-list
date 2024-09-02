@@ -95,7 +95,7 @@ class _TaskTile extends StatelessWidget {
                 : Colors.red.shade600;
     return RepaintBoundary(
       child: Slidable(
-        groupTag: '0', // only keep 1 open
+        groupTag: '0', // SlideableAutoClose is based on group tag
         endActionPane: ActionPane(
           extentRatio: 0.25,
           motion: const StretchMotion(),
@@ -114,6 +114,7 @@ class _TaskTile extends StatelessWidget {
             onTap: onTap,
             onLongPress: onLongPress,
             dense: true,
+            // shape: const Border(),
             tileColor: checkboxState ? tileColor.withOpacity(0.9) : tileColor,
             textColor:
                 checkboxState ? onTileColor.withOpacity(0.4) : onTileColor,

@@ -133,17 +133,21 @@ class TaskSectionsBuilder extends StatelessWidget {
       return sectionTiles;
     }
 
+    List<Widget> expandableTaskSections = [
+      ...getSectionedTaskTiles(
+        groupBy: taskSortOptions.groupBy,
+      ),
+      ExpandableTaskSection(
+        titleText: "Completed",
+        children: getTaskTilesBasedOnCompletion(isCompleted: true),
+      ),
+    ];
     return SlidableAutoCloseBehavior(
-      child: ListView(
-        children: [
-          ...getSectionedTaskTiles(
-            groupBy: taskSortOptions.groupBy,
-          ),
-          ExpandableTaskSection(
-            titleText: "Completed",
-            children: getTaskTilesBasedOnCompletion(isCompleted: true),
-          ),
-        ],
+      child: ListView.builder(
+        itemCount: expandableTaskSections.length,
+        itemBuilder: (context, int index) {
+          return expandableTaskSections[index];
+        },
       ),
     );
   }
