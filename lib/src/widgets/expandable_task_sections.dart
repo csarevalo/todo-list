@@ -23,6 +23,7 @@ class ExpandableTaskSection extends StatelessWidget {
       padding: const EdgeInsets.only(left: 8, right: 8, bottom: 16),
       child: RepaintBoundary(
         child: Material(
+          //A MUST HAVE
           child: Slidable(
             //FIXME: should use a slideable controller..
             groupTag: '0', //grouptag for taskTile

@@ -109,50 +109,46 @@ class _TaskTile extends StatelessWidget {
             )
           ],
         ),
-        child: Material(
-          child: ListTile(
-            onTap: onTap,
-            onLongPress: onLongPress,
-            dense: true,
-            // shape: const Border(),
-            tileColor: checkboxState ? tileColor.withOpacity(0.9) : tileColor,
-            textColor:
-                checkboxState ? onTileColor.withOpacity(0.4) : onTileColor,
-            iconColor: checkboxState ? iconColor.withOpacity(0.7) : iconColor,
-            leading: Checkbox(
-              value: checkboxState,
-              onChanged: onCheckboxChanged,
-              checkColor: tileColor.withOpacity(0.4),
-              activeColor: onTileColor.withOpacity(0.4),
-              side: BorderSide(color: onTileColor),
+        child: ListTile(
+          onTap: onTap,
+          onLongPress: onLongPress,
+          dense: true,
+          // shape: const Border(),
+          tileColor: checkboxState ? tileColor.withOpacity(0.9) : tileColor,
+          textColor: checkboxState ? onTileColor.withOpacity(0.4) : onTileColor,
+          iconColor: checkboxState ? iconColor.withOpacity(0.7) : iconColor,
+          leading: Checkbox(
+            value: checkboxState,
+            onChanged: onCheckboxChanged,
+            checkColor: tileColor.withOpacity(0.4),
+            activeColor: onTileColor.withOpacity(0.4),
+            side: BorderSide(color: onTileColor),
+          ),
+          title: Text(
+            title,
+            style: textTheme.bodyLarge!.copyWith(
+              fontSize: 18,
+              color: checkboxState ? onTileColor.withOpacity(0.4) : onTileColor,
+              decoration: checkboxState
+                  ? TextDecoration.lineThrough
+                  : TextDecoration.none,
+              decorationColor:
+                  checkboxState ? onTileColor.withOpacity(0.4) : onTileColor,
+              decorationThickness: 1.5,
             ),
-            title: Text(
-              title,
-              style: textTheme.bodyLarge!.copyWith(
-                fontSize: 18,
-                color:
-                    checkboxState ? onTileColor.withOpacity(0.4) : onTileColor,
-                decoration: checkboxState
-                    ? TextDecoration.lineThrough
-                    : TextDecoration.none,
-                decorationColor:
-                    checkboxState ? onTileColor.withOpacity(0.4) : onTileColor,
-                decorationThickness: 1.5,
-              ),
-              softWrap: false,
-            ),
-            subtitle: dateDue == null
-                ? null
-                : Text(
-                    DateFormat.yMMMd().format(dateDue!).toString(),
-                  ),
-            trailing: IconButton(
-              onPressed: onPriorityChange,
-              icon: priority == 0
-                  ? const Icon(Icons.flag_outlined)
-                  : const Icon(Icons.flag),
-              alignment: Alignment.topRight,
-            ),
+            softWrap: false,
+          ),
+          subtitle: dateDue == null
+              ? null
+              : Text(
+                  DateFormat.yMMMd().format(dateDue!).toString(),
+                ),
+          trailing: IconButton(
+            onPressed: onPriorityChange,
+            icon: priority == 0
+                ? const Icon(Icons.flag_outlined)
+                : const Icon(Icons.flag),
+            alignment: Alignment.topRight,
           ),
         ),
       ),
