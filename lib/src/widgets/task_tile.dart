@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:provider/provider.dart';
 
 import '../models/task.dart';
-import '../providers/task_provider.dart';
 import 'dialogs/change_priority_dialog.dart';
 import 'dialogs/small_task_dialog.dart';
 
@@ -21,13 +19,8 @@ class TaskTile extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    // final taskProvider = Provider.of<TaskProvider>(context);
     final themeColors = Theme.of(context).colorScheme;
     // final textTheme = Theme.of(context).textTheme;
-
-    Task _task = context.select<TaskProvider, Task>(
-      (p) => p.todoList.singleWhere((t) => t.id == task.id),
-    );
 
     /// Set the tile colors
     Color tileColor = themeColors.primary;
@@ -35,26 +28,24 @@ class TaskTile extends StatelessWidget {
 
     _TaskTile taskTile = _TaskTile(
       key: super.key,
-      title: _task.title,
-      checkboxState: _task.isDone,
-      priority: _task.priority,
-      dateDue: _task.dateDue,
+      title: task.title,
+      checkboxState: task.isDone,
+      priority: task.priority,
+      dateDue: task.dateDue,
       onCheckboxChanged: onCheckboxChanged,
       onDelete: onDelete,
-      // onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
-      // onDelete: (context) => taskProvider.deleteTask(task.id),
       onPriorityChange: () => showChangePriorityDialog(
         context: context,
-        taskId: _task.id,
-        currentPriority: _task.priority,
+        taskId: task.id,
+        currentPriority: task.priority,
       ),
       onTap: () => showSmallTaskDialog(
         context: context,
-        task: _task,
+        task: task,
       ),
       onLongPress: () => showSmallTaskDialog(
         context: context,
-        task: _task,
+        task: task,
       ),
       tileColor: tileColor,
       onTileColor: onTileColor,

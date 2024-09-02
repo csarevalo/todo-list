@@ -25,6 +25,7 @@ class TaskProvider with ChangeNotifier {
 
   void toggleDone(int taskId) {
     final index = _todoList.indexWhere((task) => task.id == taskId);
+    if (index == -1) return; //task not found
     _todoList[index].isDone = !_todoList[index].isDone;
     if (_todoList[index].isDone) {
       _todoList[index].dateDone = DateTime.now();
@@ -80,6 +81,7 @@ class TaskProvider with ChangeNotifier {
 
   void deleteTask(int taskId) {
     final index = _todoList.indexWhere((task) => task.id == taskId);
+    if (index == -1) return; //task not found
     _todoList.removeAt(index);
     notifyListeners();
   }
