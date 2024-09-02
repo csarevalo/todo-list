@@ -141,26 +141,6 @@ class TaskSectionsBuilder extends StatelessWidget {
         titleText: "Completed",
         children: getTaskTilesBasedOnCompletion(isCompleted: true),
       ),
-      Material(
-        child: ExpansionTile(
-          title: const Text("Test"),
-          shape: const Border(),
-          collapsedShape: const Border(),
-          collapsedBackgroundColor: Theme.of(context).colorScheme.primary,
-          collapsedTextColor: Theme.of(context).colorScheme.onPrimary,
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          textColor: Theme.of(context).colorScheme.onPrimary,
-          children: List.generate(10, (int i) {
-            return ListTile(
-              dense: true,
-              title: Text("Tile $i"),
-              tileColor: Theme.of(context).colorScheme.primary,
-              textColor: Theme.of(context).colorScheme.onPrimary,
-              subtitle: const Text("data"),
-            );
-          }),
-        ),
-      ),
     ];
     return SlidableAutoCloseBehavior(
       child: ListView.builder(
