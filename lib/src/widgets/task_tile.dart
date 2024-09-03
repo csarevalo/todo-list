@@ -55,7 +55,7 @@ class _CloseSlidableOnTapState extends State<_CloseSlidableOnTap>
   @override
   void dispose() {
     super.dispose();
-    controller.dispose();
+    if (mounted) controller.dispose();
   }
 
   @override
