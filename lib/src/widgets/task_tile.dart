@@ -7,36 +7,69 @@ import 'dialogs/change_priority_dialog.dart';
 import 'dialogs/small_task_dialog.dart';
 
 class TaskTile extends StatelessWidget {
-  final SlidableController? slidableController;
   final Task task;
   final Function(bool?)? onCheckboxChanged;
   final void Function(BuildContext)? onDelete;
 
   const TaskTile({
     super.key,
-    this.slidableController,
     required this.task,
     this.onCheckboxChanged,
     this.onDelete,
   });
   @override
   Widget build(BuildContext context) {
-    final themeColors = Theme.of(context).colorScheme;
-    // final textTheme = Theme.of(context).textTheme;
+    return _CloseSlidableOnTap(
+      task: task,
+      onCheckboxChanged: onCheckboxChanged,
+      onDelete: onDelete,
+    );
+  }
+}
 
-    /// Set the tile colors
-    Color tileColor = themeColors.primary;
-    Color onTileColor = themeColors.primaryContainer;
+class _CloseSlidableOnTap extends StatefulWidget {
+  final Task task;
+  final Function(bool?)? onCheckboxChanged;
+  final void Function(BuildContext)? onDelete;
 
-    _TaskTile taskTile = _TaskTile(
-      key: super.key,
-      controller: slidableController,
+  const _CloseSlidableOnTap({
+    required this.task,
+    this.onCheckboxChanged,
+    this.onDelete,
+  });
+
+  @override
+  State<_CloseSlidableOnTap> createState() => _CloseSlidableOnTapState();
+}
+
+class _CloseSlidableOnTapState extends State<_CloseSlidableOnTap>
+    with TickerProviderStateMixin {
+  late final SlidableController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = SlidableController(this);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    // controller.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final Task task = widget.task;
+    final _TaskTile taskTile = _TaskTile(
+      // key: super.key,
+      controller: controller,
       title: task.title,
       checkboxState: task.isDone,
       priority: task.priority,
       dateDue: task.dateDue,
-      onCheckboxChanged: onCheckboxChanged,
-      onDelete: onDelete,
+      onCheckboxChanged: widget.onCheckboxChanged,
+      onDelete: widget.onDelete,
       onPriorityChange: () => showChangePriorityDialog(
         context: context,
         taskId: task.id,
@@ -50,10 +83,19 @@ class TaskTile extends StatelessWidget {
         context: context,
         task: task,
       ),
-      tileColor: tileColor,
-      onTileColor: onTileColor,
+      // tileColor: tileColor,
+      // onTileColor: onTileColor,
     );
-    return taskTile;
+    return TapRegion(
+      // behavior: HitTestBehavior.translucent,
+      onTapOutside: (_) {
+        if (!controller.closing && context.mounted) {
+          controller.close();
+          // debugPrint("Hello World"); //TODO: remove
+        }
+      },
+      child: taskTile,
+    );
   }
 }
 
@@ -67,12 +109,12 @@ class _TaskTile extends StatelessWidget {
   final void Function()? onPriorityChange;
   final void Function()? onTap;
   final void Function()? onLongPress;
-  final Color tileColor;
-  final Color onTileColor;
+  final Color? tileColor;
+  final Color? onTileColor;
   final DateTime? dateDue;
 
   const _TaskTile({
-    super.key,
+    // super.key,
     this.controller,
     required this.title,
     this.dateDue,
@@ -83,14 +125,18 @@ class _TaskTile extends StatelessWidget {
     required this.onPriorityChange,
     this.onTap,
     this.onLongPress,
-    required this.tileColor,
-    required this.onTileColor,
+    this.tileColor,
+    this.onTileColor,
   });
 
   @override
   Widget build(BuildContext context) {
-    // final themeColors = Theme.of(context).colorScheme;
+    final themeColors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+
+    /// Set the tile colors
+    Color tileColor = themeColors.primary;
+    Color onTileColor = themeColors.primaryContainer;
     final iconColor = priority == 0
         ? Colors.grey.shade500
         : priority == 1
@@ -101,6 +147,7 @@ class _TaskTile extends StatelessWidget {
     return RepaintBoundary(
       child: Slidable(
         groupTag: '0', // SlideableAutoClose is based on group tag
+        key: UniqueKey(),
         controller: controller,
         endActionPane: ActionPane(
           extentRatio: 0.25,
@@ -158,29 +205,6 @@ class _TaskTile extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _CloseSlidableOnTap extends StatelessWidget {
-  const _CloseSlidableOnTap({
-    super.key,
-    required this.child,
-    required this.controller,
-  });
-
-  final Widget child;
-  final SlidableController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onTap: () {
-        // => controller.activeState?.close(),
-        if (controller.isDismissibleReady) controller.close();
-      },
-      child: child,
     );
   }
 }
