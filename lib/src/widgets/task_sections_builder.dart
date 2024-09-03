@@ -48,7 +48,7 @@ class TaskSectionsBuilder extends StatelessWidget {
           TaskTile(
             task: task,
             onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
-            onDelete: (context) => taskProvider.deleteTask(task.id),
+            onDelete: (_) => taskProvider.deleteTask(task.id),
           ),
         );
       }

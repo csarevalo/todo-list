@@ -7,12 +7,14 @@ import 'dialogs/change_priority_dialog.dart';
 import 'dialogs/small_task_dialog.dart';
 
 class TaskTile extends StatelessWidget {
+  final SlidableController? slidableController;
   final Task task;
   final Function(bool?)? onCheckboxChanged;
   final void Function(BuildContext)? onDelete;
 
   const TaskTile({
     super.key,
+    this.slidableController,
     required this.task,
     this.onCheckboxChanged,
     this.onDelete,
@@ -28,6 +30,7 @@ class TaskTile extends StatelessWidget {
 
     _TaskTile taskTile = _TaskTile(
       key: super.key,
+      controller: slidableController,
       title: task.title,
       checkboxState: task.isDone,
       priority: task.priority,
@@ -55,6 +58,7 @@ class TaskTile extends StatelessWidget {
 }
 
 class _TaskTile extends StatelessWidget {
+  final SlidableController? controller;
   final String title;
   final bool checkboxState;
   final int priority;
@@ -69,6 +73,7 @@ class _TaskTile extends StatelessWidget {
 
   const _TaskTile({
     super.key,
+    this.controller,
     required this.title,
     this.dateDue,
     required this.checkboxState,
@@ -96,6 +101,7 @@ class _TaskTile extends StatelessWidget {
     return RepaintBoundary(
       child: Slidable(
         groupTag: '0', // SlideableAutoClose is based on group tag
+        controller: controller,
         endActionPane: ActionPane(
           extentRatio: 0.25,
           motion: const StretchMotion(),
@@ -152,6 +158,29 @@ class _TaskTile extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _CloseSlidableOnTap extends StatelessWidget {
+  const _CloseSlidableOnTap({
+    super.key,
+    required this.child,
+    required this.controller,
+  });
+
+  final Widget child;
+  final SlidableController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {
+        // => controller.activeState?.close(),
+        if (controller.isDismissibleReady) controller.close();
+      },
+      child: child,
     );
   }
 }

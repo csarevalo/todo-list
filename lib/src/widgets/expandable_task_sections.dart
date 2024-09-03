@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ExpandableTaskSection extends StatelessWidget {
   const ExpandableTaskSection({
@@ -24,34 +23,29 @@ class ExpandableTaskSection extends StatelessWidget {
       child: RepaintBoundary(
         child: Material(
           //A MUST HAVE
-          child: Slidable(
-            //FIXME: should use a slideable controller..
-            groupTag: '0', //grouptag for taskTile
-            enabled: false, //disable slideable
-            child: ExpansionTile(
-              // maintainState: true,
-              initiallyExpanded: true,
-              leading: leading,
-              title: Text(
-                titleText,
-                style: textTheme.titleMedium!.copyWith(
-                  color: themeColors.primaryContainer,
-                ),
+          child: ExpansionTile(
+            // maintainState: true,
+            initiallyExpanded: true,
+            leading: leading,
+            title: Text(
+              titleText,
+              style: textTheme.titleMedium!.copyWith(
+                color: themeColors.primaryContainer,
               ),
-              expansionAnimationStyle: AnimationStyle(
-                curve: Curves.easeInSine,
-                duration: Duration(
-                  milliseconds: min(300, 50 * children.length),
-                ),
-              ),
-              shape: const Border(),
-              collapsedShape: const Border(),
-              backgroundColor: themeColors.primary,
-              collapsedBackgroundColor: themeColors.primary,
-              iconColor: themeColors.primaryContainer,
-              collapsedIconColor: themeColors.primaryContainer,
-              children: children,
             ),
+            expansionAnimationStyle: AnimationStyle(
+              curve: Curves.easeInSine,
+              duration: Duration(
+                milliseconds: min(300, 50 * children.length),
+              ),
+            ),
+            shape: const Border(),
+            collapsedShape: const Border(),
+            backgroundColor: themeColors.primary,
+            collapsedBackgroundColor: themeColors.primary,
+            iconColor: themeColors.primaryContainer,
+            collapsedIconColor: themeColors.primaryContainer,
+            children: children,
           ),
         ),
       ),
