@@ -10,12 +10,22 @@ class TaskTile extends StatelessWidget {
   final Task task;
   final Function(bool?)? onCheckboxChanged;
   final void Function(BuildContext)? onDelete;
+  final void Function()? onPriorityChange;
+  final void Function()? onTap;
+  final void Function()? onLongPress;
+  final Color? tileColor;
+  final Color? onTileColor;
 
   const TaskTile({
     super.key,
     required this.task,
     this.onCheckboxChanged,
     this.onDelete,
+    this.onPriorityChange,
+    this.onTap,
+    this.onLongPress,
+    this.tileColor,
+    this.onTileColor,
   });
   @override
   Widget build(BuildContext context) {
@@ -23,6 +33,11 @@ class TaskTile extends StatelessWidget {
       task: task,
       onCheckboxChanged: onCheckboxChanged,
       onDelete: onDelete,
+      onPriorityChange: onPriorityChange,
+      onTap: onTap,
+      onLongPress: onLongPress,
+      tileColor: tileColor,
+      onTileColor: onTileColor,
     );
   }
 }
@@ -31,11 +46,21 @@ class _CloseSlidableOnTap extends StatefulWidget {
   final Task task;
   final Function(bool?)? onCheckboxChanged;
   final void Function(BuildContext)? onDelete;
+  final void Function()? onPriorityChange;
+  final void Function()? onTap;
+  final void Function()? onLongPress;
+  final Color? tileColor;
+  final Color? onTileColor;
 
   const _CloseSlidableOnTap({
     required this.task,
     this.onCheckboxChanged,
     this.onDelete,
+    this.onPriorityChange,
+    this.onTap,
+    this.onLongPress,
+    this.tileColor,
+    this.onTileColor,
   });
 
   @override
@@ -44,17 +69,19 @@ class _CloseSlidableOnTap extends StatefulWidget {
 
 class _CloseSlidableOnTapState extends State<_CloseSlidableOnTap>
     with TickerProviderStateMixin {
-  late final SlidableController controller;
+  late final SlidableController _slidableController;
+  late bool _enTapOutside;
 
   @override
   void initState() {
     super.initState();
-    controller = SlidableController(this);
+    _slidableController = SlidableController(this);
+    _enTapOutside = false;
   }
 
   @override
   void dispose() {
-    controller.dispose(); //if (mounted)
+    if (mounted) _slidableController.dispose();
     super.dispose();
   }
 
@@ -63,35 +90,28 @@ class _CloseSlidableOnTapState extends State<_CloseSlidableOnTap>
     final Task task = widget.task;
     final _TaskTile taskTile = _TaskTile(
       // key: super.key,
-      controller: controller,
-      title: task.title,
-      checkboxState: task.isDone,
-      priority: task.priority,
-      dateDue: task.dateDue,
+      controller: _slidableController,
+      task: task,
       onCheckboxChanged: widget.onCheckboxChanged,
       onDelete: widget.onDelete,
-      onPriorityChange: () => showChangePriorityDialog(
-        context: context,
-        taskId: task.id,
-        currentPriority: task.priority,
-      ),
-      onTap: () => showSmallTaskDialog(
-        context: context,
-        task: task,
-      ),
-      onLongPress: () => showSmallTaskDialog(
-        context: context,
-        task: task,
-      ),
-      // tileColor: tileColor,
-      // onTileColor: onTileColor,
+      onPriorityChange: widget.onPriorityChange,
+      onTap: widget.onTap,
+      onLongPress: widget.onLongPress,
+      tileColor: widget.tileColor,
+      onTileColor: widget.onTileColor,
     );
     return TapRegion(
-      // behavior: HitTestBehavior.translucent,
+      onTapInside: (_) {
+        if (_enTapOutside) return;
+        _enTapOutside = true;
+        // debugPrint("Hit inside TaskTile ${task.title}");
+      },
       onTapOutside: (_) {
-        if (!controller.closing && context.mounted) {
-          controller.close();
-          // debugPrint("Hello World"); //TODO: remove
+        if (!mounted || !_enTapOutside) return;
+        if (!_slidableController.closing) {
+          _slidableController.close();
+          _enTapOutside = false;
+          // debugPrint("Hit outside TaskTile ${task.title}");
         }
       },
       child: taskTile,
@@ -101,9 +121,7 @@ class _CloseSlidableOnTapState extends State<_CloseSlidableOnTap>
 
 class _TaskTile extends StatelessWidget {
   final SlidableController? controller;
-  final String title;
-  final bool checkboxState;
-  final int priority;
+  final Task task;
   final Function(bool?)? onCheckboxChanged;
   final void Function(BuildContext)? onDelete;
   final void Function()? onPriorityChange;
@@ -111,15 +129,11 @@ class _TaskTile extends StatelessWidget {
   final void Function()? onLongPress;
   final Color? tileColor;
   final Color? onTileColor;
-  final DateTime? dateDue;
 
   const _TaskTile({
     // super.key,
     this.controller,
-    required this.title,
-    this.dateDue,
-    required this.checkboxState,
-    required this.priority,
+    required this.task,
     required this.onCheckboxChanged,
     required this.onDelete,
     required this.onPriorityChange,
@@ -134,16 +148,23 @@ class _TaskTile extends StatelessWidget {
     final themeColors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
+    /// Set shorter variables
+    String title = task.title;
+    bool completed = task.isDone;
+    int priority = task.priority;
+    DateTime? dateDue = task.dateDue;
+
     /// Set the tile colors
-    Color tileColor = themeColors.primary;
-    Color onTileColor = themeColors.primaryContainer;
-    final iconColor = priority == 0
+    final Color tileColor = this.tileColor ?? themeColors.primary;
+    final Color onTileColor = this.onTileColor ?? themeColors.primaryContainer;
+    final Color iconColor = priority == 0
         ? Colors.grey.shade500
         : priority == 1
             ? Colors.blue
             : priority == 2
                 ? Colors.yellow.shade700
                 : Colors.red.shade600;
+
     return RepaintBoundary(
       child: Slidable(
         groupTag: '0', // SlideableAutoClose is based on group tag
@@ -163,15 +184,21 @@ class _TaskTile extends StatelessWidget {
           ],
         ),
         child: ListTile(
-          onTap: onTap,
+          onTap: onTap ??
+              () {
+                showSmallTaskDialog(
+                  context: context,
+                  task: task,
+                );
+              },
           onLongPress: onLongPress,
           dense: true,
           // shape: const Border(),
-          tileColor: checkboxState ? tileColor.withOpacity(0.9) : tileColor,
-          textColor: checkboxState ? onTileColor.withOpacity(0.4) : onTileColor,
-          iconColor: checkboxState ? iconColor.withOpacity(0.7) : iconColor,
+          tileColor: completed ? tileColor.withOpacity(0.9) : tileColor,
+          textColor: completed ? onTileColor.withOpacity(0.4) : onTileColor,
+          iconColor: completed ? iconColor.withOpacity(0.7) : iconColor,
           leading: Checkbox(
-            value: checkboxState,
+            value: completed,
             onChanged: onCheckboxChanged,
             checkColor: tileColor.withOpacity(0.4),
             activeColor: onTileColor.withOpacity(0.4),
@@ -181,12 +208,11 @@ class _TaskTile extends StatelessWidget {
             title,
             style: textTheme.bodyLarge!.copyWith(
               fontSize: 18,
-              color: checkboxState ? onTileColor.withOpacity(0.4) : onTileColor,
-              decoration: checkboxState
-                  ? TextDecoration.lineThrough
-                  : TextDecoration.none,
+              color: completed ? onTileColor.withOpacity(0.4) : onTileColor,
+              decoration:
+                  completed ? TextDecoration.lineThrough : TextDecoration.none,
               decorationColor:
-                  checkboxState ? onTileColor.withOpacity(0.4) : onTileColor,
+                  completed ? onTileColor.withOpacity(0.4) : onTileColor,
               decorationThickness: 1.5,
             ),
             softWrap: false,
@@ -194,10 +220,17 @@ class _TaskTile extends StatelessWidget {
           subtitle: dateDue == null
               ? null
               : Text(
-                  DateFormat.yMMMd().format(dateDue!).toString(),
+                  DateFormat.yMMMd().format(dateDue).toString(),
                 ),
           trailing: IconButton(
-            onPressed: onPriorityChange,
+            onPressed: onPriorityChange ??
+                () {
+                  showChangePriorityDialog(
+                    context: context,
+                    taskId: task.id,
+                    currentPriority: task.priority,
+                  );
+                },
             icon: priority == 0
                 ? const Icon(Icons.flag_outlined)
                 : const Icon(Icons.flag),
