@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 
 import '../constants/task_group_headings.dart';
@@ -146,13 +145,11 @@ class TaskSectionsBuilder extends StatelessWidget {
         children: getTaskTilesBasedOnCompletion(isCompleted: true),
       ),
     ];
-    return SlidableAutoCloseBehavior(
-      child: ListView.builder(
-        itemCount: expandableTaskSections.length,
-        itemBuilder: (context, int index) {
-          return expandableTaskSections[index];
-        },
-      ),
+    return ListView.builder(
+      itemCount: expandableTaskSections.length,
+      itemBuilder: (context, int index) {
+        return expandableTaskSections[index];
+      },
     );
   }
 }
