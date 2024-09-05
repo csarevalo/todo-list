@@ -110,7 +110,7 @@ class HomeScreen extends StatelessWidget {
               onTap: () {},
             ),
             ExpansionTile(
-              leading: const Icon(Icons.style_rounded),
+              leading: const Icon(Icons.playlist_remove_rounded),
               shape: const Border(),
               title: const Text("Archived Lists"),
               children: [
