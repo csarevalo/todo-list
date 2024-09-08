@@ -13,6 +13,19 @@ class TaskSortOptions {
     required this.sort2ndBy,
     required this.desc2,
   });
+
+  /// List of sort options
+  static const List<String> _sortOptions = [
+    "Title",
+    "Priority",
+    "Last Modified",
+    "Due Date",
+    "Date Created",
+    "None"
+  ];
+
+  /// List of sort options available as a list of strings
+  List<String> get sortOptions => _sortOptions;
 }
 
 String sortByToString(SortBy sortBy) {

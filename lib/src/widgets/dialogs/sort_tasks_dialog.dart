@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:snazzy_todo_list/src/models/task_sort_options.dart';
 
+import '../../models/task_sort_options.dart';
 import '../../providers/task_preferences_controller.dart';
 
 Future<void> showSortTasksDialog({
@@ -33,15 +33,6 @@ class SortTasksDialog extends StatelessWidget {
   const SortTasksDialog({
     super.key,
   });
-
-  // List of items in our dropdown menu
-  static const List<String> _sortOptions = [
-    "Title",
-    "Priority",
-    "Last Modified",
-    "Due Date",
-    "Date Created",
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -101,20 +92,52 @@ class SortTasksDialog extends StatelessWidget {
               ),
             ],
           ),
-          const SortDropdownButton(
-            sort1st: true,
-            menuItems: _sortOptions,
-          ),
+          Selector<TaskPreferencesController, TaskSortOptions>(
+              selector: (_, p) => p.taskSortOptions,
+              builder: (_, taskSortOptions, __) {
+                return SortDropdownButton(
+                  value: sortByToString(taskSortOptions.sort1stBy),
+                  menuItems: taskSortOptions.sortOptions
+                      .where((opt) => opt != "None")
+                      .toList(),
+                  onValueChanged: (value) {
+                    if (value == null) return;
+                    SortBy sortBy = strToSortBy(value);
+                    taskPreferences.updateTaskSortOptions(
+                      newSort1stBy: sortBy,
+                    );
+                  },
+                  onToggleSorting: () => taskPreferences.updateTaskSortOptions(
+                    newDesc1: !taskSortOptions.desc1,
+                  ),
+                  desc: taskSortOptions.desc1,
+                );
+              }),
           Row(children: [
             Text(
               "Then By",
               style: textTheme.titleSmall,
             ),
           ]),
-          SortDropdownButton(
-            sort1st: false,
-            menuItems: _sortOptions + ["None"],
-          ),
+          Selector<TaskPreferencesController, TaskSortOptions>(
+              selector: (_, p) => p.taskSortOptions,
+              builder: (_, taskSortOptions, __) {
+                return SortDropdownButton(
+                  value: sortByToString(taskSortOptions.sort2ndBy),
+                  menuItems: taskSortOptions.sortOptions,
+                  onValueChanged: (value) {
+                    if (value == null) return;
+                    SortBy sortBy = strToSortBy(value);
+                    taskPreferences.updateTaskSortOptions(
+                      newSort2ndBy: sortBy,
+                    );
+                  },
+                  onToggleSorting: () => taskPreferences.updateTaskSortOptions(
+                    newDesc2: !taskSortOptions.desc2,
+                  ),
+                  desc: taskSortOptions.desc2,
+                );
+              }),
         ],
       ),
     );
@@ -122,45 +145,35 @@ class SortTasksDialog extends StatelessWidget {
 }
 
 class SortDropdownButton extends StatelessWidget {
+  final String value;
+  final List<String> menuItems;
+  final void Function(String?)? onValueChanged;
+  final void Function()? onToggleSorting;
+  final bool? desc;
+
   const SortDropdownButton({
     super.key,
-    required this.sort1st,
+    required this.value,
     required this.menuItems,
+    required this.onValueChanged,
+    this.onToggleSorting,
+    this.desc = true,
   });
-
-  final bool sort1st;
-  final List<String> menuItems;
 
   @override
   Widget build(BuildContext context) {
     ColorScheme themeColors = Theme.of(context).colorScheme;
     TextTheme textTheme = Theme.of(context).textTheme;
 
-    final taskPreferences = context.read<TaskPreferencesController>();
-    final taskSortOptions =
-        context.select<TaskPreferencesController, TaskSortOptions>(
-            (taskPrefs) => taskPrefs.taskSortOptions);
-    // debugPrint(taskSortOptions.sort2ndBy.toString());
-    // debugPrint(taskSortOptions.sortByToString(taskSortOptions.sort2ndBy));
     return DropdownButton(
       isExpanded: true,
       style: textTheme.titleMedium!.copyWith(color: themeColors.primary),
       underline: const SizedBox.shrink(),
-      value: sort1st
-          ? sortByToString(taskSortOptions.sort1stBy)
-          : sortByToString(taskSortOptions.sort2ndBy),
-      onChanged: (value) {
-        if (value == null) return;
-        SortBy sortBy = strToSortBy(value);
-        if (sort1st) {
-          taskPreferences.updateTaskSortOptions(newSort1stBy: sortBy);
-        } else {
-          taskPreferences.updateTaskSortOptions(newSort2ndBy: sortBy);
-        }
-      },
+      value: value,
+      onChanged: onValueChanged,
       items: (menuItems).map<DropdownMenuItem<String>>((String strMenuItem) {
         return DropdownMenuItem(
-          value: strMenuItem, //.replaceAll(" ", "_"),
+          value: strMenuItem,
           child: Row(
             children: [
               CircleAvatar(
@@ -173,31 +186,105 @@ class SortDropdownButton extends StatelessWidget {
           ),
         );
       }).toList(),
-      icon: IconButton(
-        onPressed: () {
-          if (sort1st) {
-            taskPreferences.updateTaskSortOptions(
-              newDesc1: !taskSortOptions.desc1,
-            );
-          } else {
-            taskPreferences.updateTaskSortOptions(
-              newDesc2: !taskSortOptions.desc2,
-            );
-          }
-        },
-        // icon: Icon(Icons.swap_vert, color: themeColors.primary),
-        icon: sort1st
-            ? (taskSortOptions.desc1
-                ? Icon(Icons.keyboard_double_arrow_down,
-                    color: themeColors.primary)
-                : Icon(Icons.keyboard_double_arrow_up,
-                    color: themeColors.primary))
-            : (taskSortOptions.desc2
-                ? Icon(Icons.keyboard_double_arrow_down,
-                    color: themeColors.primary)
-                : Icon(Icons.keyboard_double_arrow_up,
-                    color: themeColors.primary)),
-      ),
+      icon: onToggleSorting == null
+          ? const SizedBox.shrink()
+          : IconButton(
+              onPressed: onToggleSorting,
+              icon: desc!
+                  ? Icon(Icons.keyboard_double_arrow_down,
+                      color: themeColors.primary)
+                  : Icon(Icons.keyboard_double_arrow_up,
+                      color: themeColors.primary),
+            ),
     );
   }
 }
+
+// class SortDropdownButton extends StatelessWidget {
+//   final bool sort1st;
+//   final List<String> menuItems;
+//   final bool includeNone;
+
+//   const SortDropdownButton({
+//     super.key,
+//     required this.sort1st,
+//     required this.menuItems,
+//     this.includeNone = false,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     ColorScheme themeColors = Theme.of(context).colorScheme;
+//     TextTheme textTheme = Theme.of(context).textTheme;
+
+//     final taskPreferences = context.read<TaskPreferencesController>();
+//     final taskSortOptions =
+//         context.select<TaskPreferencesController, TaskSortOptions>(
+//             (taskPrefs) => taskPrefs.taskSortOptions);
+
+//     // late final List<String> menuItems;
+//     // if (includeNone) {
+//     //   menuItems = taskSortOptions.sortOptions;
+//     // } else {
+//     //   menuItems =
+//     //       taskSortOptions.sortOptions.where((opt) => opt != "None").toList();
+//     // }
+//     return DropdownButton(
+//       isExpanded: true,
+//       style: textTheme.titleMedium!.copyWith(color: themeColors.primary),
+//       underline: const SizedBox.shrink(),
+//       value: sort1st
+//           ? sortByToString(taskSortOptions.sort1stBy)
+//           : sortByToString(taskSortOptions.sort2ndBy),
+//       onChanged: (value) {
+//         if (value == null) return;
+//         SortBy sortBy = strToSortBy(value);
+//         if (sort1st) {
+//           taskPreferences.updateTaskSortOptions(newSort1stBy: sortBy);
+//         } else {
+//           taskPreferences.updateTaskSortOptions(newSort2ndBy: sortBy);
+//         }
+//       },
+//       items: (menuItems).map<DropdownMenuItem<String>>((String strMenuItem) {
+//         return DropdownMenuItem(
+//           value: strMenuItem, //.replaceAll(" ", "_"),
+//           child: Row(
+//             children: [
+//               CircleAvatar(
+//                 backgroundColor: themeColors.tertiary,
+//                 radius: 5,
+//               ),
+//               const SizedBox.square(dimension: 8),
+//               Text(strMenuItem),
+//             ],
+//           ),
+//         );
+//       }).toList(),
+//       icon: IconButton(
+//         onPressed: () {
+//           if (sort1st) {
+//             taskPreferences.updateTaskSortOptions(
+//               newDesc1: !taskSortOptions.desc1,
+//             );
+//           } else {
+//             taskPreferences.updateTaskSortOptions(
+//               newDesc2: !taskSortOptions.desc2,
+//             );
+//           }
+//         },
+//         // icon: Icon(Icons.swap_vert, color: themeColors.primary),
+//         icon: sort1st
+//             ? (taskSortOptions.desc1
+//                 ? Icon(Icons.keyboard_double_arrow_down,
+//                     color: themeColors.primary)
+//                 : Icon(Icons.keyboard_double_arrow_up,
+//                     color: themeColors.primary))
+//             : (taskSortOptions.desc2
+//                 ? Icon(Icons.keyboard_double_arrow_down,
+//                     color: themeColors.primary)
+//                 : Icon(Icons.keyboard_double_arrow_up,
+//                     color: themeColors.primary)),
+//       ),
+//     );
+//   }
+// }
