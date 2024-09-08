@@ -16,6 +16,7 @@ class ExpandableTaskSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("Rebuild ExpansionTile: $titleText");
     final themeColors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     return Padding(

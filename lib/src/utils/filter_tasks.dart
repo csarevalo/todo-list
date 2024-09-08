@@ -52,10 +52,14 @@ class FilterTasks {
   }
 
   List<Task> byDate({
-    required String
-        datePeriod, // Options: overdue, today, tomorrow, next, later, no..date
-    required String dateType, // Options: done, modified, due, created
-    bool isCompleted = false, // Default: uncompleted
+    /// Options: overdue, today, tomorrow, next, later, no..date
+    required String datePeriod,
+
+    /// Options: done, modified, due, created
+    required String dateType,
+
+    /// Default: uncompleted
+    bool isCompleted = false,
   }) {
     dateType = dateType.toLowerCase();
     datePeriod = datePeriod.toLowerCase();

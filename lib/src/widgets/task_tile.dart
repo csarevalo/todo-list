@@ -29,6 +29,7 @@ class TaskTile extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
+    debugPrint("Rebuild TaskTile: ${task.title}");
     return _CloseSlidableOnTap(
       task: task,
       onCheckboxChanged: onCheckboxChanged,
