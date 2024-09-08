@@ -30,7 +30,7 @@ class TaskTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // debugPrint("Rebuild TaskTile: ${task.title}");
-    
+
     return _CloseSlidableOnTap(
       task: task,
       onCheckboxChanged: onCheckboxChanged,
@@ -160,12 +160,12 @@ class _TaskTile extends StatelessWidget {
     final Color tileColor = this.tileColor ?? themeColors.primary;
     final Color onTileColor = this.onTileColor ?? themeColors.primaryContainer;
     final Color iconColor = priority == 0
-        ? Colors.grey.shade500
+        ? Colors.red.shade600
         : priority == 1
-            ? Colors.blue
+            ? Colors.yellow.shade700
             : priority == 2
-                ? Colors.yellow.shade700
-                : Colors.red.shade600;
+                ? Colors.blue
+                : Colors.grey.shade500;
 
     return RepaintBoundary(
       child: Slidable(
@@ -233,7 +233,7 @@ class _TaskTile extends StatelessWidget {
                     currentPriority: task.priority,
                   );
                 },
-            icon: priority == 0
+            icon: priority == 3
                 ? const Icon(Icons.flag_outlined)
                 : const Icon(Icons.flag),
             alignment: Alignment.topRight,

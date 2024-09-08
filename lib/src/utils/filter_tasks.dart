@@ -31,13 +31,13 @@ class FilterTasks {
     int priority;
     switch (strPriority) {
       case "High":
-        priority = 3;
-      case "Medium":
-        priority = 2;
-      case "Low":
-        priority = 1;
-      default:
         priority = 0;
+      case "Medium":
+        priority = 1;
+      case "Low":
+        priority = 2;
+      default:
+        priority = 3;
     }
     filteredTasks.retainWhere(
       (task) => task.priority == priority && task.isDone == isCompleted,
@@ -168,7 +168,7 @@ int compareBy(
       return desc ? dateCreatedComp : dateCreatedComp * -1;
     case "priority":
       int priorityComp = taskB.priority.compareTo(taskA.priority);
-      return desc ? priorityComp : priorityComp * -1;
+      return desc ? priorityComp * -1 : priorityComp;
     case "title":
       int titleComp =
           taskB.title.toLowerCase().compareTo(taskA.title.toLowerCase());
