@@ -142,13 +142,16 @@ DateTime? getDateFromTask({
 }
 
 int compareBy(
-  String compBy, {
+  SortBy compBy, {
   required Task taskA,
   required Task taskB,
   bool desc = true,
 }) {
   switch (compBy) {
-    case "due_date":
+    case SortBy.dateCreate: //"date_created":
+      int dateCreatedComp = taskB.dateCreated.compareTo(taskA.dateCreated);
+      return desc ? dateCreatedComp : dateCreatedComp * -1;
+    case SortBy.dueDate: //"due_date":
       int dueDateComp;
       if (taskB.dateDue == null && taskA.dateDue == null) {
         dueDateComp = 0; // both a & b have no due date
@@ -160,18 +163,16 @@ int compareBy(
         dueDateComp = taskB.dateDue!.compareTo(taskA.dateDue!);
       }
       return desc ? dueDateComp : dueDateComp * -1;
-    case "last_modified":
+    case SortBy.lastModified: //"last_modified":
       int lastModComp = taskB.dateModified.compareTo(taskA.dateModified);
       return desc ? lastModComp : lastModComp * -1;
-    case "date_created":
-      int dateCreatedComp = taskB.dateCreated.compareTo(taskA.dateCreated);
-      return desc ? dateCreatedComp : dateCreatedComp * -1;
-    case "priority":
+    case SortBy.priority: //"priority":
       int priorityComp = taskB.priority.compareTo(taskA.priority);
       return desc ? priorityComp * -1 : priorityComp;
-    case "title":
-      int titleComp =
-          taskB.title.toLowerCase().compareTo(taskA.title.toLowerCase());
+    case SortBy.title: //"title":
+      int titleComp = taskB.title.toLowerCase().compareTo(
+            taskA.title.toLowerCase(),
+          );
       return desc ? titleComp : titleComp * -1;
     default:
       return 0;
@@ -180,15 +181,17 @@ int compareBy(
 
 typedef SortTask = int Function(Task a, Task b);
 
+//TODO: remove comments
 ///Sorting Options: title, priority, due_date, last_modified, date_created
+///Sort Options: dateCreated, dueDate, lastModified, none, priority, title
 SortTask sortTasksBy({
-  required String sort1stBy,
-  String sort2ndBy = '',
+  required SortBy sort1stBy, //String sort1stBy,
+  SortBy sort2ndBy = SortBy.none, //String sort2ndBy = '',
   bool desc1 = true, // order of 1st sort by
   bool desc2 = true, // order of 2nd sort by
 }) {
-  sort1stBy = sort1stBy.toLowerCase();
-  sort2ndBy = sort2ndBy.toLowerCase();
+  // sort1stBy = sort1stBy.toLowerCase();
+  // sort2ndBy = sort2ndBy.toLowerCase();
   return (a, b) {
     // Primary comparison by 1st sortBy
     int firstComp = compareBy(sort1stBy, taskA: a, taskB: b, desc: desc1);

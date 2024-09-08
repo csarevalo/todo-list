@@ -20,8 +20,10 @@ class TaskPreferencesController with ChangeNotifier {
 
   /// Update and persist the Task View Options based on the user's selection.
   Future<void> updateTaskSortOptions({
-    String? newSort1stBy,
-    String? newSort2ndBy,
+    SortBy? newSort1stBy,
+    SortBy? newSort2ndBy,
+    // String? newSort1stBy,
+    // String? newSort2ndBy,
     String? newGroupBy,
     bool? newDesc1,
     bool? newDesc2,
@@ -63,10 +65,11 @@ class TaskPreferencesController with ChangeNotifier {
   /// Loads the User's preferred TaskSettings from local or remote storage.
   Future<TaskSortOptions> getTaskSortOptions() async {
     return TaskSortOptions(
+      //TODO: remove comments
       groupBy: "None",
-      sort1stBy: "Priority",
+      sort1stBy: SortBy.priority, //"Priority",
       desc1: true,
-      sort2ndBy: "Due_Date", //FIXME: use "_" instead of " "
+      sort2ndBy: SortBy.dueDate, //"Due_Date", //FIXME: use "_" instead of " "
       desc2: true,
     );
   }

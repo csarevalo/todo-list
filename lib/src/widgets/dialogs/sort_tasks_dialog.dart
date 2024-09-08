@@ -36,10 +36,10 @@ class SortTasksDialog extends StatelessWidget {
 
   // List of items in our dropdown menu
   static const List<String> _sortOptions = [
-    "Priority",
-    "Due Date",
     "Title",
+    "Priority",
     "Last Modified",
+    "Due Date",
     "Date Created",
   ];
 
@@ -105,14 +105,12 @@ class SortTasksDialog extends StatelessWidget {
             sort1st: true,
             menuItems: _sortOptions,
           ),
-          Row(
-            children: [
-              Text(
-                "Then By",
-                style: textTheme.titleSmall,
-              ),
-            ],
-          ),
+          Row(children: [
+            Text(
+              "Then By",
+              style: textTheme.titleSmall,
+            ),
+          ]),
           SortDropdownButton(
             sort1st: false,
             menuItems: _sortOptions + ["None"],
@@ -142,22 +140,27 @@ class SortDropdownButton extends StatelessWidget {
     final taskSortOptions =
         context.select<TaskPreferencesController, TaskSortOptions>(
             (taskPrefs) => taskPrefs.taskSortOptions);
-
+    // debugPrint(taskSortOptions.sort2ndBy.toString());
+    // debugPrint(taskSortOptions.sortByToString(taskSortOptions.sort2ndBy));
     return DropdownButton(
       isExpanded: true,
       style: textTheme.titleMedium!.copyWith(color: themeColors.primary),
       underline: const SizedBox.shrink(),
-      value: sort1st ? taskSortOptions.sort1stBy : taskSortOptions.sort2ndBy,
-      onChanged: (String? value) {
+      value: sort1st
+          ? sortByToString(taskSortOptions.sort1stBy)
+          : sortByToString(taskSortOptions.sort2ndBy),
+      onChanged: (value) {
+        if (value == null) return;
+        SortBy sortBy = strToSortBy(value);
         if (sort1st) {
-          taskPreferences.updateTaskSortOptions(newSort1stBy: value);
+          taskPreferences.updateTaskSortOptions(newSort1stBy: sortBy);
         } else {
-          taskPreferences.updateTaskSortOptions(newSort2ndBy: value);
+          taskPreferences.updateTaskSortOptions(newSort2ndBy: sortBy);
         }
       },
       items: (menuItems).map<DropdownMenuItem<String>>((String strMenuItem) {
         return DropdownMenuItem(
-          value: strMenuItem.replaceAll(" ", "_"),
+          value: strMenuItem, //.replaceAll(" ", "_"),
           child: Row(
             children: [
               CircleAvatar(
