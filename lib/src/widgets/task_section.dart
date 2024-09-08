@@ -20,6 +20,8 @@ class TaskSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // debugPrint('Rebuild TaskSection: $sectionTitle');
+
     List<TaskTile> createTaskTileListFrom(List<Task> taskList) {
       final taskProvider = Provider.of<TaskProvider>(context, listen: false);
       List<TaskTile> taskTiles = [];
@@ -132,7 +134,6 @@ class TaskSection extends StatelessWidget {
       }
     }
 
-    debugPrint('Rebuild TaskSection: $sectionTitle');
     List<TaskTile> children = getChildren(sectionTitle.split(' ')[0]);
     return children.isEmpty
         ? const SizedBox.shrink()
