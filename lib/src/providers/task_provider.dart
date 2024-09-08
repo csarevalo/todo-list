@@ -101,7 +101,7 @@ class TaskProviderService {
         id: -1,
         title: "Task 1",
         isDone: false,
-        priority: 3,
+        priority: 0,
         dateCreated: rn,
         dateDue: rn,
         hasDueByTime: false,
