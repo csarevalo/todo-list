@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -69,35 +68,6 @@ class SortTasksDialog extends StatelessWidget {
                   },
                 );
               }),
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child: Selector<TaskPreferencesController, TaskSortOptions>(
-          //     selector: (_, taskPrefs) => taskPrefs.taskSortOptions,
-          //     builder: (context, taskSortOptions, _) => SegmentedButton(
-          //       style: SegmentedButton.styleFrom(
-          //         selectedBackgroundColor: themeColors.tertiaryContainer,
-          //         selectedForegroundColor: themeColors.onTertiaryContainer,
-          //         backgroundColor: themeColors.primaryContainer,
-          //         foregroundColor: themeColors.onPrimaryContainer,
-          //       ),
-          //       segments: taskSortOptions.groupOptions
-          //           .map<ButtonSegment<String>>((String value) {
-          //         return ButtonSegment(
-          //           //TODO: Add an icon for each GROUPBY
-          //           value: value.replaceAll(" ", "_"),
-          //           label: Text(value),
-          //         );
-          //       }).toList(),
-          //       selected: <GroupBy>{taskSortOptions.groupBy},
-          //       showSelectedIcon: false,
-          //       onSelectionChanged: (value) {
-          //         taskPreferences.updateTaskSortOptions(
-          //           newGroupBy: value.first,
-          //         );
-          //       },
-          //     ),
-          //   ),
-          // ),
           Row(
             children: [
               Text(
@@ -194,7 +164,9 @@ class SortDropdownButton extends StatelessWidget {
             child: Row(
               children: [
                 CircleAvatar(
-                  backgroundColor: themeColors.tertiary,
+                  backgroundColor: onToggleSorting == null
+                      ? themeColors.error
+                      : themeColors.tertiary,
                   radius: 5,
                 ),
                 const SizedBox.square(dimension: 8),
@@ -223,92 +195,3 @@ class SortDropdownButton extends StatelessWidget {
     );
   }
 }
-
-// class SortDropdownButton extends StatelessWidget {
-//   final bool sort1st;
-//   final List<String> menuItems;
-//   final bool includeNone;
-
-//   const SortDropdownButton({
-//     super.key,
-//     required this.sort1st,
-//     required this.menuItems,
-//     this.includeNone = false,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     ColorScheme themeColors = Theme.of(context).colorScheme;
-//     TextTheme textTheme = Theme.of(context).textTheme;
-
-//     final taskPreferences = context.read<TaskPreferencesController>();
-//     final taskSortOptions =
-//         context.select<TaskPreferencesController, TaskSortOptions>(
-//             (taskPrefs) => taskPrefs.taskSortOptions);
-
-//     // late final List<String> menuItems;
-//     // if (includeNone) {
-//     //   menuItems = taskSortOptions.sortOptions;
-//     // } else {
-//     //   menuItems =
-//     //       taskSortOptions.sortOptions.where((opt) => opt != "None").toList();
-//     // }
-//     return DropdownButton(
-//       isExpanded: true,
-//       style: textTheme.titleMedium!.copyWith(color: themeColors.primary),
-//       underline: const SizedBox.shrink(),
-//       value: sort1st
-//           ? sortByToString(taskSortOptions.sort1stBy)
-//           : sortByToString(taskSortOptions.sort2ndBy),
-//       onChanged: (value) {
-//         if (value == null) return;
-//         SortBy sortBy = strToSortBy(value);
-//         if (sort1st) {
-//           taskPreferences.updateTaskSortOptions(newSort1stBy: sortBy);
-//         } else {
-//           taskPreferences.updateTaskSortOptions(newSort2ndBy: sortBy);
-//         }
-//       },
-//       items: (menuItems).map<DropdownMenuItem<String>>((String strMenuItem) {
-//         return DropdownMenuItem(
-//           value: strMenuItem, //.replaceAll(" ", "_"),
-//           child: Row(
-//             children: [
-//               CircleAvatar(
-//                 backgroundColor: themeColors.tertiary,
-//                 radius: 5,
-//               ),
-//               const SizedBox.square(dimension: 8),
-//               Text(strMenuItem),
-//             ],
-//           ),
-//         );
-//       }).toList(),
-//       icon: IconButton(
-//         onPressed: () {
-//           if (sort1st) {
-//             taskPreferences.updateTaskSortOptions(
-//               newDesc1: !taskSortOptions.desc1,
-//             );
-//           } else {
-//             taskPreferences.updateTaskSortOptions(
-//               newDesc2: !taskSortOptions.desc2,
-//             );
-//           }
-//         },
-//         // icon: Icon(Icons.swap_vert, color: themeColors.primary),
-//         icon: sort1st
-//             ? (taskSortOptions.desc1
-//                 ? Icon(Icons.keyboard_double_arrow_down,
-//                     color: themeColors.primary)
-//                 : Icon(Icons.keyboard_double_arrow_up,
-//                     color: themeColors.primary))
-//             : (taskSortOptions.desc2
-//                 ? Icon(Icons.keyboard_double_arrow_down,
-//                     color: themeColors.primary)
-//                 : Icon(Icons.keyboard_double_arrow_up,
-//                     color: themeColors.primary)),
-//       ),
-//     );
-//   }
-// }

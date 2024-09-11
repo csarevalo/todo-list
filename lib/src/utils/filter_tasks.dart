@@ -84,6 +84,7 @@ class FilterTasks {
 typedef RetainTaskWhere = bool Function(Task task);
 
 RetainTaskWhere retainTaskWhere({
+  //TODO: Change to enum here too
   required String dateType, // Options: done, modified, due, created
   required String
       datePeriod, // Options: overdue, today, tomorrow, next, later, no..date
@@ -181,17 +182,13 @@ int compareBy(
 
 typedef SortTask = int Function(Task a, Task b);
 
-//TODO: remove comments
-///Sorting Options: title, priority, due_date, last_modified, date_created
-///Sort Options: dateCreated, dueDate, lastModified, none, priority, title
+/// Sorts Tasks accordingly
 SortTask sortTasksBy({
-  required SortBy sort1stBy, //String sort1stBy,
-  SortBy sort2ndBy = SortBy.none, //String sort2ndBy = '',
+  required SortBy sort1stBy, 
+  SortBy sort2ndBy = SortBy.none, 
   bool desc1 = true, // order of 1st sort by
   bool desc2 = true, // order of 2nd sort by
 }) {
-  // sort1stBy = sort1stBy.toLowerCase();
-  // sort2ndBy = sort2ndBy.toLowerCase();
   return (a, b) {
     // Primary comparison by 1st sortBy
     int firstComp = compareBy(sort1stBy, taskA: a, taskB: b, desc: desc1);

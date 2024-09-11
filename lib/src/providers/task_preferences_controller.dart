@@ -23,9 +23,6 @@ class TaskPreferencesController with ChangeNotifier {
     GroupBy? newGroupBy,
     SortBy? newSort1stBy,
     SortBy? newSort2ndBy,
-    // String? newGroupBy,
-    // String? newSort1stBy,
-    // String? newSort2ndBy,
     bool? newDesc1,
     bool? newDesc2,
   }) async {

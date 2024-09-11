@@ -2,12 +2,9 @@ import 'package:enum_to_string/enum_to_string.dart';
 
 class TaskSortOptions {
   GroupBy groupBy;
-  // String groupBy;
   SortBy sort1stBy;
-  // String sort1stBy;
   bool desc1;
   SortBy sort2ndBy;
-  // String sort2ndBy;
   bool desc2;
   TaskSortOptions({
     required this.groupBy,
