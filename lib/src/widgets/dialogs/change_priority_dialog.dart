@@ -45,9 +45,8 @@ class ChangePriorityDialog extends StatelessWidget {
   void _changePriority(BuildContext context, {required int newPriority}) {
     final taskProvider = Provider.of<TaskProvider>(context, listen: false);
     taskProvider.changePriority(taskId, newPriority);
-    //FIXME: updating wrong priority
-    //CHANGE priority to enum and use the name of enum as capitalize and
-    //then add "Priority" where necessary
+    //TODO: CHANGE priority to enum and use the name of enum as capitalize and
+    // then add "Priority" where necessary
     Navigator.of(context).pop();
   }
 
@@ -64,7 +63,7 @@ class ChangePriorityDialog extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: List<Widget>.generate(4, (index) {
-          int i = 3 - index;
+          int i = index; //3-index
           return priorityButton(
             priority: i,
             active: currentPriority == i,
@@ -104,21 +103,21 @@ class ChangePriorityDialog extends StatelessWidget {
     bool active = false,
   }) {
     List<String> priorityLevels = <String>[
-      "No Priority",
-      "Low Priority",
-      "Medium Priority",
       "High Priority",
+      "Medium Priority",
+      "Low Priority",
+      "No Priority",
     ];
     List<Color> priorityColors = [
-      Colors.grey.shade500,
-      Colors.blue,
-      Colors.yellow.shade700,
       Colors.red.shade600,
+      Colors.yellow.shade700,
+      Colors.blue,
+      Colors.grey.shade500,
     ];
     return TextButton.icon(
       onPressed: onPressed,
       icon: Icon(
-        priority == 0 ? Icons.flag_outlined : Icons.flag,
+        priority == 3 ? Icons.flag_outlined : Icons.flag,
         color: priorityColors[priority],
       ),
       label: Padding(
@@ -127,10 +126,10 @@ class ChangePriorityDialog extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                priorityLevels[priority],
+                priorityLevels[priority], //FIXME: lousy reference
                 style: TextStyle(
                   fontSize: 16,
-                  color: priorityColors[priority],
+                  color: priorityColors[priority], //FIXME: lousy reference
                 ),
               ),
             ),
