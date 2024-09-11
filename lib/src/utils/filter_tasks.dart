@@ -148,7 +148,7 @@ int compareBy(
   bool desc = true,
 }) {
   switch (compBy) {
-    case SortBy.dateCreate: //"date_created":
+    case SortBy.dateCreated: //"date_created":
       int dateCreatedComp = taskB.dateCreated.compareTo(taskA.dateCreated);
       return desc ? dateCreatedComp : dateCreatedComp * -1;
     case SortBy.dueDate: //"due_date":
