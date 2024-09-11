@@ -86,18 +86,21 @@ enum SortBy {
 
 /// Determines how to group tasks.
 enum GroupBy {
-  /// Groups Tasks by those completed.
-  completed,
+  /// Group Tasks by priority.
+  priority,
 
-  /// Groups Tasks by due date.
+  /// Group Tasks by due date.
   dueDate,
+
+  /// Group Tasks by List
+  list,
+
+  /// Group Tasks by Tag
+  tag,
+
+  /// Group Tasks by those NOT completed.
+  notCompleted,
 
   /// Does NOT group tasks.
   none,
-
-  /// Groups Tasks by those NOT completed.
-  notCompleted,
-
-  /// Groups Tasks by priority.
-  priority,
 }

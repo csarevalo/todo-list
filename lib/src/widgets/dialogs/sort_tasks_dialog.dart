@@ -66,7 +66,7 @@ class SortTasksDialog extends StatelessWidget {
                   backgroundColor: themeColors.primaryContainer,
                   foregroundColor: themeColors.onPrimaryContainer,
                 ),
-                segments: ["Priority", "Due Date", "None"]
+                segments: ["Priority", "Due Date", "List", "Tag", "None"]
                     .map<ButtonSegment<String>>((String value) {
                   return ButtonSegment(
                     //TODO: Add an icon for each GROUPBY
