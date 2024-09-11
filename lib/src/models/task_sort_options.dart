@@ -1,7 +1,8 @@
 import 'package:enum_to_string/enum_to_string.dart';
 
 class TaskSortOptions {
-  String groupBy;
+  GroupBy groupBy;
+  // String groupBy;
   SortBy sort1stBy;
   // String sort1stBy;
   bool desc1;
@@ -16,7 +17,7 @@ class TaskSortOptions {
     required this.desc2,
   });
 
-  /// List of sort options
+  /// List of sort options (preferred order)
   static const List<String> _sortOptions = [
     "Title",
     "Priority",
@@ -27,12 +28,12 @@ class TaskSortOptions {
     "None"
   ];
 
-  /// List of group options
+  /// List of group options (preferred order)
   static const List<String> _groupOptions = [
     "List",
     "Due Date",
-    "Tag",
     "Priority",
+    "Tag",
     "Not Completed",
     "None",
   ];
@@ -75,44 +76,21 @@ String _titleCase(String name) {
 }
 
 String sortByToString(SortBy sortBy) {
-  var str = EnumToString.convertToString(sortBy, camelCase: true);
-  return _titleCase(str);
-  // switch (sortBy) {
-  //   case SortBy.dateCreated:
-  //     return "Date Created";
-  //   case SortBy.dueDate:
-  //     return "Due Date";
-  //   case SortBy.lastModified:
-  //     return "Last Modified";
-  //   case SortBy.priority:
-  //     return "Priority";
-  //   case SortBy.title:
-  //     return "Title";
-  //   default:
-  //     return 'None';
-  // }
+  return _titleCase(EnumToString.convertToString(sortBy, camelCase: true));
 }
 
 SortBy strToSortBy(String str) {
   return EnumToString.fromString(SortBy.values, str, camelCase: true) ??
       SortBy.none;
-  // String sortBy = str.toLowerCase().replaceAll(" ", "_");
-  // switch (sortBy) {
-  //   case "date_created":
-  //     return SortBy.dateCreated;
-  //   case "due_date":
-  //     return SortBy.dueDate;
-  //   case "last_modified":
-  //     return SortBy.lastModified;
-  //   case "priority":
-  //     return SortBy.priority;
-  //   case "title":
-  //     return SortBy.title;
-  //   case "tag":
-  //     return SortBy.tag;
-  //   default:
-  //     return SortBy.none;
-  // }
+}
+
+String groupByToString(GroupBy groupBy) {
+  return _titleCase(EnumToString.convertToString(groupBy, camelCase: true));
+}
+
+GroupBy strToGroupBy(String str) {
+  return EnumToString.fromString(GroupBy.values, str, camelCase: true) ??
+      GroupBy.none;
 }
 
 /// Determines how to sort tasks.

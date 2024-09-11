@@ -117,11 +117,11 @@ class TaskSection extends StatelessWidget {
             isCompleted: true,
           );
     } else {
-      switch (taskSortOptions.groupBy.toLowerCase()) {
-        case "priority":
+      switch (taskSortOptions.groupBy){ //.toLowerCase()) {
+        case GroupBy.priority: //"priority":
           getChildren =
               (String s) => getTaskTileBasedOnPriority(strPriority: s);
-        case "due_date": //Date Due
+        case GroupBy.dueDate://"due_date":
           getChildren = (String s) => getTaskTileBasedOnDate(
                 datePeriod: s,
                 dateType: 'due',

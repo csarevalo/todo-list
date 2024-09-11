@@ -22,9 +22,9 @@ class TaskSectionsBuilder extends StatelessWidget {
     const TaskGroupHeadings headingOptions = TaskGroupHeadings();
 
     List<Widget> getSectionedTaskTiles({
-      required String groupBy,
+      required GroupBy groupBy,
     }) {
-      groupBy = groupBy.toLowerCase().trim();
+      groupBy = groupBy; //.toLowerCase().trim(); TODO: remove comment 
       final List<SectionHeading> priorityHeadings =
           headingOptions.priorityHeadings();
 
@@ -33,9 +33,9 @@ class TaskSectionsBuilder extends StatelessWidget {
       List<Widget> sectionTiles = [];
 
       switch (groupBy) {
-        case "priority":
+        case GroupBy.priority://"priority":
           groupHeaders = priorityHeadings;
-        case "due_date": //Date Due
+        case GroupBy.dueDate://"due_date": //Date Due
           groupHeaders = dateSections;
         default:
           //TODO: Do not add a section and just the tasks

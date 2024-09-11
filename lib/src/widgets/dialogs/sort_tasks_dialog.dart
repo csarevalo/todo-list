@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -55,35 +56,48 @@ class SortTasksDialog extends StatelessWidget {
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Selector<TaskPreferencesController, String>(
-              selector: (_, taskPrefs) => taskPrefs.taskSortOptions.groupBy,
-              builder: (context, groupBy, _) => SegmentedButton(
-                style: SegmentedButton.styleFrom(
-                  selectedBackgroundColor: themeColors.tertiaryContainer,
-                  selectedForegroundColor: themeColors.onTertiaryContainer,
-                  backgroundColor: themeColors.primaryContainer,
-                  foregroundColor: themeColors.onPrimaryContainer,
-                ),
-                segments: ["Priority", "Due Date", "List", "Tag", "None"]
-                    .map<ButtonSegment<String>>((String value) {
-                  return ButtonSegment(
-                    //TODO: Add an icon for each GROUPBY
-                    value: value.replaceAll(" ", "_"),
-                    label: Text(value),
-                  );
-                }).toList(),
-                selected: <String>{groupBy},
-                showSelectedIcon: false,
-                onSelectionChanged: (value) {
-                  taskPreferences.updateTaskSortOptions(
-                    newGroupBy: value.first,
-                  );
-                },
-              ),
-            ),
-          ),
+          Selector<TaskPreferencesController, TaskSortOptions>(
+              selector: (_, taskPrefs) => taskPrefs.taskSortOptions,
+              builder: (_, taskSortOptions, __) {
+                return SortDropdownButton(
+                  value: groupByToString(taskSortOptions.groupBy),
+                  menuItems: taskSortOptions.groupOptions,
+                  onValueChanged: (value) {
+                    if (value == null) return;
+                    GroupBy groupBy = strToGroupBy(value);
+                    taskPreferences.updateTaskSortOptions(newGroupBy: groupBy);
+                  },
+                );
+              }),
+          // Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: Selector<TaskPreferencesController, TaskSortOptions>(
+          //     selector: (_, taskPrefs) => taskPrefs.taskSortOptions,
+          //     builder: (context, taskSortOptions, _) => SegmentedButton(
+          //       style: SegmentedButton.styleFrom(
+          //         selectedBackgroundColor: themeColors.tertiaryContainer,
+          //         selectedForegroundColor: themeColors.onTertiaryContainer,
+          //         backgroundColor: themeColors.primaryContainer,
+          //         foregroundColor: themeColors.onPrimaryContainer,
+          //       ),
+          //       segments: taskSortOptions.groupOptions
+          //           .map<ButtonSegment<String>>((String value) {
+          //         return ButtonSegment(
+          //           //TODO: Add an icon for each GROUPBY
+          //           value: value.replaceAll(" ", "_"),
+          //           label: Text(value),
+          //         );
+          //       }).toList(),
+          //       selected: <GroupBy>{taskSortOptions.groupBy},
+          //       showSelectedIcon: false,
+          //       onSelectionChanged: (value) {
+          //         taskPreferences.updateTaskSortOptions(
+          //           newGroupBy: value.first,
+          //         );
+          //       },
+          //     ),
+          //   ),
+          // ),
           Row(
             children: [
               Text(
@@ -93,7 +107,7 @@ class SortTasksDialog extends StatelessWidget {
             ],
           ),
           Selector<TaskPreferencesController, TaskSortOptions>(
-              selector: (_, p) => p.taskSortOptions,
+              selector: (_, taskPrefs) => taskPrefs.taskSortOptions,
               builder: (_, taskSortOptions, __) {
                 return SortDropdownButton(
                   value: sortByToString(taskSortOptions.sort1stBy),
@@ -120,7 +134,7 @@ class SortTasksDialog extends StatelessWidget {
             ),
           ]),
           Selector<TaskPreferencesController, TaskSortOptions>(
-              selector: (_, p) => p.taskSortOptions,
+              selector: (_, taskPrefs) => taskPrefs.taskSortOptions,
               builder: (_, taskSortOptions, __) {
                 return SortDropdownButton(
                   value: sortByToString(taskSortOptions.sort2ndBy),
@@ -165,37 +179,47 @@ class SortDropdownButton extends StatelessWidget {
     ColorScheme themeColors = Theme.of(context).colorScheme;
     TextTheme textTheme = Theme.of(context).textTheme;
 
-    return DropdownButton(
-      isExpanded: true,
-      style: textTheme.titleMedium!.copyWith(color: themeColors.primary),
-      underline: const SizedBox.shrink(),
-      value: value,
-      onChanged: onValueChanged,
-      items: (menuItems).map<DropdownMenuItem<String>>((String strMenuItem) {
-        return DropdownMenuItem(
-          value: strMenuItem,
-          child: Row(
-            children: [
-              CircleAvatar(
-                backgroundColor: themeColors.tertiary,
-                radius: 5,
-              ),
-              const SizedBox.square(dimension: 8),
-              Text(strMenuItem),
-            ],
-          ),
-        );
-      }).toList(),
-      icon: onToggleSorting == null
-          ? const SizedBox.shrink()
-          : IconButton(
-              onPressed: onToggleSorting,
-              icon: desc!
-                  ? Icon(Icons.keyboard_double_arrow_down,
-                      color: themeColors.primary)
-                  : Icon(Icons.keyboard_double_arrow_up,
-                      color: themeColors.primary),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: DropdownButton(
+        isExpanded: true,
+        // isDense: true,
+        style: textTheme.titleMedium!.copyWith(color: themeColors.primary),
+        underline: const SizedBox.shrink(),
+        value: value,
+        onChanged: onValueChanged,
+        items: (menuItems).map<DropdownMenuItem<String>>((String strMenuItem) {
+          return DropdownMenuItem(
+            value: strMenuItem,
+            child: Row(
+              children: [
+                CircleAvatar(
+                  backgroundColor: themeColors.tertiary,
+                  radius: 5,
+                ),
+                const SizedBox.square(dimension: 8),
+                Text(strMenuItem),
+              ],
             ),
+          );
+        }).toList(),
+        icon: onToggleSorting == null
+            ? const SizedBox.shrink()
+            : Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: IconButton(
+                  onPressed: onToggleSorting,
+                  padding: const EdgeInsets.all(0),
+                  icon: desc!
+                      ? Icon(
+                          Icons.keyboard_double_arrow_down,
+                          color: themeColors.primary,
+                        )
+                      : Icon(Icons.keyboard_double_arrow_up,
+                          color: themeColors.primary),
+                ),
+              ),
+      ),
     );
   }
 }
