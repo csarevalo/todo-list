@@ -54,7 +54,6 @@ class TaskTile extends StatelessWidget {
             )
           ],
         ),
-        //TODO: Use ListTile here!!!
         child: InkWell(
           onTap: onTapTaskTile,
           onLongPress: onLongPress,

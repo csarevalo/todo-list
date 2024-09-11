@@ -45,6 +45,9 @@ class ChangePriorityDialog extends StatelessWidget {
   void _changePriority(BuildContext context, {required int newPriority}) {
     final taskProvider = Provider.of<TaskProvider>(context, listen: false);
     taskProvider.changePriority(taskId, newPriority);
+    //FIXME: updating wrong priority
+    //CHANGE priority to enum and use the name of enum as capitalize and
+    //then add "Priority" where necessary
     Navigator.of(context).pop();
   }
 
