@@ -27,16 +27,14 @@ class TaskSection extends StatelessWidget {
       List<TaskTile> taskTiles = [];
       for (var taskk in taskList) {
         Task task = context.select<TaskProvider, Task>(
-          (p) => p.todoList.singleWhere((t) => t.id == taskk.id),
+          (p) => p.todoList.firstWhere((t) => t.id == taskk.id),
         );
         taskTiles.add(
           TaskTile(
             task: task,
             onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
             onDelete: (ctx) {
-              if (ctx.mounted) {
-                taskProvider.deleteTask(task.id);
-              }
+              if (ctx.mounted) taskProvider.deleteTask(task.id);
             },
           ),
         );
@@ -117,11 +115,13 @@ class TaskSection extends StatelessWidget {
             isCompleted: true,
           );
     } else {
-      switch (taskSortOptions.groupBy){ //.toLowerCase()) {
+      switch (taskSortOptions.groupBy) {
+        //.toLowerCase()) { //TODO: remove
         case GroupBy.priority: //"priority":
-          getChildren =
-              (String s) => getTaskTileBasedOnPriority(strPriority: s);
-        case GroupBy.dueDate://"due_date":
+          getChildren = (String s) => getTaskTileBasedOnPriority(
+                strPriority: s,
+              );
+        case GroupBy.dueDate: //"due_date":
           getChildren = (String s) => getTaskTileBasedOnDate(
                 datePeriod: s,
                 dateType: 'due',
