@@ -153,19 +153,19 @@ class _TaskTile extends StatelessWidget {
     /// Set shorter variables
     String title = task.title;
     bool completed = task.isDone;
-    int priority = task.priority;
+    Priority priority = task.priority;
     DateTime? dateDue = task.dateDue;
 
     /// Set the tile colors
     final Color tileColor = this.tileColor ?? themeColors.primary;
     final Color onTileColor = this.onTileColor ?? themeColors.primaryContainer;
-    final Color iconColor = priority == 0
-        ? Colors.red.shade600
-        : priority == 1
-            ? Colors.yellow.shade700
-            : priority == 2
-                ? Colors.blue
-                : Colors.grey.shade500;
+    // final Color iconColor = priority == 0
+    //     ? Colors.red.shade600
+    //     : priority == 1
+    //         ? Colors.yellow.shade700
+    //         : priority == 2
+    //             ? Colors.blue
+    //             : Colors.grey.shade500;
 
     return RepaintBoundary(
       child: Slidable(
@@ -198,7 +198,9 @@ class _TaskTile extends StatelessWidget {
           // shape: const Border(),
           tileColor: completed ? tileColor.withOpacity(0.9) : tileColor,
           textColor: completed ? onTileColor.withOpacity(0.4) : onTileColor,
-          iconColor: completed ? iconColor.withOpacity(0.7) : iconColor,
+          iconColor:
+              completed ? priority.color.withOpacity(0.7) : priority.color,
+          // iconColor: completed ? iconColor.withOpacity(0.7) : iconColor, //TODO: remove
           leading: Checkbox(
             value: completed,
             onChanged: onCheckboxChanged,
@@ -225,15 +227,18 @@ class _TaskTile extends StatelessWidget {
                   DateFormat.yMMMd().format(dateDue).toString(),
                 ),
           trailing: IconButton(
-            onPressed: onPriorityChange ??
-                () {
-                  showChangePriorityDialog(
-                    context: context,
-                    taskId: task.id,
-                    currentPriority: task.priority,
-                  );
-                },
-            icon: priority == 3
+            onPressed: task.isDone
+                ? null
+                : onPriorityChange ??
+                    () {
+                      showChangePriorityDialog(
+                        context: context,
+                        taskId: task.id,
+                        currentPriority: priority,
+                      );
+                    },
+            disabledColor: priority.color.withOpacity(0.7),
+            icon: priority == Priority.none //3
                 ? const Icon(Icons.flag_outlined)
                 : const Icon(Icons.flag),
             alignment: Alignment.topRight,

@@ -41,7 +41,8 @@ class TaskProvider with ChangeNotifier {
   Task createTask({
     required String title,
     bool isDone = false,
-    int priority = 1,
+    Priority priority = Priority.none,
+    // int priority = 1, //TODO: remove
     DateTime? dateModified,
     DateTime? dateDue,
     bool? hasDueByTime,
@@ -64,7 +65,8 @@ class TaskProvider with ChangeNotifier {
   void updateTask(
     int taskId, {
     required String newTitle,
-    required int newPriority,
+    required Priority newPriority,
+    // required int newPriority, //TODO: remove
     required DateTime? newDateDue,
     required bool? hasDueByTime,
   }) {
@@ -86,7 +88,7 @@ class TaskProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void changePriority(int taskId, int newPriority) {
+  void changePriority(int taskId, Priority newPriority) {
     final index = _todoList.indexWhere((task) => task.id == taskId);
     _todoList[index].priority = newPriority;
     notifyListeners();
@@ -101,7 +103,7 @@ class TaskProviderService {
         id: -1,
         title: "Task 1",
         isDone: false,
-        priority: 0,
+        priority: Priority.high,
         dateCreated: rn,
         dateDue: rn,
         hasDueByTime: false,
@@ -111,7 +113,7 @@ class TaskProviderService {
         id: -2,
         title: "Task 2",
         isDone: false,
-        priority: 2,
+        priority: Priority.medium,
         dateCreated: rn,
         dateDue: rn,
         hasDueByTime: false,
@@ -121,7 +123,7 @@ class TaskProviderService {
         id: -3,
         title: "Task 3",
         isDone: false,
-        priority: 1,
+        priority: Priority.low,
         dateCreated: rn,
         dateDue: rn,
         hasDueByTime: false,
@@ -131,7 +133,7 @@ class TaskProviderService {
         id: -4,
         title: "Task 4",
         isDone: false,
-        priority: 3,
+        priority: Priority.none,
         dateCreated: rn,
         dateDue: rn,
         hasDueByTime: false,
@@ -141,7 +143,7 @@ class TaskProviderService {
         id: -5,
         title: "Task 5",
         isDone: false,
-        priority: 0,
+        priority: Priority.high,
         dateCreated: rn,
         dateDue: rn,
         hasDueByTime: false,

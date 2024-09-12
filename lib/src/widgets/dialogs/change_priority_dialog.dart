@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/task.dart';
 import '../../providers/task_provider.dart';
 
 Future<void> showChangePriorityDialog({
   required BuildContext context,
   required int taskId,
-  required int currentPriority,
+  required Priority currentPriority,
   bool barrierDismissible = true,
   Color? barrierColor,
   String? barrierLabel,
@@ -35,14 +36,14 @@ Future<void> showChangePriorityDialog({
 
 class ChangePriorityDialog extends StatelessWidget {
   final int taskId;
-  final int currentPriority;
+  final Priority currentPriority;
   const ChangePriorityDialog({
     super.key,
     required this.taskId,
     required this.currentPriority,
   });
 
-  void _changePriority(BuildContext context, {required int newPriority}) {
+  void _changePriority(BuildContext context, {required Priority newPriority}) {
     final taskProvider = Provider.of<TaskProvider>(context, listen: false);
     taskProvider.changePriority(taskId, newPriority);
     //TODO: CHANGE priority to enum and use the name of enum as capitalize and
@@ -62,13 +63,14 @@ class ChangePriorityDialog extends StatelessWidget {
       contentPadding: const EdgeInsets.only(top: 10),
       content: Column(
         mainAxisSize: MainAxisSize.min,
-        children: List<Widget>.generate(4, (index) {
-          int i = index; //3-index
+        children: List<Widget>.generate(Priority.values.length, (index) {
+          // int i = index; //3-index //remove
+          Priority newPriority = Priority.values[index];
           return priorityButton(
-            priority: i,
-            active: currentPriority == i,
+            priority: newPriority,
+            active: currentPriority == newPriority,
             onPressed: () {
-              _changePriority(context, newPriority: i);
+              _changePriority(context, newPriority: newPriority);
             },
           );
         }),
@@ -98,27 +100,28 @@ class ChangePriorityDialog extends StatelessWidget {
   }
 
   TextButton priorityButton({
-    required int priority,
+    required Priority priority,
     void Function()? onPressed,
     bool active = false,
   }) {
-    List<String> priorityLevels = <String>[
-      "High Priority",
-      "Medium Priority",
-      "Low Priority",
-      "No Priority",
-    ];
-    List<Color> priorityColors = [
-      Colors.red.shade600,
-      Colors.yellow.shade700,
-      Colors.blue,
-      Colors.grey.shade500,
-    ];
+    // List<String> priorityLevels = <String>[
+    //   "High Priority",
+    //   "Medium Priority",
+    //   "Low Priority",
+    //   "No Priority",
+    // ];
+    // List<Color> priorityColors = [
+    //   Colors.red.shade600,
+    //   Colors.yellow.shade700,
+    //   Colors.blue,
+    //   Colors.grey.shade500,
+    // ];
     return TextButton.icon(
       onPressed: onPressed,
       icon: Icon(
-        priority == 3 ? Icons.flag_outlined : Icons.flag,
-        color: priorityColors[priority],
+        priority == Priority.none ? Icons.flag_outlined : Icons.flag,
+        color: priority.color,
+        // color: priorityColors[priority],
       ),
       label: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -126,10 +129,12 @@ class ChangePriorityDialog extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                priorityLevels[priority], //FIXME: lousy reference
+                "${priority.str} Priority",
+                // priorityLevels[priority], //FIXME: lousy reference
                 style: TextStyle(
                   fontSize: 16,
-                  color: priorityColors[priority], //FIXME: lousy reference
+                  color: priority.color,
+                  // color: priorityColors[priority], //FIXME: lousy reference
                 ),
               ),
             ),

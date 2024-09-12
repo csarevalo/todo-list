@@ -20,7 +20,7 @@ class TaskSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // debugPrint('Rebuild TaskSection: $sectionTitle');
+    // debugPrint('Rebuild TaskSection: $sectionTitle'); //TODO: remove
 
     List<TaskTile> createTaskTileListFrom(List<Task> taskList) {
       final taskProvider = Provider.of<TaskProvider>(context, listen: false);

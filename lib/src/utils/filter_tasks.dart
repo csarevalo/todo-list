@@ -28,17 +28,22 @@ class FilterTasks {
     bool isCompleted = false, //default: uncompleted
   }) {
     List<Task> filteredTasks = List.from(tasks);
-    int priority;
-    switch (strPriority) {
-      case "High":
-        priority = 0;
-      case "Medium":
-        priority = 1;
-      case "Low":
-        priority = 2;
-      default:
-        priority = 3;
-    }
+    Priority priority = Priority.values.firstWhere(
+      (p) => p.str == strPriority,
+      orElse: () => Priority.none,
+    );
+    //TODO: remove
+    // int priority;
+    // switch (strPriority) {
+    //   case "High":
+    //     priority = 0;
+    //   case "Medium":
+    //     priority = 1;
+    //   case "Low":
+    //     priority = 2;
+    //   default:
+    //     priority = 3;
+    // }
     filteredTasks.retainWhere(
       (task) => task.priority == priority && task.isDone == isCompleted,
     );
@@ -167,7 +172,7 @@ int compareBy(
     case SortBy.lastModified:
       int lastModComp = taskB.dateModified.compareTo(taskA.dateModified);
       return desc ? lastModComp : lastModComp * -1;
-    case SortBy.priority: 
+    case SortBy.priority:
       int priorityComp = taskB.priority.compareTo(taskA.priority);
       return desc ? priorityComp * -1 : priorityComp;
     case SortBy.title:
@@ -184,8 +189,8 @@ typedef SortTask = int Function(Task a, Task b);
 
 /// Sorts Tasks accordingly
 SortTask sortTasksBy({
-  required SortBy sort1stBy, 
-  SortBy sort2ndBy = SortBy.none, 
+  required SortBy sort1stBy,
+  SortBy sort2ndBy = SortBy.none,
   bool desc1 = true, // order of 1st sort by
   bool desc2 = true, // order of 2nd sort by
 }) {
