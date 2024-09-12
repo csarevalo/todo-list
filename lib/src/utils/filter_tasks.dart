@@ -164,13 +164,13 @@ int compareBy(
         dueDateComp = taskB.dateDue!.compareTo(taskA.dateDue!);
       }
       return desc ? dueDateComp : dueDateComp * -1;
-    case SortBy.lastModified: //"last_modified":
+    case SortBy.lastModified:
       int lastModComp = taskB.dateModified.compareTo(taskA.dateModified);
       return desc ? lastModComp : lastModComp * -1;
-    case SortBy.priority: //"priority":
+    case SortBy.priority: 
       int priorityComp = taskB.priority.compareTo(taskA.priority);
       return desc ? priorityComp * -1 : priorityComp;
-    case SortBy.title: //"title":
+    case SortBy.title:
       int titleComp = taskB.title.toLowerCase().compareTo(
             taskA.title.toLowerCase(),
           );
