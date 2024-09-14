@@ -66,33 +66,8 @@ class TaskSection extends StatelessWidget {
                 ),
               );
       },
-      
-      // shouldRebuild: (previous, next) {
-      //   return !const DeepCollectionEquality().equals(previous, next);
-      // },
-
       shouldRebuild: (previous, next) {
-        debugPrint("\n\nChecking if willRebuild \"$sectionTitle\"");
-
-        for (var t in previous) {
-          debugPrint(
-            "Previous Section: ${t.title} \tLast Modified: ${t.dateModified}",
-          );
-        }
-        for (var t in next) {
-          debugPrint(
-            "    Next Section: ${t.title} \tLast Modified: ${t.dateModified}",
-          );
-        }
-        bool willRebuild =
-            !const DeepCollectionEquality().equals(previous, next);
-        debugPrint(
-          willRebuild
-              ? "Yes \"$sectionTitle\" is rebuilt"
-              : "No, \"$sectionTitle\" is not rebuild",
-        );
-        debugPrint("");
-        return willRebuild;
+        return !const DeepCollectionEquality().equals(previous, next);
       },
     );
   }
