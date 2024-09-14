@@ -27,9 +27,10 @@ class TaskTile extends StatelessWidget {
     this.tileColor,
     this.onTileColor,
   });
+
   @override
   Widget build(BuildContext context) {
-    // debugPrint("Rebuild TaskTile: ${task.title}");
+    debugPrint("Built TaskTile: ${task.title}");
 
     return _CloseSlidableOnTap(
       task: task,

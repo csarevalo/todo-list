@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:snazzy_todo_list/src/widgets/task_section.dart';
 
 import '../constants/task_group_headings.dart';
 import '../models/section_heading.dart';
 import '../models/task_sort_options.dart';
 import '../providers/task_preferences_controller.dart';
+import 'alternative_task_section.dart';
+// import 'task_section.dart';
 
 class TaskSectionsBuilder extends StatelessWidget {
   const TaskSectionsBuilder({
@@ -24,7 +25,7 @@ class TaskSectionsBuilder extends StatelessWidget {
     List<Widget> getSectionedTaskTiles({
       required GroupBy groupBy,
     }) {
-      groupBy = groupBy; 
+      groupBy = groupBy;
       final List<SectionHeading> priorityHeadings =
           headingOptions.priorityHeadings();
 
@@ -44,7 +45,9 @@ class TaskSectionsBuilder extends StatelessWidget {
       for (var section in groupHeaders) {
         sectionTiles.add(
           TaskSection(
-              sectionTitle: section.heading, taskSortOptions: taskSortOptions),
+            sectionTitle: section.heading,
+            taskSortOptions: taskSortOptions,
+          ),
         );
         // }
       }

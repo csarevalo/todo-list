@@ -5,7 +5,6 @@ class Task {
   String title;
   bool isDone;
   Priority priority;
-  // int priority;
   DateTime dateCreated;
   DateTime dateModified;
   DateTime? dateDue;

@@ -42,7 +42,6 @@ class TaskProvider with ChangeNotifier {
     required String title,
     bool isDone = false,
     Priority priority = Priority.none,
-    // int priority = 1, //TODO: remove
     DateTime? dateModified,
     DateTime? dateDue,
     bool? hasDueByTime,
@@ -66,7 +65,6 @@ class TaskProvider with ChangeNotifier {
     int taskId, {
     required String newTitle,
     required Priority newPriority,
-    // required int newPriority, //TODO: remove
     required DateTime? newDateDue,
     required bool? hasDueByTime,
   }) {

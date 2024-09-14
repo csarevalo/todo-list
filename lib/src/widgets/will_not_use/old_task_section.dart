@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/task.dart';
-import '../models/task_sort_options.dart';
-import '../providers/task_provider.dart';
-import '../utils/filter_tasks.dart';
-import 'expandable_task_sections.dart';
-import 'task_tile.dart';
+import '../../models/task.dart';
+import '../../models/task_sort_options.dart';
+import '../../providers/task_provider.dart';
+import '../../utils/filter_tasks.dart';
+import '../expandable_task_sections.dart';
+import '../task_tile.dart';
 
 class TaskSection extends StatelessWidget {
   final TaskSortOptions taskSortOptions;
@@ -20,21 +20,35 @@ class TaskSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // debugPrint('Rebuild TaskSection: $sectionTitle'); //TODO: remove
+    debugPrint('Rebuilt TaskSection: $sectionTitle');
 
-    List<TaskTile> createTaskTileListFrom(List<Task> taskList) {
-      final taskProvider = Provider.of<TaskProvider>(context, listen: false);
-      List<TaskTile> taskTiles = [];
+    List<Widget> createTaskTileListFrom(List<Task> taskList) {
+      debugPrint("createTaskTileListFrom");
+      final taskProvider = Provider.of<TaskProvider>(
+        context,
+        listen: false,
+      );
+      List<Widget> taskTiles = [];
       for (var taskk in taskList) {
-        Task task = context.select<TaskProvider, Task>(
-          (p) => p.todoList.firstWhere((t) => t.id == taskk.id),
-        );
+        // Task task = context.select<TaskProvider, Task>(
+        //   (p) => p.todoList.firstWhere((t) => t.id == taskk.id),
+        // );
         taskTiles.add(
-          TaskTile(
-            task: task,
-            onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
-            onDelete: (ctx) {
-              if (ctx.mounted) taskProvider.deleteTask(task.id);
+          Selector<TaskProvider, Task>(
+            selector: (_, p) => p.todoList.firstWhere((t) => t.id == taskk.id),
+            builder: (context, Task task, __) {
+              // debugPrint("Rebuilding ${task.title} with TaskSelector");
+              // final taskProvider = context.read<TaskProvider>();
+              return TaskTile(
+                task: task,
+                onCheckboxChanged: (value) => taskProvider.toggleDone(task.id),
+                onDelete: (ctx) {
+                  if (ctx.mounted) taskProvider.deleteTask(task.id);
+                },
+              );
+            },
+            shouldRebuild: (previous, next) {
+              return previous != next;
             },
           ),
         );
@@ -42,7 +56,8 @@ class TaskSection extends StatelessWidget {
       return taskTiles;
     }
 
-    List<TaskTile> getTaskTilesBasedOnCompletion({required isCompleted}) {
+    List<Widget> getTaskTilesBasedOnCompletion({required isCompleted}) {
+      debugPrint("getTaskTilesBasedOnCompletion");
       final filteredTasks = context.select<TaskProvider, List<Task>>(
         (p) {
           final FilterTasks filterTasks = FilterTasks(
@@ -55,14 +70,22 @@ class TaskSection extends StatelessWidget {
         },
       );
 
-      List<TaskTile> taskTiles = createTaskTileListFrom(filteredTasks);
+      // final filteredTasks = FilterTasks(
+      //   tasks: context.read<TaskProvider>().todoList,
+      //   taskSortOptions: taskSortOptions,
+      // ).byCompletion(
+      //   isCompleted: isCompleted,
+      // );
+
+      List<Widget> taskTiles = createTaskTileListFrom(filteredTasks);
       return taskTiles;
     }
 
-    List<TaskTile> getTaskTileBasedOnPriority({
+    List<Widget> getTaskTileBasedOnPriority({
       required String strPriority,
       bool isCompleted = false, // By default show uncompleted tasks only
     }) {
+      debugPrint("getTaskTileBasedOnPriority");
       final filteredTasks = context.select<TaskProvider, List<Task>>(
         (p) {
           final FilterTasks filterTasks = FilterTasks(
@@ -76,12 +99,12 @@ class TaskSection extends StatelessWidget {
         },
       );
 
-      List<TaskTile> taskTiles = createTaskTileListFrom(filteredTasks);
+      List<Widget> taskTiles = createTaskTileListFrom(filteredTasks);
       return taskTiles;
     }
 
     /// Get TaskTiles Based on Date
-    List<TaskTile> getTaskTileBasedOnDate({
+    List<Widget> getTaskTileBasedOnDate({
       /// Options: overdue, today, tomorrow, next, later, no..date
       required String datePeriod,
 
@@ -91,6 +114,7 @@ class TaskSection extends StatelessWidget {
       /// Default: uncompleted
       bool isCompleted = false,
     }) {
+      debugPrint("getTaskTileBasedOnDate");
       final filteredTasks = context.select<TaskProvider, List<Task>>(
         (p) {
           final FilterTasks filterTasks = FilterTasks(
@@ -105,11 +129,11 @@ class TaskSection extends StatelessWidget {
         },
       );
 
-      List<TaskTile> taskTiles = createTaskTileListFrom(filteredTasks);
+      List<Widget> taskTiles = createTaskTileListFrom(filteredTasks);
       return taskTiles;
     }
 
-    late List<TaskTile> Function(String)? getChildren;
+    late List<Widget> Function(String)? getChildren;
     if (sectionTitle.toLowerCase() == "completed") {
       getChildren = (String s) => getTaskTilesBasedOnCompletion(
             isCompleted: true,
@@ -134,7 +158,7 @@ class TaskSection extends StatelessWidget {
       }
     }
 
-    List<TaskTile> children = getChildren(sectionTitle.split(' ')[0]);
+    List<Widget> children = getChildren(sectionTitle.split(' ')[0]);
     return children.isEmpty
         ? const SizedBox.shrink()
         : ExpandableTaskSection(
