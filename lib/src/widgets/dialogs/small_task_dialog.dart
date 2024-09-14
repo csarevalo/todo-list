@@ -43,16 +43,8 @@ class SmallTaskDialog extends StatefulWidget {
 class _SmallTaskDialogState extends State<SmallTaskDialog> {
   _SmallTaskDialogState();
   final TextEditingController _taskTitleController = TextEditingController();
-  // final List<String> _priorityCallbackOptions = [
-  //   "None",
-  //   "Low",
-  //   "Medium",
-  //   "High",
-  // ];
   int? _dropdownPriorityValue = Priority.none.value;
   Priority _priority = Priority.none;
-  // int _priority = 0; //TODO: remove
-  // String? _dropdownPriorityValue = "None";
   DateTime? _newDateDue;
   bool _hasDueByTime = false;
   bool _isTextFieldEmpty = true;
@@ -63,9 +55,7 @@ class _SmallTaskDialogState extends State<SmallTaskDialog> {
     if (widget.task != null) {
       _taskTitleController.text = widget.task!.title; //task title
       _dropdownPriorityValue = widget.task!.priority.value;
-      _priority = widget.task!.priority;
-      // _dropdownPriorityValue = _priorityCallbackOptions[widget.task!.priority]; //dropdown priority val
-      // _priority = widget.task!.priority; //task priority
+      _priority = widget.task!.priority; //task priority
       _newDateDue = widget.task!.dateDue; //task due date
       _hasDueByTime = widget.task!.hasDueByTime ?? false; //task has due by time
       _isTextFieldEmpty = false;
@@ -79,23 +69,15 @@ class _SmallTaskDialogState extends State<SmallTaskDialog> {
       taskTitleText = taskTitleText.replaceAll(RegExp(r'  '), ' ');
     }
     final taskProvider = Provider.of<TaskProvider>(context, listen: false);
-    final compTask = taskProvider.todoList.firstWhere(
-      (Task t) => t.id == widget.task!.id,
-    );
-    if (compTask.title != taskTitleText ||
-        compTask.priority != _priority ||
-        compTask.dateDue != _newDateDue ||
-        compTask.hasDueByTime != _hasDueByTime) {
-      ///FIXME: needlessly updates
-      if (taskTitleText.isNotEmpty) {
-        taskProvider.updateTask(
-          widget.task!.id,
-          newTitle: taskTitleText,
-          newPriority: _priority,
-          newDateDue: _newDateDue,
-          hasDueByTime: _hasDueByTime,
-        );
-      }
+
+    if (taskTitleText.isNotEmpty) {
+      taskProvider.updateTask(
+        widget.task!.id,
+        newTitle: taskTitleText,
+        newPriority: _priority,
+        newDateDue: _newDateDue,
+        hasDueByTime: _hasDueByTime,
+      );
     }
 
     _taskTitleController.clear();
@@ -126,16 +108,6 @@ class _SmallTaskDialogState extends State<SmallTaskDialog> {
     setState(() {
       _dropdownPriorityValue = priorityValue;
       _priority = Priority.values.firstWhere((p) => p.value == priorityValue);
-      // switch (priority) {
-      //   case "High":
-      //     _priority = 3;
-      //   case "Medium":
-      //     _priority = 2;
-      //   case "Low":
-      //     _priority = 1;
-      //   default:
-      //     _priority = 0;
-      // }
     });
   }
 
@@ -382,24 +354,6 @@ class _SmallTaskDialogState extends State<SmallTaskDialog> {
                   ),
                 );
               }),
-              //  const [
-              //   DropdownMenuItem(
-              //     value: "High",
-              //     child: Icon(Icons.flag, color: Colors.red),
-              //   ),
-              //   DropdownMenuItem(
-              //     value: "Medium",
-              //     child: Icon(Icons.flag, color: Colors.yellow),
-              //   ),
-              //   DropdownMenuItem(
-              //     value: "Low",
-              //     child: Icon(Icons.flag, color: Colors.blue),
-              //   ),
-              //   DropdownMenuItem(
-              //     value: "None",
-              //     child: Icon(Icons.flag_outlined, color: Colors.grey),
-              //   )
-              // ],
               onChanged: dropdownPriorityCallback,
             ),
             const Spacer(),

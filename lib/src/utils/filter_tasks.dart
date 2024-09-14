@@ -32,18 +32,6 @@ class FilterTasks {
       (p) => p.str == strPriority,
       orElse: () => Priority.none,
     );
-    //TODO: remove
-    // int priority;
-    // switch (strPriority) {
-    //   case "High":
-    //     priority = 0;
-    //   case "Medium":
-    //     priority = 1;
-    //   case "Low":
-    //     priority = 2;
-    //   default:
-    //     priority = 3;
-    // }
     filteredTasks.retainWhere(
       (task) => task.priority == priority && task.isDone == isCompleted,
     );

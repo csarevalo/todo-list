@@ -3,12 +3,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/task.dart';
-import '../models/task_sort_options.dart';
-import '../providers/task_provider.dart';
-import '../utils/filter_tasks.dart';
-import 'expandable_task_sections.dart';
-import 'task_tile.dart';
+import '../../models/task.dart';
+import '../../models/task_sort_options.dart';
+import '../../providers/task_provider.dart';
+import '../../utils/filter_tasks.dart';
+import '../expandable_task_sections.dart';
+import '../task_tile.dart';
 
 ///"taskProviderSelect"
 // extension BuildContextExtensions on BuildContext {

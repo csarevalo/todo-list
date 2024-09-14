@@ -160,17 +160,10 @@ class _TaskTile extends StatelessWidget {
     /// Set the tile colors
     final Color tileColor = this.tileColor ?? themeColors.primary;
     final Color onTileColor = this.onTileColor ?? themeColors.primaryContainer;
-    // final Color iconColor = priority == 0
-    //     ? Colors.red.shade600
-    //     : priority == 1
-    //         ? Colors.yellow.shade700
-    //         : priority == 2
-    //             ? Colors.blue
-    //             : Colors.grey.shade500;
 
     return RepaintBoundary(
       child: Slidable(
-        groupTag: '0', // SlideableAutoClose is based on group tag
+        groupTag: '0', // SlideableAutoClose closes by group tag
         key: UniqueKey(),
         controller: controller,
         endActionPane: ActionPane(

@@ -14,12 +14,10 @@ class TaskProvider with ChangeNotifier {
 
   late List<Task> _todoList = [];
 
-  List<Task> get todoList => _todoList;
+  List<Task> get todoList => List.unmodifiable(_todoList);
 
   Future<void> init() async {
     _todoList = await _taskProviderService.loadTasks();
-
-    // Important! Inform listeners a change has occurred.
     notifyListeners();
   }
 
@@ -71,12 +69,19 @@ class TaskProvider with ChangeNotifier {
     final index = _todoList.indexWhere((task) => task.id == taskId);
     if (index == -1) return; // exit if index is Not Found
     if (newTitle.isEmpty) newTitle = _todoList[index].title;
-    _todoList[index].title = newTitle;
-    _todoList[index].priority = newPriority;
-    _todoList[index].dateDue = newDateDue;
-    _todoList[index].hasDueByTime = hasDueByTime;
-    _todoList[index].dateModified = DateTime.now();
-    notifyListeners();
+    var todos = todoList;
+    if (todos[index].title != newTitle ||
+        todos[index].priority != newPriority ||
+        todos[index].dateDue != newDateDue ||
+        todos[index].hasDueByTime != hasDueByTime) {
+      _todoList[index].title = newTitle;
+      _todoList[index].priority = newPriority;
+      _todoList[index].dateDue = newDateDue;
+      _todoList[index].hasDueByTime = hasDueByTime;
+      _todoList[index].dateModified = DateTime.now();
+
+      notifyListeners();
+    }
   }
 
   void deleteTask(int taskId) {
@@ -88,8 +93,11 @@ class TaskProvider with ChangeNotifier {
 
   void changePriority(int taskId, Priority newPriority) {
     final index = _todoList.indexWhere((task) => task.id == taskId);
-    _todoList[index].priority = newPriority;
-    notifyListeners();
+    if (index == -1) return; //task not found
+    if (_todoList[index].priority.value != newPriority.value) {
+      _todoList[index].priority = newPriority;
+      notifyListeners();
+    }
   }
 }
 

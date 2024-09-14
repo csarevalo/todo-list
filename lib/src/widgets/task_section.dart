@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -56,18 +55,21 @@ class TaskSection extends StatelessWidget {
         return List.unmodifiable(immutableFilteredTasks);
       },
       builder: (ctx, immutableFilteredTasks, __) {
-        return ExpandableTaskSection(
-          titleText: sectionTitle,
-          children: _createTaskTileListFrom(
-            context: ctx,
-            taskList: immutableFilteredTasks,
-            taskProvider: taskProvider,
-          ),
-        );
+        return immutableFilteredTasks.isEmpty
+            ? const SizedBox.shrink()
+            : ExpandableTaskSection(
+                titleText: sectionTitle,
+                children: _createTaskTileListFrom(
+                  context: ctx,
+                  taskList: immutableFilteredTasks,
+                  taskProvider: taskProvider,
+                ),
+              );
       },
-
-      // shouldRebuild: (previous, next) =>
-      //     !const DeepCollectionEquality().equals(previous, next),
+      
+      // shouldRebuild: (previous, next) {
+      //   return !const DeepCollectionEquality().equals(previous, next);
+      // },
 
       shouldRebuild: (previous, next) {
         debugPrint("\n\nChecking if willRebuild \"$sectionTitle\"");
@@ -82,9 +84,8 @@ class TaskSection extends StatelessWidget {
             "    Next Section: ${t.title} \tLast Modified: ${t.dateModified}",
           );
         }
-        bool willRebuild = !listEquals(previous, next); //works
-        // bool willRebuild =
-        //     !const DeepCollectionEquality().equals(previous, next);
+        bool willRebuild =
+            !const DeepCollectionEquality().equals(previous, next);
         debugPrint(
           willRebuild
               ? "Yes \"$sectionTitle\" is rebuilt"

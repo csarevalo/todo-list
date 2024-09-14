@@ -102,3 +102,12 @@ enum Priority implements Comparable<Priority> {
   @override
   int compareTo(Priority other) => value - other.value;
 }
+
+///PREVIOUS FLAG COLORS ON TASKTILE
+// final Color iconColor = priority == Priority.high
+//     ? Colors.red.shade600
+//     : priority == Priority.medium
+//         ? Colors.yellow.shade700
+//         : priority == Priority.low
+//             ? Colors.blue
+//             : Colors.grey.shade500;
