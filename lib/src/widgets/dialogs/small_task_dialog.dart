@@ -142,6 +142,7 @@ class _SmallTaskDialogState extends State<SmallTaskDialog> {
         _newDateDue == null ? null : TimeOfDay.fromDateTime(_newDateDue!);
     showTimePicker(
       context: context,
+      cancelText: "Clear",
       initialTime: prevTime ?? TimeOfDay.now(),
     ).then(
       (timePicked) {

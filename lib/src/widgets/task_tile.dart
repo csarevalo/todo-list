@@ -218,7 +218,9 @@ class _TaskTile extends StatelessWidget {
           subtitle: dateDue == null
               ? null
               : Text(
-                  DateFormat.yMMMd().format(dateDue).toString(),
+                  task.hasDueByTime!
+                      ? "${DateFormat.yMMMd().format(dateDue)}, ${DateFormat('hh:mm a').format(dateDue)}"
+                      : DateFormat.yMMMd().format(dateDue),
                 ),
           trailing: IconButton(
             onPressed: task.isDone
