@@ -5,7 +5,7 @@ import '../constants/task_group_headings.dart';
 import '../models/section_heading.dart';
 import '../models/task_sort_options.dart';
 import '../providers/task_preferences_controller.dart';
-import 'alternative_task_section.dart';
+import 'alternative2_task_section.dart';
 // import 'task_section.dart';
 
 class TaskSectionsBuilder extends StatelessWidget {

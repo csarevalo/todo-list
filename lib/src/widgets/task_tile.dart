@@ -7,7 +7,7 @@ import 'dialogs/change_priority_dialog.dart';
 import 'dialogs/small_task_dialog.dart';
 
 class TaskTile extends StatelessWidget {
-  final Task task;
+  final ImmutableTask task;
   final Function(bool?)? onCheckboxChanged;
   final void Function(BuildContext)? onDelete;
   final void Function()? onPriorityChange;
@@ -46,7 +46,7 @@ class TaskTile extends StatelessWidget {
 }
 
 class _CloseSlidableOnTap extends StatefulWidget {
-  final Task task;
+  final ImmutableTask task;
   final Function(bool?)? onCheckboxChanged;
   final void Function(BuildContext)? onDelete;
   final void Function()? onPriorityChange;
@@ -90,7 +90,7 @@ class _CloseSlidableOnTapState extends State<_CloseSlidableOnTap>
 
   @override
   Widget build(BuildContext context) {
-    final Task task = widget.task;
+    final ImmutableTask task = widget.task;
     final _TaskTile taskTile = _TaskTile(
       // key: super.key,
       controller: _slidableController,
@@ -124,7 +124,7 @@ class _CloseSlidableOnTapState extends State<_CloseSlidableOnTap>
 
 class _TaskTile extends StatelessWidget {
   final SlidableController? controller;
-  final Task task;
+  final ImmutableTask task;
   final Function(bool?)? onCheckboxChanged;
   final void Function(BuildContext)? onDelete;
   final void Function()? onPriorityChange;

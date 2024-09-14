@@ -8,7 +8,7 @@ import '../../providers/task_provider.dart';
 
 Future<void> showSmallTaskDialog({
   required BuildContext context,
-  Task? task,
+  ImmutableTask? task,
   bool barrierDismissible = true,
   Color? barrierColor,
   String? barrierLabel,
@@ -33,7 +33,7 @@ Future<void> showSmallTaskDialog({
 }
 
 class SmallTaskDialog extends StatefulWidget {
-  final Task? task;
+  final ImmutableTask? task;
   const SmallTaskDialog({super.key, this.task});
 
   @override
@@ -79,16 +79,25 @@ class _SmallTaskDialogState extends State<SmallTaskDialog> {
       taskTitleText = taskTitleText.replaceAll(RegExp(r'  '), ' ');
     }
     final taskProvider = Provider.of<TaskProvider>(context, listen: false);
-
-    if (taskTitleText.isNotEmpty) {
-      taskProvider.updateTask(
-        widget.task!.id,
-        newTitle: taskTitleText,
-        newPriority: _priority,
-        newDateDue: _newDateDue,
-        hasDueByTime: _hasDueByTime,
-      );
+    final compTask = taskProvider.todoList.firstWhere(
+      (Task t) => t.id == widget.task!.id,
+    );
+    if (compTask.title != taskTitleText ||
+        compTask.priority != _priority ||
+        compTask.dateDue != _newDateDue ||
+        compTask.hasDueByTime != _hasDueByTime) {
+      ///FIXME: needlessly updates
+      if (taskTitleText.isNotEmpty) {
+        taskProvider.updateTask(
+          widget.task!.id,
+          newTitle: taskTitleText,
+          newPriority: _priority,
+          newDateDue: _newDateDue,
+          hasDueByTime: _hasDueByTime,
+        );
+      }
     }
+
     _taskTitleController.clear();
     Navigator.of(context).pop();
   }

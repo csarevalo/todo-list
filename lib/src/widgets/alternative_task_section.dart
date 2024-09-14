@@ -42,6 +42,8 @@ class TaskSection extends StatelessWidget {
     debugPrint('Built TaskSection: $sectionTitle');
     final taskProvider = Provider.of<TaskProvider>(context, listen: false);
     final String specificSection = sectionTitle.split(' ')[0];
+    late final List<Task> compTasks;
+    bool comparing = false;
 
     return Selector<TaskProvider, List<Task>>(
       selector: (ctx, tp) {
@@ -65,7 +67,12 @@ class TaskSection extends StatelessWidget {
               filteredTasks = filterTasks.byCompletion(isCompleted: false);
           }
         }
-        return filteredTasks;
+
+        if (!comparing) {
+          compTasks = List.unmodifiable(filteredTasks);
+          comparing = true;
+        }
+        return List.unmodifiable(filteredTasks);
       },
       builder: (ctx, filteredTasks, __) {
         return ExpandableTaskSection(
@@ -94,7 +101,7 @@ class TaskSection extends StatelessWidget {
             "    Next Section: ${t.title} \tLast Modified: ${t.dateModified}",
           );
         }
-        bool willRebuild = !listEquals(previous, next); //previous != next;
+        bool willRebuild = !listEquals(compTasks, next); //previous != next;
         debugPrint(
           willRebuild
               ? "Yes \"$sectionTitle\" is rebuilt"

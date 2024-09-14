@@ -20,7 +20,7 @@ class FilterTasks {
             sort2ndBy: taskSortOptions.sort2ndBy,
             desc2: taskSortOptions.desc2,
           ));
-    return filteredTasks;
+    return List.unmodifiable(filteredTasks);
   }
 
   List<Task> byPriority({
@@ -53,7 +53,7 @@ class FilterTasks {
       sort2ndBy: taskSortOptions.sort2ndBy,
       desc2: taskSortOptions.desc2,
     ));
-    return filteredTasks;
+    return List.unmodifiable(filteredTasks);
   }
 
   List<Task> byDate({
@@ -82,7 +82,7 @@ class FilterTasks {
       desc2: taskSortOptions.desc2,
     ));
 
-    return filteredTasks;
+    return List.unmodifiable(filteredTasks);
   }
 }
 
