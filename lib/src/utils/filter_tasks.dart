@@ -58,7 +58,7 @@ class FilterTasks {
     datePeriod = datePeriod.toLowerCase();
 
     List<Task> filteredTasks = List.from(tasks);
-    filteredTasks.retainWhere(retainTaskWhere(
+    filteredTasks.retainWhere(retainTasksByDate(
       dateType: dateType,
       datePeriod: datePeriod,
     ));
@@ -76,11 +76,15 @@ class FilterTasks {
 
 typedef RetainTaskWhere = bool Function(Task task);
 
-RetainTaskWhere retainTaskWhere({
+RetainTaskWhere retainTasksByDate({
   //TODO: Change to enum here too
-  required String dateType, // Options: done, modified, due, created
-  required String
-      datePeriod, // Options: overdue, today, tomorrow, next, later, no..date
+  /// Options: done, modified, due, created
+  required String dateType,
+
+  /// Options: overdue, today, tomorrow, next, later, no..date
+  required String datePeriod,
+
+  /// By default, retain tasks that are not yet completed
   bool isCompleted = false,
 }) {
   dateType = dateType.toLowerCase();

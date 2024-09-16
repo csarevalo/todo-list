@@ -24,19 +24,14 @@ class TaskSectionsBuilder extends StatelessWidget {
     List<Widget> getSectionedTaskTiles({
       required GroupBy groupBy,
     }) {
-      groupBy = groupBy;
-      final List<SectionHeading> priorityHeadings =
-          headingOptions.priorityHeadings();
-
-      final List<SectionHeading> dateSections = headingOptions.dateHeadings();
-      List<SectionHeading> groupHeaders;
+      late final List<SectionHeading> groupHeaders;
       List<Widget> sectionTiles = [];
 
       switch (groupBy) {
         case GroupBy.priority:
-          groupHeaders = priorityHeadings;
+          groupHeaders = headingOptions.priorityHeadings();
         case GroupBy.dueDate:
-          groupHeaders = dateSections;
+          groupHeaders = headingOptions.dateHeadings();
         default:
           //TODO: Do not add a section and just the tasks
           groupHeaders = [SectionHeading(heading: "Not Completed")];
