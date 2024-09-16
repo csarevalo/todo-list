@@ -9,7 +9,8 @@ class FilterTasks {
     required this.taskSortOptions,
   });
 
-  List<Task> byCompletion({required bool isCompleted}) {
+  ///Filter tasks by completion
+  List<Task> byCompletion({required final bool isCompleted}) {
     List<Task> filteredTasks = List.from(tasks);
     filteredTasks.retainWhere((task) => task.isDone == isCompleted);
     filteredTasks.sort(isCompleted
@@ -23,9 +24,10 @@ class FilterTasks {
     return filteredTasks;
   }
 
+  /// Filter tasks by priority
   List<Task> byPriority({
-    required String strPriority,
-    bool isCompleted = false, //default: uncompleted
+    required final String strPriority,
+    final bool isCompleted = false, //default: uncompleted
   }) {
     List<Task> filteredTasks = List.from(tasks);
     Priority priority = Priority.values.firstWhere(
@@ -44,22 +46,22 @@ class FilterTasks {
     return filteredTasks;
   }
 
+  /// Filter tasks by date
+  ///
+  /// datePeriod: overdue, today, tomorrow, next, later, no ..date
+  ///
+  /// dateField: done, modified, due, created
   List<Task> byDate({
-    /// Options: overdue, today, tomorrow, next, later, no..date
+    //TODO: make enum
     required String datePeriod,
-
-    /// Options: done, modified, due, created
-    required String dateType,
-
-    /// Default: uncompleted
+    required final TaskDateField dateField,
     bool isCompleted = false,
   }) {
-    dateType = dateType.toLowerCase();
     datePeriod = datePeriod.toLowerCase();
 
     List<Task> filteredTasks = List.from(tasks);
     filteredTasks.retainWhere(retainTasksByDate(
-      dateType: dateType,
+      dateField: dateField,
       datePeriod: datePeriod,
     ));
 
@@ -76,19 +78,17 @@ class FilterTasks {
 
 typedef RetainTaskWhere = bool Function(Task task);
 
+/// Retain Tasks where
+///
+/// datePeriod: overdue, today, tomorrow, next, later, no ..date
+///
+/// dateField: done, modified, due, created
 RetainTaskWhere retainTasksByDate({
+  required final TaskDateField dateField,
   //TODO: Change to enum here too
-  /// Options: done, modified, due, created
-  required String dateType,
-
-  /// Options: overdue, today, tomorrow, next, later, no..date
-  required String datePeriod,
-
-  /// By default, retain tasks that are not yet completed
+  required final String datePeriod,
   bool isCompleted = false,
 }) {
-  dateType = dateType.toLowerCase();
-  DateTime? todaysDate = dateOnly(DateTime.now());
   bool Function(int) dayComp;
   switch (datePeriod) {
     case 'overdue':
@@ -104,9 +104,33 @@ RetainTaskWhere retainTasksByDate({
     default: //no date.. is not used..is never called bc dayDiff==null
       dayComp = (_) => false;
   }
+
+  /// Gets the date only based on dateField (done, modifed, due, created)
+  DateTime? getDateFromTask({
+    required final Task task,
+    required final TaskDateField dateField,
+  }) {
+    switch (dateField) {
+      case TaskDateField.done:
+        return dateOnly(task.dateDone);
+      case TaskDateField.modified:
+        return dateOnly(task.dateModified);
+      case TaskDateField.due:
+        return dateOnly(task.dateDue);
+      case TaskDateField.created:
+        return dateOnly(task.dateCreated);
+      default:
+        return null;
+    }
+  }
+
+  DateTime? todaysDate = dateOnly(DateTime.now());
   return (Task task) {
     if (task.isDone != isCompleted) return false;
-    DateTime? taskDate = getDateFromTask(task: task, dateType: dateType);
+    final DateTime? taskDate = getDateFromTask(
+      task: task,
+      dateField: dateField,
+    );
     int? dayDiff = taskDate?.difference(todaysDate!).inDays;
     if (dayDiff != null) return dayComp(dayDiff);
     if (datePeriod == "no") return true; //no date
@@ -114,29 +138,24 @@ RetainTaskWhere retainTasksByDate({
   };
 }
 
-/// Used to compare date relative to days
+/// Get date only from datetime
 DateTime? dateOnly(DateTime? date) {
   if (date == null) return null;
   return DateTime(date.year, date.month, date.day);
 }
 
-/// Gets the date only based on datetype (done, modifed, due, created)
-DateTime? getDateFromTask({
-  required Task task,
-  required String dateType,
-}) {
-  switch (dateType) {
-    case "done":
-      return dateOnly(task.dateDone);
-    case "modified":
-      return dateOnly(task.dateModified);
-    case "due":
-      return dateOnly(task.dateDue);
-    case "created":
-      return dateOnly(task.dateCreated);
-    default:
-      return null;
-  }
+enum TaskDateField {
+  /// Refers to Task.dateCreated
+  created,
+
+  /// Refers to Task.dateDone
+  done,
+
+  /// Refers to Task.dateDue
+  due,
+
+  /// Refers to Task.dateModified
+  modified
 }
 
 int compareBy(
