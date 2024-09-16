@@ -87,7 +87,7 @@ enum Priority implements Comparable<Priority> {
   low(value: 2, str: "Low", color: Colors.blue),
 
   /// No Priority
-  none(value: 3, str: "None", color: Colors.grey);
+  none(value: 3, str: "No", color: Colors.grey);
 
   const Priority({
     required this.value,

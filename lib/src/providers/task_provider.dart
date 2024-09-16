@@ -14,7 +14,7 @@ class TaskProvider with ChangeNotifier {
 
   late List<Task> _todoList = [];
 
-  List<Task> get todoList => List.unmodifiable(_todoList);
+  List<Task> get todoList => List.unmodifiable(_todoList); //not immutable
 
   Future<void> init() async {
     _todoList = await _taskProviderService.loadTasks();
@@ -23,7 +23,7 @@ class TaskProvider with ChangeNotifier {
 
   void toggleDone(int taskId) {
     final index = _todoList.indexWhere((task) => task.id == taskId);
-    if (index == -1) return; //task not found
+    assert(index != -1, "Task not found."); //task not found
     _todoList[index].isDone = !_todoList[index].isDone;
     if (_todoList[index].isDone) {
       _todoList[index].dateDone = DateTime.now();
@@ -67,13 +67,14 @@ class TaskProvider with ChangeNotifier {
     required bool? hasDueByTime,
   }) {
     final index = _todoList.indexWhere((task) => task.id == taskId);
-    if (index == -1) return; // exit if index is Not Found
-    if (newTitle.isEmpty) newTitle = _todoList[index].title;
-    var todos = todoList;
-    if (todos[index].title != newTitle ||
-        todos[index].priority != newPriority ||
-        todos[index].dateDue != newDateDue ||
-        todos[index].hasDueByTime != hasDueByTime) {
+    assert(index != -1, "Task not found."); //task not found
+    assert(newTitle.isNotEmpty, "Task title cannot be empty"); //missing title
+    
+    final todo = _todoList[index];
+    if (todo.title != newTitle ||
+        todo.priority != newPriority ||
+        todo.dateDue != newDateDue ||
+        todo.hasDueByTime != hasDueByTime) {
       _todoList[index].title = newTitle;
       _todoList[index].priority = newPriority;
       _todoList[index].dateDue = newDateDue;
@@ -86,14 +87,14 @@ class TaskProvider with ChangeNotifier {
 
   void deleteTask(int taskId) {
     final index = _todoList.indexWhere((task) => task.id == taskId);
-    if (index == -1) return; //task not found
+    assert(index != -1, "Task not found."); //task not found
     _todoList.removeAt(index);
     notifyListeners();
   }
 
   void changePriority(int taskId, Priority newPriority) {
     final index = _todoList.indexWhere((task) => task.id == taskId);
-    if (index == -1) return; //task not found
+    assert(index != -1, "Task not found."); //task not found
     if (_todoList[index].priority.value != newPriority.value) {
       _todoList[index].priority = newPriority;
       notifyListeners();
@@ -112,7 +113,7 @@ class TaskProviderService {
         priority: Priority.high,
         dateCreated: rn,
         dateDue: rn,
-        hasDueByTime: false,
+        hasDueByTime: true,
         dateModified: rn,
       ),
       Task(
@@ -152,7 +153,7 @@ class TaskProviderService {
         priority: Priority.high,
         dateCreated: rn,
         dateDue: rn,
-        hasDueByTime: false,
+        hasDueByTime: true,
         dateModified: rn,
       ),
     ];

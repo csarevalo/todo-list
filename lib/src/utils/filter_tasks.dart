@@ -14,7 +14,7 @@ class FilterTasks {
     filteredTasks.retainWhere((task) => task.isDone == isCompleted);
     filteredTasks.sort(isCompleted
         ? (a, b) => b.dateDone!.compareTo(a.dateDone!)
-        : sortTasksBy(
+        : _sortTasksBy(
             sort1stBy: taskSortOptions.sort1stBy,
             desc1: taskSortOptions.desc1,
             sort2ndBy: taskSortOptions.sort2ndBy,
@@ -35,7 +35,7 @@ class FilterTasks {
     filteredTasks.retainWhere(
       (task) => task.priority == priority && task.isDone == isCompleted,
     );
-    filteredTasks.sort(sortTasksBy(
+    filteredTasks.sort(_sortTasksBy(
       sort1stBy: taskSortOptions.sort1stBy,
       desc1: taskSortOptions.desc1,
       sort2ndBy: taskSortOptions.sort2ndBy,
@@ -63,7 +63,7 @@ class FilterTasks {
       datePeriod: datePeriod,
     ));
 
-    filteredTasks.sort(sortTasksBy(
+    filteredTasks.sort(_sortTasksBy(
       sort1stBy: taskSortOptions.sort1stBy,
       desc1: taskSortOptions.desc1,
       sort2ndBy: taskSortOptions.sort2ndBy,
@@ -173,10 +173,10 @@ int compareBy(
   }
 }
 
-typedef SortTask = int Function(Task a, Task b);
+typedef _SortTask = int Function(Task a, Task b);
 
 /// Sorts Tasks accordingly
-SortTask sortTasksBy({
+_SortTask _sortTasksBy({
   required SortBy sort1stBy,
   SortBy sort2ndBy = SortBy.none,
   bool desc1 = true, // order of 1st sort by
