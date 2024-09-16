@@ -47,12 +47,7 @@ class TaskSection extends StatelessWidget {
               filteredTasks = filterTasks.byCompletion(isCompleted: false);
           }
         }
-
-        List<ImmutableTask> immutableFilteredTasks = [];
-        for (Task t in filteredTasks) {
-          immutableFilteredTasks.add(createImmutableTask(t));
-        }
-        return List.unmodifiable(immutableFilteredTasks);
+        return createImmutableTasks(filteredTasks);
       },
       builder: (ctx, immutableFilteredTasks, __) {
         return immutableFilteredTasks.isEmpty
@@ -60,7 +55,6 @@ class TaskSection extends StatelessWidget {
             : ExpandableTaskSection(
                 titleText: sectionTitle,
                 children: _createTaskTileListFrom(
-                  context: ctx,
                   taskList: immutableFilteredTasks,
                   taskProvider: taskProvider,
                 ),
@@ -69,14 +63,35 @@ class TaskSection extends StatelessWidget {
       shouldRebuild: (previous, next) {
         return !const DeepCollectionEquality().equals(previous, next);
       },
+      // shouldRebuild: (previous, next) {
+      //   debugPrint("\n\nChecking if willRebuild \"$sectionTitle\"");
+      //   for (var t in previous) {
+      //     debugPrint(
+      //       "Previous Section: ${t.title} \tLast Modified: ${t.dateModified}",
+      //     );
+      //   }
+      //   for (var t in next) {
+      //     debugPrint(
+      //       "    Next Section: ${t.title} \tLast Modified: ${t.dateModified}",
+      //     );
+      //   }
+      //   bool willRebuild =
+      //       !const DeepCollectionEquality().equals(previous, next);
+      //   debugPrint(
+      //     willRebuild
+      //         ? "Yes \"$sectionTitle\" is rebuilt"
+      //         : "No, \"$sectionTitle\" is not rebuild",
+      //   );
+      //   debugPrint("");
+      //   return willRebuild;
+      // },
     );
   }
 }
 
 List<Widget> _createTaskTileListFrom({
-  required BuildContext context,
-  required List<ImmutableTask> taskList,
-  required TaskProvider taskProvider,
+  required final List<ImmutableTask> taskList,
+  required final TaskProvider taskProvider,
 }) {
   List<Widget> taskTiles = [];
   for (var task in taskList) {

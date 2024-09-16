@@ -76,6 +76,14 @@ ImmutableTask createImmutableTask(Task task) {
   );
 }
 
+List<ImmutableTask> createImmutableTasks(List<Task> task) {
+  List<ImmutableTask> immutableTasks = [];
+  for (Task t in task) {
+    immutableTasks.add(createImmutableTask(t));
+  }
+  return List.unmodifiable(immutableTasks);
+}
+
 enum Priority implements Comparable<Priority> {
   /// High Priority
   high(value: 0, str: "High", color: Colors.red),

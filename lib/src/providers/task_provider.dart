@@ -14,7 +14,7 @@ class TaskProvider with ChangeNotifier {
 
   late List<Task> _todoList = [];
 
-  List<Task> get todoList => List.unmodifiable(_todoList); //not immutable
+  List<Task> get todoList => _todoList; //not immutable
 
   Future<void> init() async {
     _todoList = await _taskProviderService.loadTasks();
