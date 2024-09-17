@@ -10,24 +10,30 @@ class FilterTasks {
   });
 
   ///Filter tasks by completion
-  List<Task> byCompletion({required final bool isCompleted}) {
+  List<Task> byCompletion({
+    required final bool isCompleted,
+    final bool sort = true, //sort by default
+  }) {
     List<Task> filteredTasks = List.from(tasks);
     filteredTasks.retainWhere((task) => task.isDone == isCompleted);
-    filteredTasks.sort(isCompleted
-        ? (a, b) => b.dateDone!.compareTo(a.dateDone!)
-        : _sortTasksBy(
-            sort1stBy: taskSortOptions.sort1stBy,
-            desc1: taskSortOptions.desc1,
-            sort2ndBy: taskSortOptions.sort2ndBy,
-            desc2: taskSortOptions.desc2,
-          ));
+    if (sort) {
+      filteredTasks.sort(isCompleted
+          ? (a, b) => b.dateDone!.compareTo(a.dateDone!)
+          : _sortTasksBy(
+              sort1stBy: taskSortOptions.sort1stBy,
+              desc1: taskSortOptions.desc1,
+              sort2ndBy: taskSortOptions.sort2ndBy,
+              desc2: taskSortOptions.desc2,
+            ));
+    }
     return filteredTasks;
   }
 
   /// Filter tasks by priority
   List<Task> byPriority({
     required final String strPriority,
-    final bool isCompleted = false, //default: uncompleted
+    final bool sort = true, //sort by default
+    final bool isCompleted = false, //filter uncompleted tasks by default
   }) {
     List<Task> filteredTasks = List.from(tasks);
     Priority priority = Priority.values.firstWhere(
@@ -54,7 +60,8 @@ class FilterTasks {
   List<Task> byDate({
     required final TaskDate dateField,
     required String datePeriod,
-    bool isCompleted = false,
+    final bool sort = true, //sort by default
+    final bool isCompleted = false, //filter uncompleted tasks by default
   }) {
     datePeriod = datePeriod.toLowerCase();
 
@@ -85,7 +92,8 @@ typedef RetainTaskWhere = bool Function(Task task);
 RetainTaskWhere retainTasksByDate({
   required final TaskDate dateField,
   required final String datePeriod,
-  bool isCompleted = false,
+  final bool sort = true, //sort by default
+  final bool isCompleted = false, //filter uncompleted tasks by default
 }) {
   // Create dayComp function to check if tasks is within date range
   late final bool Function(int) dayComp;
@@ -107,8 +115,8 @@ RetainTaskWhere retainTasksByDate({
   final DateTime? todaysDate = dateOnly(DateTime.now());
   return (Task task) {
     if (task.isDone != isCompleted) return false;
-    late final DateTime? taskDate;
     // Get specific date from task datefield
+    late final DateTime? taskDate;
     switch (dateField) {
       case TaskDate.done:
         taskDate = dateOnly(task.dateDone);
@@ -129,7 +137,7 @@ RetainTaskWhere retainTasksByDate({
 }
 
 /// Get date only from datetime
-DateTime? dateOnly(DateTime? date) {
+DateTime? dateOnly(final DateTime? date) {
   if (date == null) return null;
   return DateTime(date.year, date.month, date.day);
 }
@@ -151,10 +159,10 @@ enum TaskDate {
 
 /// Used to sort tasks by comparing Task B to Task A
 int compareBy(
-  SortBy compBy, {
-  required Task taskA,
-  required Task taskB,
-  bool desc = true,
+  final SortBy compBy, {
+  required final Task taskA,
+  required final Task taskB,
+  final bool desc = true,
 }) {
   switch (compBy) {
     case SortBy.dateCreated: //"date_created":
@@ -192,10 +200,10 @@ typedef _SortTask = int Function(Task a, Task b);
 
 /// Sorts Tasks accordingly
 _SortTask _sortTasksBy({
-  required SortBy sort1stBy,
-  SortBy sort2ndBy = SortBy.none,
-  bool desc1 = true, // order of 1st sort by
-  bool desc2 = true, // order of 2nd sort by
+  required final SortBy sort1stBy,
+  final SortBy sort2ndBy = SortBy.none,
+  final bool desc1 = true, // order of 1st sort by
+  final bool desc2 = true, // order of 2nd sort by
 }) {
   return (a, b) {
     // Primary comparison by 1st sortBy
