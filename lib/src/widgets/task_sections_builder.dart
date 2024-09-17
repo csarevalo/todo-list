@@ -14,6 +14,7 @@ class TaskSectionsBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("Running task section builder...");
     final taskSortOptions =
         context.select<TaskPreferencesController, TaskSortOptions>(
       (taskPrefs) => taskPrefs.taskSortOptions,

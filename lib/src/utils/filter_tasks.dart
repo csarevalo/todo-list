@@ -36,7 +36,7 @@ class FilterTasks {
     final bool isCompleted = false, //filter uncompleted tasks by default
   }) {
     List<Task> filteredTasks = List.from(tasks);
-    Priority priority = Priority.values.firstWhere(
+    final Priority priority = Priority.values.firstWhere(
       (p) => p.str == strPriority,
       orElse: () => Priority.none,
     );
