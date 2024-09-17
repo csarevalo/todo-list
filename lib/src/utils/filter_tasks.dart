@@ -43,12 +43,14 @@ class FilterTasks {
     filteredTasks.retainWhere(
       (task) => task.priority == priority && task.isDone == isCompleted,
     );
-    filteredTasks.sort(_sortTasksBy(
-      sort1stBy: taskSortOptions.sort1stBy,
-      desc1: taskSortOptions.desc1,
-      sort2ndBy: taskSortOptions.sort2ndBy,
-      desc2: taskSortOptions.desc2,
-    ));
+    if (sort) {
+      filteredTasks.sort(_sortTasksBy(
+        sort1stBy: taskSortOptions.sort1stBy,
+        desc1: taskSortOptions.desc1,
+        sort2ndBy: taskSortOptions.sort2ndBy,
+        desc2: taskSortOptions.desc2,
+      ));
+    }
     return filteredTasks;
   }
 
@@ -71,12 +73,14 @@ class FilterTasks {
       datePeriod: datePeriod,
     ));
 
-    filteredTasks.sort(_sortTasksBy(
-      sort1stBy: taskSortOptions.sort1stBy,
-      desc1: taskSortOptions.desc1,
-      sort2ndBy: taskSortOptions.sort2ndBy,
-      desc2: taskSortOptions.desc2,
-    ));
+    if (sort) {
+      filteredTasks.sort(_sortTasksBy(
+        sort1stBy: taskSortOptions.sort1stBy,
+        desc1: taskSortOptions.desc1,
+        sort2ndBy: taskSortOptions.sort2ndBy,
+        desc2: taskSortOptions.desc2,
+      ));
+    }
 
     return filteredTasks;
   }
