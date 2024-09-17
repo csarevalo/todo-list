@@ -48,13 +48,12 @@ class FilterTasks {
 
   /// Filter tasks by date
   ///
-  /// datePeriod: overdue, today, tomorrow, next, later, no ..date
+  /// datePeriod: 'overdue', 'today', 'tomorrow', 'next', 'later', 'no' ..date
   ///
-  /// dateField: done, modified, due, created
+  /// dateField: TaskDate.done, TaskDate.modified, TaskDate.due, TaskDate.created
   List<Task> byDate({
-    //TODO: make enum
+    required final TaskDate dateField,
     required String datePeriod,
-    required final TaskDateField dateField,
     bool isCompleted = false,
   }) {
     datePeriod = datePeriod.toLowerCase();
@@ -80,16 +79,16 @@ typedef RetainTaskWhere = bool Function(Task task);
 
 /// Retain Tasks where
 ///
-/// datePeriod: overdue, today, tomorrow, next, later, no ..date
+/// datePeriod: 'overdue', 'today', 'tomorrow', 'next', 'later', 'no' ..date
 ///
-/// dateField: done, modified, due, created
+/// dateField: TaskDate.done, TaskDate.modified, TaskDate.due, TaskDate.created
 RetainTaskWhere retainTasksByDate({
-  required final TaskDateField dateField,
-  //TODO: Change to enum here too
+  required final TaskDate dateField,
   required final String datePeriod,
   bool isCompleted = false,
 }) {
-  bool Function(int) dayComp;
+  // Create dayComp function to check if tasks is within date range
+  late final bool Function(int) dayComp;
   switch (datePeriod) {
     case 'overdue':
       dayComp = (dayDiff) => dayDiff < 0;
@@ -97,44 +96,35 @@ RetainTaskWhere retainTasksByDate({
       dayComp = (dayDiff) => dayDiff == 0;
     case 'tomorrow':
       dayComp = (dayDiff) => dayDiff == 1;
-    case 'next': //next 7 days (2-7) days
+    case 'next': //'next 7 days' (2-7) days
       dayComp = (dayDiff) => dayDiff >= 2 && dayDiff <= 7;
     case 'later':
       dayComp = (dayDiff) => dayDiff > 7;
-    default: //no date.. is not used..is never called bc dayDiff==null
+    default: //'no date'.. is never called bc dayDiff==null
       dayComp = (_) => false;
   }
 
-  /// Gets the date only based on dateField (done, modifed, due, created)
-  DateTime? getDateFromTask({
-    required final Task task,
-    required final TaskDateField dateField,
-  }) {
-    switch (dateField) {
-      case TaskDateField.done:
-        return dateOnly(task.dateDone);
-      case TaskDateField.modified:
-        return dateOnly(task.dateModified);
-      case TaskDateField.due:
-        return dateOnly(task.dateDue);
-      case TaskDateField.created:
-        return dateOnly(task.dateCreated);
-      default:
-        return null;
-    }
-  }
-
-  DateTime? todaysDate = dateOnly(DateTime.now());
+  final DateTime? todaysDate = dateOnly(DateTime.now());
   return (Task task) {
     if (task.isDone != isCompleted) return false;
-    final DateTime? taskDate = getDateFromTask(
-      task: task,
-      dateField: dateField,
-    );
-    int? dayDiff = taskDate?.difference(todaysDate!).inDays;
+    late final DateTime? taskDate;
+    // Get specific date from task datefield
+    switch (dateField) {
+      case TaskDate.done:
+        taskDate = dateOnly(task.dateDone);
+      case TaskDate.modified:
+        taskDate = dateOnly(task.dateModified);
+      case TaskDate.due:
+        taskDate = dateOnly(task.dateDue);
+      case TaskDate.created:
+        taskDate = dateOnly(task.dateCreated);
+      default:
+        taskDate = null;
+    }
+    final int? dayDiff = taskDate?.difference(todaysDate!).inDays;
     if (dayDiff != null) return dayComp(dayDiff);
-    if (datePeriod == "no") return true; //no date
-    return false;
+    if (datePeriod == "no") return true; // show 'no date' tasks
+    return false; // don't show irrelevant tasks
   };
 }
 
@@ -144,7 +134,8 @@ DateTime? dateOnly(DateTime? date) {
   return DateTime(date.year, date.month, date.day);
 }
 
-enum TaskDateField {
+/// Used to specify what datefield to consider from tasks
+enum TaskDate {
   /// Refers to Task.dateCreated
   created,
 
@@ -158,6 +149,7 @@ enum TaskDateField {
   modified
 }
 
+/// Used to sort tasks by comparing Task B to Task A
 int compareBy(
   SortBy compBy, {
   required Task taskA,

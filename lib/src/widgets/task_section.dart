@@ -41,7 +41,7 @@ class TaskSection extends StatelessWidget {
                   filterTasks.byPriority(strPriority: specificSection);
             case GroupBy.dueDate:
               filteredTasks = filterTasks.byDate(
-                  datePeriod: specificSection, dateField: TaskDateField.due);
+                  datePeriod: specificSection, dateField: TaskDate.due);
             default:
               //TODO: Do not add a section and just the tasks
               filteredTasks = filterTasks.byCompletion(isCompleted: false);
