@@ -1,10 +1,10 @@
 import '../models/task.dart';
 import '../models/task_sort_options.dart';
 
-class FilterTasks {
+class SortAndFilterTasks {
   final List<Task> tasks;
   final TaskSortOptions taskSortOptions;
-  FilterTasks({
+  SortAndFilterTasks({
     required this.tasks,
     required this.taskSortOptions,
   });
@@ -57,10 +57,8 @@ class FilterTasks {
   /// Filter tasks by date
   ///
   /// datePeriod: 'overdue', 'today', 'tomorrow', 'next', 'later', 'no' ..date
-  ///
-  /// dateField: TaskDate.done, TaskDate.modified, TaskDate.due, TaskDate.created
   List<Task> byDate({
-    required final TaskDate dateField,
+    required final TaskDateField dateField,
     required String datePeriod,
     final bool sort = true, //sort by default
     final bool isCompleted = false, //filter uncompleted tasks by default
@@ -86,17 +84,73 @@ class FilterTasks {
   }
 }
 
+/// Assign a list of tasks to continue applying filters
+/// The assigned tasks will continue to be modified.
+class ContinousTaskFilter {
+  List<Task> tasks;
+  ContinousTaskFilter({required this.tasks});
+
+  /// Filter tasks by completion
+  void byCompletion(final bool isCompleted) {
+    tasks.retainWhere((task) => task.isDone == isCompleted); //Update tasks
+  }
+
+  /// Filter tasks by priority
+  void byPriority(final Priority priority) {
+    tasks.retainWhere((task) => task.priority == priority); //Update tasks
+  }
+
+  /// Filter tasks by date on a specific task datefield
+  void byDate({
+    required final TaskDateField taskDateField,
+    required final DateTime date,
+  }) {
+    switch (taskDateField) {
+      case TaskDateField.due:
+        return tasks.retainWhere((Task t) => t.dateDue == dateOnly(date));
+      case TaskDateField.modified:
+        return tasks.retainWhere((Task t) => t.dateModified == dateOnly(date));
+      case TaskDateField.done:
+        return tasks.retainWhere((Task t) => t.dateDone == dateOnly(date));
+      case TaskDateField.created:
+        return tasks.retainWhere((Task t) => t.dateCreated == dateOnly(date));
+      default:
+    }
+  }
+
+  /// Filter tasks by those occuring in a duration, for a specific datefield
+  void byDuration({
+    required final TaskDateField dateField,
+    required final DateTime start,
+    required final DateTime end,
+  }) {
+    tasks.retainWhere((Task t) {
+      final DateTime? taskDate = getTaskDate(task: t, dateField: dateField);
+      if (taskDate == null) return false;
+      final DateTime startDate = dateOnly(start)!;
+      final DateTime endDate = dateOnly(end)!;
+      assert(
+        startDate.isBefore(endDate),
+        "Starting date should not be after ending date",
+      );
+      taskDate.difference(startDate).inDays >= 0;
+      if (taskDate.difference(startDate).inDays >= 0 &&
+          taskDate.difference(endDate).inDays <= 0) {
+        return true;
+      }
+      return false;
+    });
+  }
+}
+
 typedef RetainTaskWhere = bool Function(Task task);
 
 /// Retain Tasks where
 ///
 /// datePeriod: 'overdue', 'today', 'tomorrow', 'next', 'later', 'no' ..date
-///
-/// dateField: TaskDate.done, TaskDate.modified, TaskDate.due, TaskDate.created
 RetainTaskWhere retainTasksByDate({
-  required final TaskDate dateField,
+  required final TaskDateField dateField,
   required final String datePeriod,
-  final bool sort = true, //sort by default
   final bool isCompleted = false, //filter uncompleted tasks by default
 }) {
   // Create dayComp function to check if tasks is within date range
@@ -120,24 +174,31 @@ RetainTaskWhere retainTasksByDate({
   return (Task task) {
     if (task.isDone != isCompleted) return false;
     // Get specific date from task datefield
-    late final DateTime? taskDate;
-    switch (dateField) {
-      case TaskDate.done:
-        taskDate = dateOnly(task.dateDone);
-      case TaskDate.modified:
-        taskDate = dateOnly(task.dateModified);
-      case TaskDate.due:
-        taskDate = dateOnly(task.dateDue);
-      case TaskDate.created:
-        taskDate = dateOnly(task.dateCreated);
-      default:
-        taskDate = null;
-    }
+    final DateTime? taskDate = getTaskDate(task: task, dateField: dateField);
     final int? dayDiff = taskDate?.difference(todaysDate!).inDays;
     if (dayDiff != null) return dayComp(dayDiff);
     if (datePeriod == "no") return true; // show 'no date' tasks
     return false; // don't show irrelevant tasks
   };
+}
+
+/// Extract the date from a specific task datetime field
+DateTime? getTaskDate({
+  required final Task task,
+  required final TaskDateField dateField,
+}) {
+  switch (dateField) {
+    case TaskDateField.done:
+      return dateOnly(task.dateDone);
+    case TaskDateField.modified:
+      return dateOnly(task.dateModified);
+    case TaskDateField.due:
+      return dateOnly(task.dateDue);
+    case TaskDateField.created:
+      return dateOnly(task.dateCreated);
+    default:
+      return null;
+  }
 }
 
 /// Get date only from datetime
@@ -147,7 +208,7 @@ DateTime? dateOnly(final DateTime? date) {
 }
 
 /// Used to specify what datefield to consider from tasks
-enum TaskDate {
+enum TaskDateField {
   /// Refers to Task.dateCreated
   created,
 
@@ -159,6 +220,25 @@ enum TaskDate {
 
   /// Refers to Task.dateModified
   modified
+}
+
+typedef _SortTask = int Function(Task a, Task b);
+
+/// Sorts Tasks accordingly
+_SortTask _sortTasksBy({
+  required final SortBy sort1stBy,
+  final SortBy sort2ndBy = SortBy.none,
+  final bool desc1 = true, // order of 1st sort by
+  final bool desc2 = true, // order of 2nd sort by
+}) {
+  return (a, b) {
+    // Primary comparison by 1st sortBy
+    int firstComp = compareBy(sort1stBy, taskA: a, taskB: b, desc: desc1);
+    if (firstComp != 0) return firstComp;
+    // Secondary comparison by 2nd sortBy
+    int secondComp = compareBy(sort2ndBy, taskA: a, taskB: b, desc: desc2);
+    return secondComp;
+  };
 }
 
 /// Used to sort tasks by comparing Task B to Task A
@@ -198,23 +278,4 @@ int compareBy(
     default:
       return 0;
   }
-}
-
-typedef _SortTask = int Function(Task a, Task b);
-
-/// Sorts Tasks accordingly
-_SortTask _sortTasksBy({
-  required final SortBy sort1stBy,
-  final SortBy sort2ndBy = SortBy.none,
-  final bool desc1 = true, // order of 1st sort by
-  final bool desc2 = true, // order of 2nd sort by
-}) {
-  return (a, b) {
-    // Primary comparison by 1st sortBy
-    int firstComp = compareBy(sort1stBy, taskA: a, taskB: b, desc: desc1);
-    if (firstComp != 0) return firstComp;
-    // Secondary comparison by 2nd sortBy
-    int secondComp = compareBy(sort2ndBy, taskA: a, taskB: b, desc: desc2);
-    return secondComp;
-  };
 }
