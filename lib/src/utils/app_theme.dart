@@ -32,11 +32,11 @@ class AppTheme {
   }
 
   /// Select app light contrast theme
-  ThemeData lightContrast(String contrast) {
+  ThemeData lightContrast(Contrast contrast) {
     switch (contrast) {
-      case "High":
+      case Contrast.high:
         return lightHighContrast();
-      case "Low":
+      case Contrast.low:
         return lightMediumContrast();
       default:
         return light();
@@ -80,11 +80,11 @@ class AppTheme {
   }
 
   /// Select app dark contrast theme
-  ThemeData darkContrast(String contrast) {
+  ThemeData darkContrast(Contrast contrast) {
     switch (contrast) {
-      case "High":
+      case Contrast.high:
         return darkHighContrast();
-      case "Low":
+      case Contrast.low:
         return darkMediumContrast();
       default:
         return dark();
@@ -114,4 +114,15 @@ class AppTheme {
         return ThemeData.dark();
     }
   }
+}
+
+enum Contrast {
+  /// High contrast
+  high,
+
+  /// Low contrast
+  low,
+
+  /// No contrast
+  none,
 }

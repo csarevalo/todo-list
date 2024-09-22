@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../providers/settings_controller.dart';
+import '../utils/app_theme.dart';
 
 /// Displays the various settings that can be customized by the user.
 ///
@@ -81,21 +82,21 @@ class SettingsView extends StatelessWidget {
               // When a user selects a contrast from the dropdown list, the
               // SettingsController is updated, which rebuilds the MaterialApp
               // on user enabling accessibility contrast.
-              child: DropdownButton<String>(
+              child: DropdownButton<Contrast>(
                 value: controller.contrast,
                 onChanged: (newContrast) =>
-                    controller.updateContrast(newContrast),
+                    controller.updateContrast(newContrast!),
                 items: const [
                   DropdownMenuItem(
-                    value: 'High',
+                    value: Contrast.high,
                     child: Text('High Contrast'),
                   ),
                   DropdownMenuItem(
-                    value: 'Low',
+                    value: Contrast.low,
                     child: Text('Low Contrast'),
                   ),
                   DropdownMenuItem(
-                    value: 'None',
+                    value: Contrast.none,
                     child: Text('None'),
                   )
                 ],
