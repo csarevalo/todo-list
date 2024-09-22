@@ -6,7 +6,7 @@ class TaskProvider with ChangeNotifier {
   TaskProvider(this._taskProviderService);
   final TaskProviderService _taskProviderService;
 
-  int _internalIdCounter = -1; // id counter starts at 0
+  late int _internalIdCounter; // Task id counter
   int _getNewId() {
     _internalIdCounter += 1;
     return _internalIdCounter;
@@ -18,6 +18,8 @@ class TaskProvider with ChangeNotifier {
 
   Future<void> init() async {
     _todoList = await _taskProviderService.loadTasks();
+    _todoList.sort((a, b) => a.id.compareTo(b.id)); // Sort tasks by id (asc)
+    _internalIdCounter = _todoList.last.id; // Init task id counter
     notifyListeners();
   }
 
@@ -69,7 +71,6 @@ class TaskProvider with ChangeNotifier {
     final index = _todoList.indexWhere((task) => task.id == taskId);
     assert(index != -1, "Task not found."); //task not found
     assert(newTitle.isNotEmpty, "Task title cannot be empty"); //missing title
-    
     final todo = _todoList[index];
     if (todo.title != newTitle ||
         todo.priority != newPriority ||
@@ -80,7 +81,6 @@ class TaskProvider with ChangeNotifier {
       _todoList[index].dateDue = newDateDue;
       _todoList[index].hasDueByTime = hasDueByTime;
       _todoList[index].dateModified = DateTime.now();
-
       notifyListeners();
     }
   }

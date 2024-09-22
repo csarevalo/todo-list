@@ -39,123 +39,151 @@ class MyDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeColors = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
     return Drawer(
       backgroundColor: themeColors.primaryContainer,
-      child: ListView(
-        children: [
-          Container(
-            margin: const EdgeInsets.only(bottom: 8.0),
-            padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
-            child: ListTile(
-              contentPadding: const EdgeInsets.all(0),
-              leading: const Icon(Icons.account_circle_rounded),
-              title: Text(
-                "FirstName LastName",
-                style: textTheme.titleMedium,
-              ),
-              trailing: IconButton(
-                onPressed: () {
-                  Navigator.restorablePushNamed(
-                    context,
-                    SettingsView.routeName,
-                  );
-                },
-                icon: const Icon(Icons.settings),
-              ),
+      child: const SampleDrawerItems(),
+    );
+  }
+}
+
+class SampleDrawerItems extends StatelessWidget {
+  const SampleDrawerItems({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    return ListView(
+      children: [
+        DrawerHeader(
+          child: Card(
+            child: Column(
+              children: [
+                const Icon(Icons.account_circle_rounded),
+                Text(
+                  "FirstName LastName",
+                  style: textTheme.titleMedium,
+                ),
+                Text(
+                  "firstName.lastName@email.com",
+                  style: textTheme.bodySmall,
+                ),
+              ],
             ),
           ),
-          ListTile(
-            leading: const Icon(Icons.search_rounded),
-            title: const Text("Search"),
-            onTap: () {},
+        ),
+        Container(
+          margin: const EdgeInsets.only(bottom: 8.0),
+          padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
+          child: ListTile(
+            contentPadding: const EdgeInsets.all(0),
+            leading: const Icon(Icons.account_circle_rounded),
+            title: Text(
+              "FirstName LastName",
+              style: textTheme.titleMedium,
+            ),
+            trailing: IconButton(
+              onPressed: () {
+                Navigator.restorablePushNamed(
+                  context,
+                  SettingsView.routeName,
+                );
+              },
+              icon: const Icon(Icons.settings),
+            ),
           ),
-          ListTile(
-            leading: const Icon(Icons.all_inbox),
-            title: const Text("All"),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.inbox_rounded),
-            title: const Text("Inbox"),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.today_rounded),
-            title: const Text("Today"),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.signpost_rounded),
-            title: const Text("Tomorrow"),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.calendar_month_rounded),
-            title: const Text("Next 7 Days"),
-            onTap: () {},
-          ),
-          ExpansionTile(
-            leading: const Icon(Icons.style_rounded),
-            shape: const Border(),
-            title: const Text("Tags"),
-            children: [
-              ListTile(
-                leading: const Icon(Icons.event),
-                title: const Text("Appts"),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: const Icon(Icons.people),
-                title: const Text("Family"),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: const Icon(Icons.savings_rounded),
-                title: const Text("Finances"),
-                onTap: () {},
-              ),
-            ],
-          ),
-          ListTile(
-            leading: const Icon(Icons.workspace_premium_rounded),
-            title: const Text("Passion"),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.business_center_rounded),
-            title: const Text("Career"),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.home_work_rounded),
-            title: const Text("Personal"),
-            onTap: () {},
-          ),
-          ExpansionTile(
-            leading: const Icon(Icons.playlist_remove_rounded),
-            shape: const Border(),
-            title: const Text("Archived Lists"),
-            children: [
-              ListTile(
-                leading: const Icon(Icons.verified_rounded),
-                title: const Text("Test"),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: const Icon(Icons.nearby_error_rounded),
-                title: const Text("Not Important Plans"),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: const Icon(Icons.running_with_errors_rounded),
-                title: const Text("Not Urgent Reminders"),
-                onTap: () {},
-              ),
-            ],
-          ),
-        ],
-      ),
+        ),
+        ListTile(
+          leading: const Icon(Icons.search_rounded),
+          title: const Text("Search"),
+          onTap: () {},
+        ),
+        ListTile(
+          leading: const Icon(Icons.all_inbox),
+          title: const Text("All"),
+          onTap: () {},
+        ),
+        ListTile(
+          leading: const Icon(Icons.inbox_rounded),
+          title: const Text("Inbox"),
+          onTap: () {},
+        ),
+        ListTile(
+          leading: const Icon(Icons.today_rounded),
+          title: const Text("Today"),
+          onTap: () {},
+        ),
+        ListTile(
+          leading: const Icon(Icons.signpost_rounded),
+          title: const Text("Tomorrow"),
+          onTap: () {},
+        ),
+        ListTile(
+          leading: const Icon(Icons.calendar_month_rounded),
+          title: const Text("Next 7 Days"),
+          onTap: () {},
+        ),
+        ExpansionTile(
+          leading: const Icon(Icons.style_rounded),
+          shape: const Border(),
+          title: const Text("Tags"),
+          children: [
+            ListTile(
+              leading: const Icon(Icons.event),
+              title: const Text("Appts"),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.people),
+              title: const Text("Family"),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.savings_rounded),
+              title: const Text("Finances"),
+              onTap: () {},
+            ),
+          ],
+        ),
+        ListTile(
+          leading: const Icon(Icons.workspace_premium_rounded),
+          title: const Text("Passion"),
+          onTap: () {},
+        ),
+        ListTile(
+          leading: const Icon(Icons.business_center_rounded),
+          title: const Text("Career"),
+          onTap: () {},
+        ),
+        ListTile(
+          leading: const Icon(Icons.home_work_rounded),
+          title: const Text("Personal"),
+          onTap: () {},
+        ),
+        ExpansionTile(
+          leading: const Icon(Icons.playlist_remove_rounded),
+          shape: const Border(),
+          title: const Text("Archived Lists"),
+          children: [
+            ListTile(
+              leading: const Icon(Icons.verified_rounded),
+              title: const Text("Test"),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.nearby_error_rounded),
+              title: const Text("Not Important Plans"),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.running_with_errors_rounded),
+              title: const Text("Not Urgent Reminders"),
+              onTap: () {},
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
