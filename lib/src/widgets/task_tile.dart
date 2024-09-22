@@ -164,6 +164,8 @@ class _TaskTile extends StatelessWidget {
     /// Set the tile colors
     final Color tileColor = this.tileColor ?? themeColors.primary;
     final Color onTileColor = this.onTileColor ?? themeColors.primaryContainer;
+    final Color iconColor =
+        completed ? priority.color.withOpacity(0.7) : priority.color;
 
     return RepaintBoundary(
       child: Slidable(
@@ -196,9 +198,7 @@ class _TaskTile extends StatelessWidget {
           // shape: const Border(),
           tileColor: completed ? tileColor.withOpacity(0.9) : tileColor,
           textColor: completed ? onTileColor.withOpacity(0.4) : onTileColor,
-          iconColor:
-              completed ? priority.color.withOpacity(0.7) : priority.color,
-          // iconColor: completed ? iconColor.withOpacity(0.7) : iconColor, //TODO: remove
+          iconColor: iconColor,
           leading: Checkbox(
             value: completed,
             onChanged: onCheckboxChanged,
