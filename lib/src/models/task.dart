@@ -88,30 +88,6 @@ List<ImmutableTask> createImmutableTasks(List<Task> task) {
   return List.unmodifiable(immutableTasks);
 }
 
-/// Task Tag Model
-class Tag {
-  final String id;
-  Icon icon;
-  String tagName;
-  Tag({
-    required this.id,
-    required this.icon,
-    required this.tagName,
-  });
-}
-
-/// Task List Model
-class TaskList {
-  final String id;
-  Icon icon;
-  String listName;
-  TaskList({
-    required this.id,
-    required this.icon,
-    required this.listName,
-  });
-}
-
 /// Contains task priorities
 enum Priority implements Comparable<Priority> {
   /// High Priority

@@ -11,14 +11,15 @@ class AppTheme {
     required this.textTheme,
   });
 
-  /// Theme Options
-  /// darkHighContrast()
-  /// darkMediumContrast()
-  /// dark()
-  /// lightHighContrast()
-  /// lightMediumContrast()
-  /// light()
+  // Theme Options
+  // darkHighContrast()
+  // darkMediumContrast()
+  // dark()
+  // lightHighContrast()
+  // lightMediumContrast()
+  // light()
 
+  /// App light theme
   ThemeData light() {
     switch (title) {
       case "Green Tea":
@@ -30,6 +31,7 @@ class AppTheme {
     }
   }
 
+  /// Select app light contrast theme
   ThemeData lightContrast(String contrast) {
     switch (contrast) {
       case "High":
@@ -41,6 +43,7 @@ class AppTheme {
     }
   }
 
+  /// App light high contrast theme
   ThemeData lightHighContrast() {
     switch (title) {
       case "Green Tea":
@@ -52,6 +55,7 @@ class AppTheme {
     }
   }
 
+  /// App light medium contrast theme
   ThemeData lightMediumContrast() {
     switch (title) {
       case "Green Tea":
@@ -63,6 +67,7 @@ class AppTheme {
     }
   }
 
+  /// App dark theme
   ThemeData dark() {
     switch (title) {
       case "Green Tea":
@@ -74,6 +79,7 @@ class AppTheme {
     }
   }
 
+  /// Select app dark contrast theme
   ThemeData darkContrast(String contrast) {
     switch (contrast) {
       case "High":
@@ -85,6 +91,7 @@ class AppTheme {
     }
   }
 
+  /// App dark high contrast theme
   ThemeData darkHighContrast() {
     switch (title) {
       case "Green Tea":
@@ -96,6 +103,7 @@ class AppTheme {
     }
   }
 
+  /// App dark medium contrast theme
   ThemeData darkMediumContrast() {
     switch (title) {
       case "Green Tea":
