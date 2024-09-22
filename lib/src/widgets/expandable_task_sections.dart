@@ -20,6 +20,10 @@ class ExpandableTaskSection extends StatelessWidget {
 
     final themeColors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+    final int durationInMilliseconds = min(
+      kThemeChangeDuration.inMilliseconds,
+      (kThemeChangeDuration.inMilliseconds / 2 * children.length).toInt(),
+    );
 
     return Padding(
       padding: const EdgeInsets.only(left: 8, right: 8, bottom: 16),
@@ -38,9 +42,7 @@ class ExpandableTaskSection extends StatelessWidget {
             ),
             expansionAnimationStyle: AnimationStyle(
               curve: Curves.easeInSine,
-              duration: Duration(
-                milliseconds: min(300, 50 * children.length),
-              ),
+              duration: Duration(milliseconds: durationInMilliseconds),
             ),
             shape: const Border(),
             collapsedShape: const Border(),
