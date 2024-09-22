@@ -4,8 +4,10 @@ import 'package:equatable/equatable.dart';
 class Task {
   final int id;
   String title;
-  bool isDone;
+  // TaskList list;
+  // List<Tag> tags;
   Priority priority;
+  bool isDone;
   DateTime dateCreated;
   DateTime dateModified;
   DateTime? dateDue;
@@ -15,8 +17,10 @@ class Task {
   Task({
     required this.id,
     required this.title,
-    required this.isDone,
+    // required this.list,
+    // required this.tags,
     required this.priority,
+    required this.isDone,
     required this.dateCreated,
     required this.dateModified,
     this.dateDue,
@@ -85,7 +89,7 @@ List<ImmutableTask> createImmutableTasks(List<Task> task) {
 }
 
 /// Task Tag Model
-class Tag{
+class Tag {
   final String id;
   Icon icon;
   String tagName;
@@ -108,7 +112,7 @@ class TaskList {
   });
 }
 
-/// Task priorities
+/// Contains task priorities
 enum Priority implements Comparable<Priority> {
   /// High Priority
   high(value: 0, str: "High", color: Colors.red),

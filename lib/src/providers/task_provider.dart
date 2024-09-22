@@ -51,8 +51,8 @@ class TaskProvider with ChangeNotifier {
     return Task(
       id: _getNewId(),
       title: title,
-      isDone: isDone,
       priority: priority,
+      isDone: isDone,
       dateCreated: rn,
       dateModified: rn,
       dateDue: dateDue,
