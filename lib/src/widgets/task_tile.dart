@@ -103,6 +103,10 @@ class _CloseSlidableOnTapState extends State<_CloseSlidableOnTap>
       tileColor: widget.tileColor,
       onTileColor: widget.onTileColor,
     );
+
+    // TODO: Use gesture detector to determine when to close slideable.
+    //       Focus on the tasktile when open such that when you interact anywhere
+    //       outside of the tasktile, the slideable closes
     return TapRegion(
       onTapInside: (_) {
         if (_enTapOutside) return;
