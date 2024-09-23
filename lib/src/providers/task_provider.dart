@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 import '../models/task.dart';
@@ -13,13 +14,24 @@ class TaskProvider with ChangeNotifier {
   }
 
   late List<Task> _todoList = [];
+  late List<Task> _activeTasks = [];
+  late bool Function(Task task) activeTaskTest;
 
-  List<Task> get todoList => _todoList; //not immutable
+  /// Get a mutable copy of app todo list
+  List<Task> get todoList => List.from(_todoList);
+
+  /// Get mutable active tasks list
+  List<Task> get activeTasks => _activeTasks;
 
   Future<void> init() async {
     _todoList = await _taskProviderService.loadTasks();
     _todoList.sort((a, b) => a.id.compareTo(b.id)); // Sort tasks by id (asc)
     _internalIdCounter = _todoList.last.id; // Init task id counter
+
+    //NEW STUFF
+    activeTaskTest = (Task t) => true; //FIXME: retrieve from somewhere
+    _activeTasks = List.from(_todoList); //FIXME: need filter here
+    _activeTasks.retainWhere(activeTaskTest);
     notifyListeners();
   }
 
@@ -34,8 +46,28 @@ class TaskProvider with ChangeNotifier {
   }
 
   void addTask(Task newTask) {
+    addToActiveTasks(newTask); //First try adding to active tasks
     _todoList.add(newTask);
     notifyListeners();
+  }
+
+  void addToActiveTasks(Task newTask) {
+    if (activeTaskTest(newTask)) _activeTasks.add(newTask);
+  }
+
+  void updateActiveTaskTest(bool Function(Task t) f) {
+    activeTaskTest = f; //no need to notify listeners
+    List<Task> newActiveTasks = List.from(_todoList);
+    newActiveTasks.retainWhere(f);
+    updateActiveTasks(newActiveTasks);
+  }
+
+  void updateActiveTasks(List<Task> newActiveTasks) {
+    if (!const DeepCollectionEquality().equals(_activeTasks, newActiveTasks)) {
+      _activeTasks = newActiveTasks;
+      debugPrint("Updated active tasks\n\n");
+      notifyListeners();
+    }
   }
 
   Task createTask({

@@ -28,7 +28,7 @@ class TaskSection extends StatelessWidget {
     return Selector<TaskProvider, List<ImmutableTask>>(
       selector: (ctx, tp) {
         final filterTasks = SortAndFilterTasks(
-          tasks: tp.todoList,
+          tasks: tp.activeTasks,
           taskSortOptions: taskSortOptions,
         );
         late List<Task> filteredTasks;
@@ -61,6 +61,10 @@ class TaskSection extends StatelessWidget {
               );
       },
       shouldRebuild: (previous, next) {
+        //TODO: only rebuild task section when the order changes, or new tasks
+        //are added... so maybe do not compare immutable tasks
+        //instead make tasktile embed a selector to listen to changes to a
+        //specific task for each tasktile
         return !const DeepCollectionEquality().equals(previous, next);
       },
       // shouldRebuild: (previous, next) {

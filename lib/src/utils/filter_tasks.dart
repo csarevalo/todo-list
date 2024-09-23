@@ -143,12 +143,10 @@ class ContinousTaskFilter {
   }
 }
 
-typedef RetainTaskWhere = bool Function(Task task);
-
 /// Retain Tasks where
 ///
 /// datePeriod: 'overdue', 'today', 'tomorrow', 'next', 'later', 'no' ..date
-RetainTaskWhere retainTasksByDate({
+bool Function(Task task) retainTasksByDate({
   required final TaskDateField dateField,
   required final String datePeriod,
   final bool isCompleted = false, //filter uncompleted tasks by default
@@ -201,7 +199,8 @@ DateTime? getTaskDate({
   }
 }
 
-/// Get date only from datetime
+/// Returns a nullable [DateTime] with the date of the original,
+/// but time set to midnight.
 DateTime? dateOnly(final DateTime? date) {
   if (date == null) return null;
   return DateTime(date.year, date.month, date.day);

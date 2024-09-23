@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../models/task.dart';
+import '../providers/task_provider.dart';
 import '../screens/settings_view.dart';
+import '../utils/filter_tasks.dart';
 import '../widgets/dialogs/sort_tasks_dialog.dart';
 import '../widgets/task_sections_builder.dart';
 import '../widgets/dialogs/small_task_dialog.dart';
@@ -54,6 +58,7 @@ class SampleDrawerItems extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final taskProvider = context.read<TaskProvider>();
     return ListView(
       children: [
         DrawerHeader(
@@ -102,7 +107,10 @@ class SampleDrawerItems extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.all_inbox),
           title: const Text("All"),
-          onTap: () {},
+          onTap: () {
+            taskProvider.updateActiveTaskTest((Task t) => true);
+            taskProvider.updateActiveTasks(taskProvider.todoList);
+          },
         ),
         ListTile(
           leading: const Icon(Icons.inbox_rounded),
@@ -112,17 +120,38 @@ class SampleDrawerItems extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.today_rounded),
           title: const Text("Today"),
-          onTap: () {},
+          onTap: () {
+            taskProvider.updateActiveTaskTest((Task task) {
+              if (task.dateDue == null) return false;
+              final DateTime today = DateUtils.dateOnly(DateTime.now());
+              final DateTime due = DateUtils.dateOnly(task.dateDue!);
+              return due.difference(today).inDays <= 0; //due on or before today
+            });
+          },
         ),
         ListTile(
           leading: const Icon(Icons.signpost_rounded),
           title: const Text("Tomorrow"),
-          onTap: () {},
+          onTap: () {
+            taskProvider.updateActiveTaskTest((Task task) {
+              if (task.dateDue == null) return false;
+              final DateTime today = DateUtils.dateOnly(DateTime.now());
+              final DateTime due = DateUtils.dateOnly(task.dateDue!);
+              return due.difference(today).inDays == 1; //due tomorrow
+            });
+          },
         ),
         ListTile(
           leading: const Icon(Icons.calendar_month_rounded),
           title: const Text("Next 7 Days"),
-          onTap: () {},
+          onTap: () {
+            taskProvider.updateActiveTaskTest((Task task) {
+              if (task.dateDue == null) return false;
+              final DateTime today = DateUtils.dateOnly(DateTime.now());
+              final DateTime due = DateUtils.dateOnly(task.dateDue!);
+              return due.difference(today).inDays <= 7; //on or b/f next 7 days
+            });
+          },
         ),
         ExpansionTile(
           leading: const Icon(Icons.style_rounded),
