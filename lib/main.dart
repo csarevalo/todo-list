@@ -13,8 +13,8 @@ void main() async {
   final taskPreferencesController = TaskPreferencesController();
   await taskPreferencesController.loadPreferences();
 
-  final settingsController = SettingsController();
-  await settingsController.loadSettings();
+  final appSettings = SettingsController();
+  await appSettings.loadSettings();
 
   runApp(
     MultiProvider(
@@ -22,9 +22,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => taskProvider),
         ChangeNotifierProvider(create: (context) => taskPreferencesController),
       ],
-      child: TodoApp(
-        settingsController: settingsController,
-      ),
+      child: TodoApp(settingsController: appSettings),
     ),
   );
 }
