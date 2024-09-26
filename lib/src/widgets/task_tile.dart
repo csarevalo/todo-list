@@ -207,7 +207,7 @@ class _TaskTile extends StatelessWidget {
             side: BorderSide(color: onTileColor),
           ),
           title: Text(
-            title,
+            '$title\t\t\t\t\t${task.list.name}',
             style: textTheme.bodyLarge!.copyWith(
               fontSize: 18,
               color: completed ? onTileColor.withOpacity(0.4) : onTileColor,

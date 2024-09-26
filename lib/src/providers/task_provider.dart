@@ -15,7 +15,16 @@ class TaskProvider with ChangeNotifier {
 
   late List<Task> _todoList = [];
   late List<Task> _activeTasks = [];
+
+  /// Used to determine active tasks from task todo list
   late bool Function(Task task) activeTaskTest;
+
+  /// Task Default List
+  TaskList defaultList = TaskList(
+    id: DateTime.timestamp(),
+    icon: const Icon(Icons.inbox_rounded),
+    name: "Inbox",
+  );
 
   /// Get a mutable copy of app todo list
   List<Task> get todoList => List.from(_todoList);
@@ -83,6 +92,7 @@ class TaskProvider with ChangeNotifier {
     return Task(
       id: _getNewId(),
       title: title,
+      list: defaultList,
       priority: priority,
       isDone: isDone,
       dateCreated: rn,

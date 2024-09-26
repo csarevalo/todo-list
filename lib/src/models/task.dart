@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 class Task {
   final int id;
   String title;
-  // TaskList list;
+  TaskList list;
   // List<Tag> tags;
   Priority priority;
   bool isDone;
@@ -17,7 +17,7 @@ class Task {
   Task({
     required this.id,
     required this.title,
-    // required this.list,
+    required this.list,
     // required this.tags,
     required this.priority,
     required this.isDone,
@@ -32,8 +32,10 @@ class Task {
 class ImmutableTask extends Equatable {
   final int id;
   final String title;
-  final bool isDone;
+  final TaskList list;
+  // List<Tag> tags;
   final Priority priority;
+  final bool isDone;
   final DateTime dateCreated;
   final DateTime dateModified;
   final DateTime? dateDue;
@@ -43,8 +45,9 @@ class ImmutableTask extends Equatable {
   const ImmutableTask({
     required this.id,
     required this.title,
-    required this.isDone,
+    required this.list,
     required this.priority,
+    required this.isDone,
     required this.dateCreated,
     required this.dateModified,
     this.dateDue,
@@ -56,6 +59,7 @@ class ImmutableTask extends Equatable {
   List<Object?> get props => [
         id,
         title,
+        list,
         isDone,
         priority,
         dateCreated,
@@ -70,6 +74,7 @@ ImmutableTask createImmutableTask(Task task) {
   return ImmutableTask(
     id: task.id,
     title: task.title,
+    list: task.list,
     isDone: task.isDone,
     priority: task.priority,
     dateCreated: task.dateCreated,
@@ -90,13 +95,14 @@ List<ImmutableTask> createImmutableTasks(List<Task> task) {
 
 /// Task List Model
 class TaskList {
-  final String id;
+  // final String id;
+  final DateTime id;
   Icon icon;
-  String listName;
+  String name;
   TaskList({
     required this.id,
     required this.icon,
-    required this.listName,
+    required this.name,
   });
 }
 
@@ -104,11 +110,11 @@ class TaskList {
 class Tag {
   final String id;
   Icon icon;
-  String tagName;
+  String name;
   Tag({
     required this.id,
     required this.icon,
-    required this.tagName,
+    required this.name,
   });
 }
 
