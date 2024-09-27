@@ -59,7 +59,7 @@ class SampleDrawerItems extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final taskProvider = context.read<TaskProvider>();
-    return ListView(
+    return Column(
       children: [
         DrawerHeader(
           child: Card(
@@ -99,116 +99,144 @@ class SampleDrawerItems extends StatelessWidget {
             ),
           ),
         ),
-        ListTile(
-          leading: const Icon(Icons.search_rounded),
-          title: const Text("Search"),
-          onTap: () {},
+        Expanded(
+          child: ListView(
+            //TODO: use a builder instead
+            //FIXME: add a fixed heigh based on media query or whatever
+            shrinkWrap: true,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.search_rounded),
+                title: const Text("Search"),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: const Icon(Icons.all_inbox),
+                title: const Text("All"),
+                onTap: () {
+                  taskProvider.updateActiveTaskTest((Task t) => true);
+                  taskProvider.updateActiveTasks(taskProvider.todoList);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.inbox_rounded),
+                title: const Text("Inbox"),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: const Icon(Icons.today_rounded),
+                title: const Text("Today"),
+                onTap: () {
+                  taskProvider.updateActiveTaskTest((Task task) {
+                    if (task.dateDue == null) return false;
+                    final DateTime today = DateUtils.dateOnly(DateTime.now());
+                    final DateTime due = DateUtils.dateOnly(task.dateDue!);
+                    return due.difference(today).inDays <=
+                        0; //due on or before today
+                  });
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.signpost_rounded),
+                title: const Text("Tomorrow"),
+                onTap: () {
+                  taskProvider.updateActiveTaskTest((Task task) {
+                    if (task.dateDue == null) return false;
+                    final DateTime today = DateUtils.dateOnly(DateTime.now());
+                    final DateTime due = DateUtils.dateOnly(task.dateDue!);
+                    return due.difference(today).inDays == 1; //due tomorrow
+                  });
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.calendar_month_rounded),
+                title: const Text("Next 7 Days"),
+                onTap: () {
+                  taskProvider.updateActiveTaskTest((Task task) {
+                    if (task.dateDue == null) return false;
+                    final DateTime today = DateUtils.dateOnly(DateTime.now());
+                    final DateTime due = DateUtils.dateOnly(task.dateDue!);
+                    return due.difference(today).inDays <=
+                        7; //on or b/f next 7 days
+                  });
+                },
+              ),
+              ExpansionTile(
+                leading: const Icon(Icons.style_rounded),
+                shape: const Border(),
+                title: const Text("Tags"),
+                children: [
+                  ListTile(
+                    leading: const Icon(Icons.event),
+                    title: const Text("Appts"),
+                    onTap: () {},
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.people),
+                    title: const Text("Family"),
+                    onTap: () {},
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.savings_rounded),
+                    title: const Text("Finances"),
+                    onTap: () {},
+                  ),
+                ],
+              ),
+              ListTile(
+                leading: const Icon(Icons.workspace_premium_rounded),
+                title: const Text("Passion"),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: const Icon(Icons.business_center_rounded),
+                title: const Text("Career"),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: const Icon(Icons.home_work_rounded),
+                title: const Text("Personal"),
+                onTap: () {},
+              ),
+              ExpansionTile(
+                leading: const Icon(Icons.playlist_remove_rounded),
+                shape: const Border(),
+                title: const Text("Archived Lists"),
+                children: [
+                  ListTile(
+                    leading: const Icon(Icons.verified_rounded),
+                    title: const Text("Test"),
+                    onTap: () {},
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.nearby_error_rounded),
+                    title: const Text("Not Important Plans"),
+                    onTap: () {},
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.running_with_errors_rounded),
+                    title: const Text("Not Urgent Reminders"),
+                    onTap: () {},
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
-        ListTile(
-          leading: const Icon(Icons.all_inbox),
-          title: const Text("All"),
-          onTap: () {
-            taskProvider.updateActiveTaskTest((Task t) => true);
-            taskProvider.updateActiveTasks(taskProvider.todoList);
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.inbox_rounded),
-          title: const Text("Inbox"),
-          onTap: () {},
-        ),
-        ListTile(
-          leading: const Icon(Icons.today_rounded),
-          title: const Text("Today"),
-          onTap: () {
-            taskProvider.updateActiveTaskTest((Task task) {
-              if (task.dateDue == null) return false;
-              final DateTime today = DateUtils.dateOnly(DateTime.now());
-              final DateTime due = DateUtils.dateOnly(task.dateDue!);
-              return due.difference(today).inDays <= 0; //due on or before today
-            });
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.signpost_rounded),
-          title: const Text("Tomorrow"),
-          onTap: () {
-            taskProvider.updateActiveTaskTest((Task task) {
-              if (task.dateDue == null) return false;
-              final DateTime today = DateUtils.dateOnly(DateTime.now());
-              final DateTime due = DateUtils.dateOnly(task.dateDue!);
-              return due.difference(today).inDays == 1; //due tomorrow
-            });
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.calendar_month_rounded),
-          title: const Text("Next 7 Days"),
-          onTap: () {
-            taskProvider.updateActiveTaskTest((Task task) {
-              if (task.dateDue == null) return false;
-              final DateTime today = DateUtils.dateOnly(DateTime.now());
-              final DateTime due = DateUtils.dateOnly(task.dateDue!);
-              return due.difference(today).inDays <= 7; //on or b/f next 7 days
-            });
-          },
-        ),
-        ExpansionTile(
-          leading: const Icon(Icons.style_rounded),
-          shape: const Border(),
-          title: const Text("Tags"),
+        const SizedBox(height: 25),
+        Row(
+          // direction: Axis.horizontal,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            ListTile(
-              leading: const Icon(Icons.event),
-              title: const Text("Appts"),
-              onTap: () {},
+            TextButton.icon(
+              onPressed: () {},
+              label: const Text("Add"),
+              icon: const Icon(Icons.add),
             ),
-            ListTile(
-              leading: const Icon(Icons.people),
-              title: const Text("Family"),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: const Icon(Icons.savings_rounded),
-              title: const Text("Finances"),
-              onTap: () {},
-            ),
-          ],
-        ),
-        ListTile(
-          leading: const Icon(Icons.workspace_premium_rounded),
-          title: const Text("Passion"),
-          onTap: () {},
-        ),
-        ListTile(
-          leading: const Icon(Icons.business_center_rounded),
-          title: const Text("Career"),
-          onTap: () {},
-        ),
-        ListTile(
-          leading: const Icon(Icons.home_work_rounded),
-          title: const Text("Personal"),
-          onTap: () {},
-        ),
-        ExpansionTile(
-          leading: const Icon(Icons.playlist_remove_rounded),
-          shape: const Border(),
-          title: const Text("Archived Lists"),
-          children: [
-            ListTile(
-              leading: const Icon(Icons.verified_rounded),
-              title: const Text("Test"),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: const Icon(Icons.nearby_error_rounded),
-              title: const Text("Not Important Plans"),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: const Icon(Icons.running_with_errors_rounded),
-              title: const Text("Not Urgent Reminders"),
-              onTap: () {},
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.settings),
+              // icon: const Icon(Icons.rule_rounded),
             ),
           ],
         ),
