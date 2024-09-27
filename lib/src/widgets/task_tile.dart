@@ -207,7 +207,7 @@ class _TaskTile extends StatelessWidget {
             side: BorderSide(color: onTileColor),
           ),
           title: Text(
-            '$title\t\t\t\t\t${task.list.name}',
+            title,
             style: textTheme.bodyLarge!.copyWith(
               fontSize: 18,
               color: completed ? onTileColor.withOpacity(0.4) : onTileColor,
@@ -220,11 +220,22 @@ class _TaskTile extends StatelessWidget {
             softWrap: false,
           ),
           subtitle: dateDue == null
-              ? null
-              : Text(
-                  task.hasDueByTime!
-                      ? "${DateFormat.yMMMd().format(dateDue)}, ${DateFormat('hh:mm a').format(dateDue)}"
-                      : DateFormat.yMMMd().format(dateDue),
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(task.list.name),
+                  ],
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      task.hasDueByTime!
+                          ? "${DateFormat.yMMMd().format(dateDue)}, ${DateFormat('hh:mm a').format(dateDue)}"
+                          : DateFormat.yMMMd().format(dateDue),
+                    ),
+                    Text(task.list.name),
+                  ],
                 ),
           trailing: IconButton(
             onPressed: task.isDone

@@ -235,7 +235,7 @@ class SampleDrawerItems extends StatelessWidget {
             ),
             IconButton(
               onPressed: () {},
-              icon: const Icon(Icons.settings),
+              icon: const Icon(Icons.settings_suggest_rounded),
               // icon: const Icon(Icons.rule_rounded),
             ),
           ],
