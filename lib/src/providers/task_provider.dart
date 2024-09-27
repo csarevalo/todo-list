@@ -181,9 +181,12 @@ class TaskProvider with ChangeNotifier {
   }
 
   void deleteTask(int taskId) {
-    final index = _todoList.indexWhere((task) => task.id == taskId);
+    int index = _todoList.indexWhere((task) => task.id == taskId);
     assert(index != -1, "Task not found. Invalid id $taskId."); //task not found
     _todoList.removeAt(index);
+    index = _activeTasks.indexWhere((task) => task.id == taskId);
+    assert(index != -1, "Active Task not found. Invalid id $taskId.");
+    _activeTasks.removeAt(index);
     notifyListeners();
   }
 

@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 class Task {
   final int id;
   String title;
-  TaskList list;
+  TaskList list; //FIXME: change this to list name? or list id?
   // List<Tag> tags;
   Priority priority;
   bool isDone;
@@ -32,7 +32,7 @@ class Task {
 class ImmutableTask extends Equatable {
   final int id;
   final String title;
-  final TaskList list;
+  final ImmutableTaskList list;
   // List<Tag> tags;
   final Priority priority;
   final bool isDone;
@@ -74,7 +74,7 @@ ImmutableTask createImmutableTask(Task task) {
   return ImmutableTask(
     id: task.id,
     title: task.title,
-    list: task.list,
+    list: createImmutableTaskList(task.list),
     isDone: task.isDone,
     priority: task.priority,
     dateCreated: task.dateCreated,
@@ -104,6 +104,28 @@ class TaskList {
     required this.icon,
     required this.name,
   });
+}
+
+/// Immutable Task List Model
+class ImmutableTaskList {
+  // final String id;
+  final DateTime id;
+  final Icon icon;
+  final String name;
+  ImmutableTaskList({
+    required this.id,
+    required this.icon,
+    required this.name,
+  });
+}
+
+/// Create Immutable Task List from Task List
+ImmutableTaskList createImmutableTaskList(final TaskList taskList) {
+  return ImmutableTaskList(
+    id: taskList.id,
+    icon: taskList.icon,
+    name: taskList.name,
+  );
 }
 
 /// Task Tag Model

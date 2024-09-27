@@ -60,35 +60,39 @@ class TaskSection extends StatelessWidget {
                 ),
               );
       },
-      shouldRebuild: (previous, next) {
-        //TODO: only rebuild task section when the order changes, or new tasks
-        //are added... so maybe do not compare immutable tasks
-        //instead make tasktile embed a selector to listen to changes to a
-        //specific task for each tasktile
-        return !const DeepCollectionEquality().equals(previous, next);
-      },
       // shouldRebuild: (previous, next) {
-      //   debugPrint("\n\nChecking if willRebuild \"$sectionTitle\"");
-      //   for (var t in previous) {
-      //     debugPrint(
-      //       "Previous Section: ${t.title} \tLast Modified: ${t.dateModified}",
-      //     );
-      //   }
-      //   for (var t in next) {
-      //     debugPrint(
-      //       "    Next Section: ${t.title} \tLast Modified: ${t.dateModified}",
-      //     );
-      //   }
-      //   bool willRebuild =
-      //       !const DeepCollectionEquality().equals(previous, next);
-      //   debugPrint(
-      //     willRebuild
-      //         ? "Yes \"$sectionTitle\" is rebuilt"
-      //         : "No, \"$sectionTitle\" is not rebuild",
-      //   );
-      //   debugPrint("");
-      //   return willRebuild;
+      //   //FIXME: can use equatable to only compare the task id to see if the
+      //   // if the order has change
+      //   //TODO: have tasktile builder embed an immutable task listener
+      //   //TODO: only rebuild task section when the order changes, or new tasks
+      //   //are added... so maybe do not compare immutable tasks
+      //   //instead make tasktile embed a selector to listen to changes to a
+      //   //specific task for each tasktile
+      //   return !const DeepCollectionEquality().equals(previous, next);
       // },
+
+      shouldRebuild: (previous, next) {
+        debugPrint("\n\nChecking if willRebuild \"$sectionTitle\"");
+        for (var t in previous) {
+          debugPrint(
+            "Previous Section: ${t.title} \tLast Modified: ${t.dateModified}",
+          );
+        }
+        for (var t in next) {
+          debugPrint(
+            "    Next Section: ${t.title} \tLast Modified: ${t.dateModified}",
+          );
+        }
+        bool willRebuild =
+            !const DeepCollectionEquality().equals(previous, next);
+        debugPrint(
+          willRebuild
+              ? "Yes \"$sectionTitle\" is rebuilt"
+              : "No, \"$sectionTitle\" is not rebuild",
+        );
+        debugPrint("");
+        return willRebuild;
+      },
     );
   }
 }
