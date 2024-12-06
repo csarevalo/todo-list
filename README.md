@@ -1,6 +1,6 @@
 # Snazzy Todo List
 
-Snazz up your todos and commit to change!
+**Snazz up your todos and commit to change!**
 
 It's available on the [web](https://csarevalo.github.io/snazzy-todo-list/). Enjoy.
 
