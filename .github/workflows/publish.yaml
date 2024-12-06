@@ -3,6 +3,8 @@ name: Build flutter release
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'lib/**'
 
 jobs:
   build:
